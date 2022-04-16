@@ -31,15 +31,16 @@ namespace AbsoluteZote
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
             {
+                Object.Instantiate(title.prefabs["bossTitle"]);
                 fsm.InsertCustomAction("Roar", () =>
                 {
-                    var title_ = Object.Instantiate(title.prefabs["title"]);
-                    title_.GetComponent<FadeGroup>().FadeUp();
+                    var bossTitle = GameObject.Find("Boss Title(Clone)");
+                    bossTitle.GetComponent<FadeGroup>().FadeUp();
                 }, 0);
                 fsm.AddCustomAction("Roar End", () =>
                 {
-                    var title_ = GameObject.Find("Boss Title(Clone)");
-                    title_.GetComponent<FadeGroup>().FadeDown();
+                    var bossTitle = GameObject.Find("Boss Title(Clone)");
+                    bossTitle.GetComponent<FadeGroup>().FadeDown();
                 });
             }
         }

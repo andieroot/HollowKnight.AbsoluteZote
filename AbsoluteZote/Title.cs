@@ -24,16 +24,14 @@ namespace AbsoluteZote
         }
         public void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
-            var title= preloadedObjects["GG_Radiance"]["Boss Control"];
-            title = title.transform.Find("Boss Title").gameObject;
-            prefabs["title"] = title;
-            Log(title.name);
+            var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
+            prefabs["bossTitle"] = bossControl.transform.Find("Boss Title").gameObject;
         }
         public void UpgradeFSM(PlayMakerFSM fsm)
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince Title" && fsm.FsmName == "Control")
             {
-                for(int i = 1; i <= 13; ++i)
+                for (int i = 1; i <= 13; ++i)
                 {
                     fsm.RemoveAction("Extra " + i.ToString(), 1);
                 }
