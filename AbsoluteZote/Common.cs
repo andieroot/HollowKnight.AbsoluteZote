@@ -1,5 +1,5 @@
-using Satchel;
 using Modding;
+using Satchel;
 
 
 namespace AbsoluteZote
@@ -11,7 +11,7 @@ namespace AbsoluteZote
             {
                 FsmUtil.InsertCustomAction(fsm, state.Name, () =>
                 {
-                    mod.LogDebug("FSM: " + fsm.gameObject.name + "-" + fsm.FsmName + " entering state: " + state.Name + ".");
+                    mod.Log("FSM: " + fsm.gameObject.name + "-" + fsm.FsmName + " entering state: " + state.Name + ".");
                     function?.Invoke();
                 }, 0);
             }
@@ -22,7 +22,7 @@ namespace AbsoluteZote
             {
                 FsmUtil.InsertCustomAction(fsm, state, () =>
                 {
-                    mod.LogDebug("State: " + fsm.FsmName + "-" + state + " entering action: " + i.ToString() + ".");
+                    mod.Log("State: " + fsm.FsmName + "-" + state + " entering action: " + i.ToString() + ".");
                     function?.Invoke();
                 }, i);
             }
