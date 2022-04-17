@@ -30,8 +30,11 @@ namespace AbsoluteZote
             title.name = "title";
             prefabs["title"] = title;
             var background = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
+            var spriteRenderer= background.GetComponent<SpriteRenderer>();
+            spriteRenderer.sortingLayerID = -349214895;
             var whiteFader = bossControl.transform.Find("White Fader").gameObject;
-            background.GetComponent<UnityEngine.SpriteRenderer>().sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
+            spriteRenderer.sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
+            spriteRenderer.color = new Color(0.3f, 0, 0.3f);
             background.transform.position = new Vector3(0, 0, -16);
             background.transform.localScale = Vector3.one * 256;
             background.name = "background";

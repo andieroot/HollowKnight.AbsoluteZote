@@ -33,6 +33,13 @@ namespace AbsoluteZote
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
             {
+                fsm.InsertCustomAction("Enter 1", () =>
+                {
+                    foreach (var f in GameCameras.instance.hudCanvas.GetComponentsInChildren<PlayMakerFSM>())
+                    {
+                        f.SendEvent("OUT");
+                    }
+                }, 0);
                 var title_ = Object.Instantiate(title.prefabs["title"]);
                 var background = Object.Instantiate(title.prefabs["background"]);
                 fsm.InsertCustomAction("Roar", () =>
@@ -46,6 +53,10 @@ namespace AbsoluteZote
                     var title = GameObject.Find("title(Clone)");
                     title.GetComponent<FadeGroup>().FadeDown();
                     background.SetActive(false);
+                    foreach (var f in GameCameras.instance.hudCanvas.GetComponentsInChildren<PlayMakerFSM>())
+                    {
+                        f.SendEvent("IN");
+                    }
                 });
             }
         }
