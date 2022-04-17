@@ -27,10 +27,11 @@ namespace AbsoluteZote
         {
             var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
             var title = bossControl.transform.Find("Boss Title").gameObject;
+            title.GetComponent<SetTextMeshProGameText>().convName = "ABSOLUTE_ZOTE_MAIN";
             title.name = "title";
             prefabs["title"] = title;
             var background = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
-            var spriteRenderer= background.GetComponent<SpriteRenderer>();
+            var spriteRenderer = background.GetComponent<SpriteRenderer>();
             spriteRenderer.sortingLayerID = -349214895;
             var whiteFader = bossControl.transform.Find("White Fader").gameObject;
             spriteRenderer.sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;

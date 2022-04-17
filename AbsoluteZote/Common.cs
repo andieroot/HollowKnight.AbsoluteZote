@@ -4,7 +4,8 @@ using Satchel;
 
 namespace AbsoluteZote
 {
-    public static class Common { 
+    public static class Common
+    {
         public static void LogFSM(this Mod mod, PlayMakerFSM fsm, System.Action function = null)
         {
             foreach (var state in fsm.FsmStates)

@@ -26,6 +26,7 @@ namespace AbsoluteZote
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
+            ModHooks.LanguageGetHook += LanguageGetHook;
             ModHooks.HeroUpdateHook += HeroUpdateHook;
             title.LoadPrefabs(preloadedObjects);
         }
@@ -65,6 +66,14 @@ namespace AbsoluteZote
             UpgradeFSM(fsm);
             title.UpgradeFSM(fsm);
             original(fsm);
+        }
+        private string LanguageGetHook(string key, string sheet, string text)
+        {
+            if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
+            {
+                text = "无上左特";
+            }
+            return text;
         }
         private void HeroUpdateHook()
         {
