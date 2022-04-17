@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Modding;
 using Satchel;
-
 
 namespace AbsoluteZote
 {
@@ -42,7 +42,7 @@ namespace AbsoluteZote
             spriteRenderer.sortingLayerID = -349214895;
             var whiteFader = bossControl.transform.Find("White Fader").gameObject;
             spriteRenderer.sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
-            spriteRenderer.color = new Color(0.3f, 0, 0.3f);
+            spriteRenderer.color = new Color(.3f, 0, .3f, 0);
             titleBackground.transform.position = new Vector3(0, 0, -16);
             titleBackground.transform.localScale = Vector3.one * 256;
             titleBackground.name = "titleBackground";
@@ -85,6 +85,7 @@ namespace AbsoluteZote
             superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
             title.name = "title";
             titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
+            titleBackground.SetActive(true);
             titleBackground.name = "titleBackground";
             var gameCameras = GameObject.Find("_GameCameras").gameObject;
             var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
@@ -98,35 +99,44 @@ namespace AbsoluteZote
                 f.SendEvent("OUT");
             }
         }
-        public void ShowTitle()
+        private IEnumerator ShowTitle_()
         {
             title.GetComponent<FadeGroup>().FadeUp();
-            titleBackground.SetActive(true);
-            foreach (var s in dreamMsg.GetComponentsInChildren<SpriteRenderer>())
+            dreamMsg.GetComponent<PlayMakerFSM>().SendEvent("CANCEL ENEMY DREAM");
+            var t = .1f;
+            var n = (int)(t * 60);
+            var color = titleBackground.GetAddComponent<SpriteRenderer>().color;
+            for (var i = 0; i < n; ++i)
             {
-                s.enabled = false;
-            }
-            foreach (var s in dreamMsg.GetComponentsInChildren<MeshRenderer>())
-            {
-                s.enabled = false;
+                yield return new WaitForSeconds(t / n);
+                titleBackground.GetAddComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, (float)(i + 1) / n);
             }
         }
-        public void HideTitle()
+        public void ShowTitle()
+        {
+            var coroutine = ShowTitle_();
+            title.GetComponent<TMPro.TextMeshPro>().StartCoroutine(coroutine);
+        }
+        private IEnumerator HideTitle_()
         {
             title.GetComponent<FadeGroup>().FadeDown();
-            titleBackground.SetActive(false);
+            var t = .1f;
+            var n = (int)(t * 60);
+            var color = titleBackground.GetAddComponent<SpriteRenderer>().color;
+            for (var i = 0; i < n; ++i)
+            {
+                yield return new WaitForSeconds(t / n);
+                titleBackground.GetAddComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, (float)(n - i) / n);
+            }
             foreach (var f in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
             {
                 f.SendEvent("IN");
             }
-            foreach (var s in dreamMsg.GetComponentsInChildren<SpriteRenderer>())
-            {
-                s.enabled = true;
-            }
-            foreach (var s in dreamMsg.GetComponentsInChildren<MeshRenderer>())
-            {
-                s.enabled = true;
-            }
+        }
+        public void HideTitle()
+        {
+            var coroutine = HideTitle_();
+            title.GetComponent<TMPro.TextMeshPro>().StartCoroutine(coroutine);
         }
     }
 }
