@@ -28,6 +28,7 @@ namespace AbsoluteZote
             var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
             var title = bossControl.transform.Find("Boss Title").gameObject;
             title.GetComponent<SetTextMeshProGameText>().convName = "ABSOLUTE_ZOTE_MAIN";
+            title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
             title.name = "title";
             prefabs["title"] = title;
             var background = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
