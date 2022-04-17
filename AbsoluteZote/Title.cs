@@ -20,12 +20,22 @@ namespace AbsoluteZote
             return new List<(string, string)>
             {
                  ("GG_Radiance", "Boss Control"),
+                 ("GG_Grey_Prince_Zote", "Mighty_Zote_0005_17"),
             };
         }
         public void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
-            prefabs["bossTitle"] = bossControl.transform.Find("Boss Title").gameObject;
+            var title = bossControl.transform.Find("Boss Title").gameObject;
+            title.name = "title";
+            prefabs["title"] = title;
+            var background = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
+            var whiteFader = bossControl.transform.Find("White Fader").gameObject;
+            background.GetComponent<UnityEngine.SpriteRenderer>().sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
+            background.transform.position = new Vector3(0, 0, -16);
+            background.transform.localScale = Vector3.one * 256;
+            background.name = "background";
+            prefabs["background"] = background;
         }
         public void UpgradeFSM(PlayMakerFSM fsm)
         {

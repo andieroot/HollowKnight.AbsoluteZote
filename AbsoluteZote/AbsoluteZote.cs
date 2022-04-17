@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using HutongGames.PlayMaker.Actions;
+using HutongGames.PlayMaker;
 using Modding;
 using Satchel;
 
@@ -31,16 +33,19 @@ namespace AbsoluteZote
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
             {
-                Object.Instantiate(title.prefabs["bossTitle"]);
+                var title_ = Object.Instantiate(title.prefabs["title"]);
+                var background = Object.Instantiate(title.prefabs["background"]);
                 fsm.InsertCustomAction("Roar", () =>
                 {
-                    var bossTitle = GameObject.Find("Boss Title(Clone)");
-                    bossTitle.GetComponent<FadeGroup>().FadeUp();
+                    var title = GameObject.Find("title(Clone)");
+                    title.GetComponent<FadeGroup>().FadeUp();
+                    background.SetActive(true);
                 }, 0);
                 fsm.AddCustomAction("Roar End", () =>
                 {
-                    var bossTitle = GameObject.Find("Boss Title(Clone)");
-                    bossTitle.GetComponent<FadeGroup>().FadeDown();
+                    var title = GameObject.Find("title(Clone)");
+                    title.GetComponent<FadeGroup>().FadeDown();
+                    background.SetActive(false);
                 });
             }
         }
