@@ -48,6 +48,21 @@ namespace AbsoluteZote
             titleBackground.name = "titleBackground";
             prefabs["titleBackground"] = titleBackground;
         }
+        public void Instantiate()
+        {
+            title = Object.Instantiate(absoluteZote_.title.prefabs["title"]);
+            title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
+            superTitle = title.transform.Find("superTitle").gameObject;
+            superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
+            title.name = "title";
+            titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
+            titleBackground.SetActive(true);
+            titleBackground.name = "titleBackground";
+            var gameCameras = GameObject.Find("_GameCameras").gameObject;
+            var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
+            var dialogueManager = hudCamera.transform.Find("DialogueManager").gameObject;
+            dreamMsg = dialogueManager.transform.Find("Dream Msg").gameObject;
+        }
         public void UpdateFSM(PlayMakerFSM fsm)
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince Title" && fsm.FsmName == "Control")
@@ -76,21 +91,6 @@ namespace AbsoluteZote
                     text = "Absolute";
             }
             return text;
-        }
-        public void InstantiateTitle()
-        {
-            title = Object.Instantiate(absoluteZote_.title.prefabs["title"]);
-            title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
-            superTitle = title.transform.Find("superTitle").gameObject;
-            superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
-            title.name = "title";
-            titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
-            titleBackground.SetActive(true);
-            titleBackground.name = "titleBackground";
-            var gameCameras = GameObject.Find("_GameCameras").gameObject;
-            var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
-            var dialogueManager = hudCamera.transform.Find("DialogueManager").gameObject;
-            dreamMsg = dialogueManager.transform.Find("Dream Msg").gameObject;
         }
         public void HideHUD()
         {

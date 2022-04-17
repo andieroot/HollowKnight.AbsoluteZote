@@ -32,6 +32,7 @@ namespace AbsoluteZote
             On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
             ModHooks.LanguageGetHook += LanguageGetHook;
             ModHooks.HeroUpdateHook += HeroUpdateHook;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
             title.LoadPrefabs(preloadedObjects);
         }
         private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
@@ -51,6 +52,14 @@ namespace AbsoluteZote
             if (Input.GetKeyDown(KeyCode.F2))
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
+            }
+        }
+        private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
+        {
+            if(to.name== "GG_Grey_Prince_Zote")
+            {
+                boss.Instantiate();
+                title.Instantiate();
             }
         }
     }
