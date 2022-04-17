@@ -10,15 +10,19 @@ namespace AbsoluteZote
 {
     public class AbsoluteZote : Mod
     {
-        private Title title;
+        private Boss boss;
+        public Title title;
         public AbsoluteZote() : base("AbsoluteZote")
         {
+            boss = new(this);
             title = new(this);
         }
         public override string GetVersion() => "1.0";
         public override List<(string, string)> GetPreloadNames()
         {
             List<(string, string)> preloadNames = new();
+            foreach (var name in boss.GetPreloadNames())
+                preloadNames.Add(name);
             foreach (var name in title.GetPreloadNames())
                 preloadNames.Add(name);
             return preloadNames;
@@ -30,50 +34,16 @@ namespace AbsoluteZote
             ModHooks.HeroUpdateHook += HeroUpdateHook;
             title.LoadPrefabs(preloadedObjects);
         }
-        private void UpgradeFSM(PlayMakerFSM fsm)
-        {
-            if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
-            {
-                fsm.InsertCustomAction("Enter 1", () =>
-                {
-                    foreach (var f in GameCameras.instance.hudCanvas.GetComponentsInChildren<PlayMakerFSM>())
-                    {
-                        f.SendEvent("OUT");
-                    }
-                }, 0);
-                var title_ = Object.Instantiate(title.prefabs["title"]);
-                title_.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
-                var background = Object.Instantiate(title.prefabs["background"]);
-                fsm.InsertCustomAction("Roar", () =>
-                {
-                    var title = GameObject.Find("title(Clone)");
-                    title.GetComponent<FadeGroup>().FadeUp();
-                    background.SetActive(true);
-                }, 0);
-                fsm.AddCustomAction("Roar End", () =>
-                {
-                    var title = GameObject.Find("title(Clone)");
-                    title.GetComponent<FadeGroup>().FadeDown();
-                    background.SetActive(false);
-                    foreach (var f in GameCameras.instance.hudCanvas.GetComponentsInChildren<PlayMakerFSM>())
-                    {
-                        f.SendEvent("IN");
-                    }
-                });
-            }
-        }
         private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
         {
-            UpgradeFSM(fsm);
-            title.UpgradeFSM(fsm);
+            boss.UpdateFSM(fsm);
+            title.UpdateFSM(fsm);
             original(fsm);
         }
         private string LanguageGetHook(string key, string sheet, string text)
         {
-            if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
-            {
-                text = "无上左特";
-            }
+            text = boss.UpdateText(key, sheet, text);
+            text = title.UpdateText(key, sheet, text);
             return text;
         }
         private void HeroUpdateHook()
