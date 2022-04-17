@@ -42,6 +42,7 @@ namespace AbsoluteZote
                     }
                 }, 0);
                 var title_ = Object.Instantiate(title.prefabs["title"]);
+                title_.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
                 var background = Object.Instantiate(title.prefabs["background"]);
                 fsm.InsertCustomAction("Roar", () =>
                 {
