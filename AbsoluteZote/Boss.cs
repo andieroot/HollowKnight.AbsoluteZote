@@ -6,29 +6,24 @@ using Satchel;
 
 namespace AbsoluteZote
 {
-    public class Boss
+    public class Boss : Module
     {
-        private readonly AbsoluteZote absoluteZote_;
-        private readonly Dictionary<string, GameObject> prefabs = new();
-        public Boss(AbsoluteZote absoluteZote)
+        public Boss(AbsoluteZote absoluteZote) : base(absoluteZote)
         {
-            absoluteZote_ = absoluteZote;
         }
-        private void Log(object message) => absoluteZote_.Log(message);
-        public List<(string, string)> GetPreloadNames()
+        public override List<(string, string)> GetPreloadNames()
         {
             return new List<(string, string)>
             {
             };
         }
-        public void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
+        public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
         }
-        public void Instantiate()
+        public override void Initialize(UnityEngine.SceneManagement.Scene scene)
         {
-
         }
-        public void UpdateFSM(PlayMakerFSM fsm)
+        public override void UpdateFSM(PlayMakerFSM fsm)
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
             {
@@ -37,7 +32,7 @@ namespace AbsoluteZote
                 fsm.AddCustomAction("Roar End", absoluteZote_.title.HideTitle);
             }
         }
-        public string UpdateText(string key, string sheet, string text)
+        public override string UpdateText(string key, string sheet, string text)
         {
             return text;
         }

@@ -6,20 +6,16 @@ using Satchel;
 
 namespace AbsoluteZote
 {
-    public class Title
+    public class Title : Module
     {
-        private readonly AbsoluteZote absoluteZote_;
-        private readonly Dictionary<string, GameObject> prefabs = new();
         private GameObject superTitle;
         private GameObject title;
         private GameObject titleBackground;
         private GameObject dreamMsg;
-        public Title(AbsoluteZote absoluteZote)
+        public Title(AbsoluteZote absoluteZote) : base(absoluteZote)
         {
-            absoluteZote_ = absoluteZote;
         }
-        private void Log(object message) => absoluteZote_.Log(message);
-        public List<(string, string)> GetPreloadNames()
+        public override List<(string, string)> GetPreloadNames()
         {
             return new List<(string, string)>
             {
@@ -27,7 +23,7 @@ namespace AbsoluteZote
                  ("GG_Grey_Prince_Zote", "Mighty_Zote_0005_17"),
             };
         }
-        public void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
+        public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
             var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
             var title = bossControl.transform.Find("Boss Title").gameObject;
@@ -48,22 +44,25 @@ namespace AbsoluteZote
             titleBackground.name = "titleBackground";
             prefabs["titleBackground"] = titleBackground;
         }
-        public void Instantiate()
+        public override void Initialize(UnityEngine.SceneManagement.Scene scene)
         {
-            title = Object.Instantiate(absoluteZote_.title.prefabs["title"]);
-            title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
-            superTitle = title.transform.Find("superTitle").gameObject;
-            superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
-            title.name = "title";
-            titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
-            titleBackground.SetActive(true);
-            titleBackground.name = "titleBackground";
-            var gameCameras = GameObject.Find("_GameCameras").gameObject;
-            var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
-            var dialogueManager = hudCamera.transform.Find("DialogueManager").gameObject;
-            dreamMsg = dialogueManager.transform.Find("Dream Msg").gameObject;
+            if (scene.name == "GG_Grey_Prince_Zote")
+            {
+                title = Object.Instantiate(absoluteZote_.title.prefabs["title"]);
+                title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
+                superTitle = title.transform.Find("superTitle").gameObject;
+                superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
+                title.name = "title";
+                titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
+                titleBackground.SetActive(true);
+                titleBackground.name = "titleBackground";
+                var gameCameras = GameObject.Find("_GameCameras").gameObject;
+                var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
+                var dialogueManager = hudCamera.transform.Find("DialogueManager").gameObject;
+                dreamMsg = dialogueManager.transform.Find("Dream Msg").gameObject;
+            }
         }
-        public void UpdateFSM(PlayMakerFSM fsm)
+        public override void UpdateFSM(PlayMakerFSM fsm)
         {
             if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince Title" && fsm.FsmName == "Control")
             {
@@ -74,29 +73,29 @@ namespace AbsoluteZote
                 fsm.RemoveAction("Main Title", 0);
             }
         }
-        public string UpdateText(string key, string sheet, string text)
+        public override string UpdateText(string key, string sheet, string text)
         {
             if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
                     text = "无上左特";
                 else
-                    text = "Zote";
+                    text = "ZOTE";
             }
             else if (key == "ABSOLUTE_ZOTE_SUPER" && sheet == "Titles")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
                     text = "";
                 else
-                    text = "Absolute";
+                    text = "ABSOLUTE";
             }
             return text;
         }
         public void HideHUD()
         {
-            foreach (var f in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
+            foreach (var fsm in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
             {
-                f.SendEvent("OUT");
+                fsm.SendEvent("OUT");
             }
         }
         private IEnumerator ShowTitle_()
@@ -128,9 +127,9 @@ namespace AbsoluteZote
                 yield return new WaitForSeconds(t / n);
                 titleBackground.GetAddComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, (float)(n - i) / n);
             }
-            foreach (var f in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
+            foreach (var fsm in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
             {
-                f.SendEvent("IN");
+                fsm.SendEvent("IN");
             }
         }
         public void HideTitle()
