@@ -13,13 +13,26 @@ namespace AbsoluteZote
         {
             return new List<(string, string)>
             {
+                ("GG_Workshop", "GG_Statue_Grimm"),
             };
         }
         public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
         {
+            var ggStatueGrimm = preloadedObjects["GG_Workshop"]["GG_Statue_Grimm"];
+            var dream = ggStatueGrimm.transform.Find("dream_version_switch").gameObject;
+            dream.transform.Find("GG_statue_plinth_dream").gameObject.SetActive(false);
+            dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
+            dream.name = "dream";
+            prefabs["dream"] = dream;
         }
         public override void Initialize(UnityEngine.SceneManagement.Scene scene)
         {
+            if (scene.name == "GG_Workshop")
+            {
+                var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
+                var dream = Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
+                dream.name = "dream";
+            }
         }
         public override void UpdateFSM(PlayMakerFSM fsm)
         {
