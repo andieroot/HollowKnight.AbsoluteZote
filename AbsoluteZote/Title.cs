@@ -47,12 +47,12 @@ namespace AbsoluteZote
         {
             if (scene.name == "GG_Grey_Prince_Zote")
             {
-                title = Object.Instantiate(absoluteZote_.title.prefabs["title"]);
+                title = UnityEngine.Object.Instantiate(absoluteZote_.title.prefabs["title"]);
                 title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
                 superTitle = title.transform.Find("superTitle").gameObject;
                 superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
                 title.name = "title";
-                titleBackground = Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
+                titleBackground = UnityEngine.Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
                 titleBackground.SetActive(true);
                 titleBackground.name = "titleBackground";
                 var gameCameras = GameObject.Find("_GameCameras").gameObject;

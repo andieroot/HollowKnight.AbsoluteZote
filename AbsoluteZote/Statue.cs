@@ -30,7 +30,7 @@ namespace AbsoluteZote
             if (scene.name == "GG_Workshop")
             {
                 var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
-                var dream = Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
+                var dream = UnityEngine.Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
                 dream.name = "dream";
             }
         }
