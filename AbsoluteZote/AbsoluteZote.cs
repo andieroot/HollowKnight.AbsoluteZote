@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using HutongGames.PlayMaker.Actions;
-using HutongGames.PlayMaker;
 using Modding;
-using Satchel;
-
 
 namespace AbsoluteZote
 {
@@ -22,7 +18,7 @@ namespace AbsoluteZote
             statue = new(this);
             arena = new(this);
         }
-        public override string GetVersion() => "1.0";
+        public override string GetVersion() => "1.0.0.0";
         public override List<(string, string)> GetPreloadNames()
         {
             List<(string, string)> preloadNames = new();
