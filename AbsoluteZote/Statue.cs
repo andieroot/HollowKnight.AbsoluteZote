@@ -42,16 +42,24 @@ namespace AbsoluteZote
             if (key == "NAME_GREY_PRINCE" && sheet == "Journal")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
+                {
                     text = "无上左特";
+                }
                 else
+                {
                     text = "ABSOLUTE ZOTE";
+                }
             }
             else if (key == "GG_S_MIGHTYZOTE" && sheet == "CP3")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
+                {
                     text = "混沌之神";
+                }
                 else
+                {
                     text = "God of chaos";
+                }
             }
             return text;
         }
