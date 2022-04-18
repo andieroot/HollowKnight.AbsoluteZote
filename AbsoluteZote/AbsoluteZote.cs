@@ -55,13 +55,17 @@ namespace AbsoluteZote
         private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
         {
             foreach (var module in modules)
+            {
                 module.UpdateFSM(fsm);
+            }
             original(fsm);
         }
         private string LanguageGetHook(string key, string sheet, string text)
         {
             foreach (var module in modules)
+            {
                 text = module.UpdateText(key, sheet, text);
+            }
             return text;
         }
         private void HeroUpdateHook()
