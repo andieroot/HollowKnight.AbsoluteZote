@@ -4,7 +4,7 @@ using Modding;
 
 namespace AbsoluteZote
 {
-    public class AbsoluteZote : Mod
+    public class AbsoluteZote : Mod, ITogglableMod
     {
         private Boss boss;
         public Title title;
@@ -33,8 +33,16 @@ namespace AbsoluteZote
             ModHooks.LanguageGetHook += LanguageGetHook;
             ModHooks.HeroUpdateHook += HeroUpdateHook;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
-            foreach (var module in modules)
-                module.LoadPrefabs(preloadedObjects);
+            if(preloadedObjects != null)
+                foreach (var module in modules)
+                    module.LoadPrefabs(preloadedObjects);
+        }
+        public void Unload()
+        {
+            On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
+            ModHooks.LanguageGetHook -= LanguageGetHook;
+            ModHooks.HeroUpdateHook -= HeroUpdateHook;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
         }
         private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
         {
