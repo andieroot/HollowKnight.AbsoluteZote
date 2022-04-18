@@ -23,8 +23,12 @@ namespace AbsoluteZote
         {
             List<(string, string)> preloadNames = new();
             foreach (var module in modules)
+            {
                 foreach (var name in module.GetPreloadNames())
+                {
                     preloadNames.Add(name);
+                }
+            }
             return preloadNames;
         }
         public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -33,9 +37,13 @@ namespace AbsoluteZote
             ModHooks.LanguageGetHook += LanguageGetHook;
             ModHooks.HeroUpdateHook += HeroUpdateHook;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
-            if(preloadedObjects != null)
+            if (preloadedObjects != null)
+            {
                 foreach (var module in modules)
+                {
                     module.LoadPrefabs(preloadedObjects);
+                }
+            }
         }
         public void Unload()
         {

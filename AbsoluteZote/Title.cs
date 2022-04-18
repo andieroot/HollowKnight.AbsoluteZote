@@ -77,16 +77,24 @@ namespace AbsoluteZote
             if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
+                {
                     text = "无上左特";
+                }
                 else
+                {
                     text = "ZOTE";
+                }
             }
             else if (key == "ABSOLUTE_ZOTE_SUPER" && sheet == "Titles")
             {
                 if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
+                {
                     text = "";
+                }
                 else
+                {
                     text = "ABSOLUTE";
+                }
             }
             return text;
         }
