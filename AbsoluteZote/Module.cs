@@ -13,7 +13,7 @@ namespace AbsoluteZote
             absoluteZote_ = absoluteZote;
             absoluteZote_.modules.Add(this);
         }
-        private void Log(object message) => absoluteZote_.Log(message);
+        protected void Log(object message) => absoluteZote_.Log(message);
         public abstract List<(string, string)> GetPreloadNames();
         public abstract void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects);
         public abstract void Initialize(UnityEngine.SceneManagement.Scene scene);

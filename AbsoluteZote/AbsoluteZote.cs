@@ -6,17 +6,19 @@ namespace AbsoluteZote
 {
     public class AbsoluteZote : Mod, ITogglableMod
     {
-        private Boss boss;
-        public Title title;
         private Statue statue;
         private Arena arena;
+        private Skin skin;
+        public Title title;
+        private Control control;
         public List<Module> modules = new();
         public AbsoluteZote() : base("AbsoluteZote")
         {
-            boss = new(this);
-            title = new(this);
             statue = new(this);
             arena = new(this);
+            skin = new(this);
+            title = new(this);
+            control = new(this);
         }
         public override string GetVersion() => "1.0.0.0";
         public override List<(string, string)> GetPreloadNames()
@@ -54,31 +56,59 @@ namespace AbsoluteZote
         }
         private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
         {
-            foreach (var module in modules)
+            try
             {
-                module.UpdateFSM(fsm);
+                foreach (var module in modules)
+                {
+                    module.UpdateFSM(fsm);
+                }
+                original(fsm);
             }
-            original(fsm);
+            catch (Exception exception)
+            {
+                LogError(exception.Message);
+            }
         }
         private string LanguageGetHook(string key, string sheet, string text)
         {
-            foreach (var module in modules)
+            try
             {
-                text = module.UpdateText(key, sheet, text);
+                foreach (var module in modules)
+                {
+                    text = module.UpdateText(key, sheet, text);
+                }
+            }
+            catch (Exception exception)
+            {
+                LogError(exception.Message);
             }
             return text;
         }
         private void HeroUpdateHook()
         {
-            if (Input.GetKeyDown(KeyCode.F2))
+            try
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
+                if (Input.GetKeyDown(KeyCode.F2))
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
+                }
+            }
+            catch (Exception exception)
+            {
+                LogError(exception.Message);
             }
         }
         private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
         {
-            foreach (var module in modules)
-                module.Initialize(to);
+            try
+            {
+                foreach (var module in modules)
+                    module.Initialize(to);
+            }
+            catch (Exception exception)
+            {
+                LogError(exception.Message);
+            }
         }
     }
 }
