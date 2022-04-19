@@ -1,67 +1,61 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-
-namespace AbsoluteZote
+﻿namespace AbsoluteZote;
+public class Statue : Module
 {
-    public class Statue : Module
+    public Statue(AbsoluteZote absoluteZote) : base(absoluteZote)
     {
-        public Statue(AbsoluteZote absoluteZote) : base(absoluteZote)
+    }
+    public override List<(string, string)> GetPreloadNames()
+    {
+        return new List<(string, string)>
         {
-        }
-        public override List<(string, string)> GetPreloadNames()
+            ("GG_Workshop", "GG_Statue_Grimm"),
+        };
+    }
+    public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
+    {
+        var ggStatueGrimm = preloadedObjects["GG_Workshop"]["GG_Statue_Grimm"];
+        var dream = ggStatueGrimm.transform.Find("dream_version_switch").gameObject;
+        dream.transform.Find("GG_statue_plinth_dream").gameObject.SetActive(false);
+        dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
+        dream.name = "dream";
+        prefabs["dream"] = dream;
+    }
+    public override void Initialize(UnityEngine.SceneManagement.Scene scene)
+    {
+        if (scene.name == "GG_Workshop")
         {
-            return new List<(string, string)>
-            {
-                ("GG_Workshop", "GG_Statue_Grimm"),
-            };
-        }
-        public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
-        {
-            var ggStatueGrimm = preloadedObjects["GG_Workshop"]["GG_Statue_Grimm"];
-            var dream = ggStatueGrimm.transform.Find("dream_version_switch").gameObject;
-            dream.transform.Find("GG_statue_plinth_dream").gameObject.SetActive(false);
-            dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
+            var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
+            var dream = UnityEngine.Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
             dream.name = "dream";
-            prefabs["dream"] = dream;
         }
-        public override void Initialize(UnityEngine.SceneManagement.Scene scene)
+    }
+    public override void UpdateFSM(PlayMakerFSM fsm)
+    {
+    }
+    public override string UpdateText(string key, string sheet, string text)
+    {
+        if (key == "NAME_GREY_PRINCE" && sheet == "Journal")
         {
-            if (scene.name == "GG_Workshop")
+            if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
-                var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
-                var dream = UnityEngine.Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
-                dream.name = "dream";
+                text = "无上左特";
+            }
+            else
+            {
+                text = "ABSOLUTE ZOTE";
             }
         }
-        public override void UpdateFSM(PlayMakerFSM fsm)
+        else if (key == "GG_S_MIGHTYZOTE" && sheet == "CP3")
         {
-        }
-        public override string UpdateText(string key, string sheet, string text)
-        {
-            if (key == "NAME_GREY_PRINCE" && sheet == "Journal")
+            if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
-                if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
-                {
-                    text = "无上左特";
-                }
-                else
-                {
-                    text = "ABSOLUTE ZOTE";
-                }
+                text = "混沌之神";
             }
-            else if (key == "GG_S_MIGHTYZOTE" && sheet == "CP3")
+            else
             {
-                if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
-                {
-                    text = "混沌之神";
-                }
-                else
-                {
-                    text = "God of chaos";
-                }
+                text = "God of chaos";
             }
-            return text;
         }
+        return text;
     }
 }

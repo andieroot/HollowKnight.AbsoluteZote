@@ -1,32 +1,26 @@
-using Modding;
-using Satchel;
-
-
-namespace AbsoluteZote
+namespace AbsoluteZote;
+public static class Common
 {
-    public static class Common
+    public static void LogFSM(this Mod mod, PlayMakerFSM fsm, System.Action function = null)
     {
-        public static void LogFSM(this Mod mod, PlayMakerFSM fsm, System.Action function = null)
+        foreach (var state in fsm.FsmStates)
         {
-            foreach (var state in fsm.FsmStates)
+            FsmUtil.InsertCustomAction(fsm, state.Name, () =>
             {
-                FsmUtil.InsertCustomAction(fsm, state.Name, () =>
-                {
-                    mod.Log("FSM: " + fsm.gameObject.name + "-" + fsm.FsmName + " entering state: " + state.Name + ".");
-                    function?.Invoke();
-                }, 0);
-            }
+                mod.Log("FSM: " + fsm.gameObject.name + "-" + fsm.FsmName + " entering state: " + state.Name + ".");
+                function?.Invoke();
+            }, 0);
         }
-        public static void LogFSMState(this Mod mod, PlayMakerFSM fsm, string state, System.Action function = null)
+    }
+    public static void LogFSMState(this Mod mod, PlayMakerFSM fsm, string state, System.Action function = null)
+    {
+        for (int i = fsm.GetState(state).Actions.Length; i >= 0; i--)
         {
-            for (int i = fsm.GetState(state).Actions.Length; i >= 0; i--)
+            FsmUtil.InsertCustomAction(fsm, state, () =>
             {
-                FsmUtil.InsertCustomAction(fsm, state, () =>
-                {
-                    mod.Log("State: " + fsm.FsmName + "-" + state + " entering action: " + i.ToString() + ".");
-                    function?.Invoke();
-                }, i);
-            }
+                mod.Log("State: " + fsm.FsmName + "-" + state + " entering action: " + i.ToString() + ".");
+                function?.Invoke();
+            }, i);
         }
     }
 }
