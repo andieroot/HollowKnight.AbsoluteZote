@@ -49,6 +49,13 @@ public class Arena : Module
             bg.transform.Find("black_fader_GG (7)").gameObject.SetActive(false);
             bg.transform.Find("black_fader_GG (8)").gameObject.SetActive(false);
             bg.transform.Find("GG_scenery_0005_16 (3)").gameObject.SetActive(false);
+            foreach (var i in new List<int> { 2, 4, 5, 7, 8 })
+            {
+                var haze2 = bg.transform.Find("haze2 (" + i.ToString() + ")").gameObject;
+                var spriteRender = haze2.GetComponent<SpriteRenderer>();
+                spriteRender.color = new Color(1, 1, 1, spriteRender.color.a / 1.5f);
+            }
+            bg.transform.Find("haze2 (3)").gameObject.SetActive(false);
             GameObject.Find("Mighty_Zote_0002_20 (1)").gameObject.SetActive(false);
             GameObject.Find("Mighty_Zote_0004_18 (7)").gameObject.SetActive(false);
             GameObject.Find("Mighty_Zote_0004_18 (8)").gameObject.SetActive(false);
