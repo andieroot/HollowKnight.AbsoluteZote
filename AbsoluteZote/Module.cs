@@ -9,9 +9,51 @@ public abstract class Module
         absoluteZote_.modules.Add(this);
     }
     protected void Log(object message) => absoluteZote_.Log(message);
-    public abstract List<(string, string)> GetPreloadNames();
-    public abstract void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects);
-    public abstract void Initialize(UnityEngine.SceneManagement.Scene scene);
-    public abstract void UpdateFSM(PlayMakerFSM fsm);
-    public abstract string UpdateText(string key, string sheet, string text);
+    protected void LogFSM(PlayMakerFSM fsm, System.Action function = null)
+    {
+        foreach (var state in fsm.FsmStates)
+        {
+            FsmUtil.InsertCustomAction(fsm, state.Name, () =>
+            {
+                Log("FSM: " + fsm.gameObject.name + "-" + fsm.FsmName + " entering state: " + state.Name + ".");
+                function?.Invoke();
+            }, 0);
+        }
+    }
+    protected void LogFSMState(PlayMakerFSM fsm, string state, System.Action function = null)
+    {
+        for (int i = fsm.GetState(state).Actions.Length; i >= 0; i--)
+        {
+            FsmUtil.InsertCustomAction(fsm, state, () =>
+            {
+                Log("State: " + fsm.FsmName + "-" + state + " entering action: " + i.ToString() + ".");
+                function?.Invoke();
+            }, i);
+        }
+    }
+    protected bool IsGreyPrince(GameObject gameObject)
+    {
+        return gameObject.scene.name == "GG_Grey_Prince_Zote" && gameObject.name == "Grey Prince";
+    }
+    public virtual List<(string, string)> GetPreloadNames()
+    {
+        return new List<(string, string)> { };
+    }
+    public virtual void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
+    {
+    }
+    public virtual void Initialize(UnityEngine.SceneManagement.Scene scene)
+    {
+    }
+    public virtual void UpdateFSM(PlayMakerFSM fsm)
+    {
+    }
+    public virtual string UpdateText(string key, string sheet, string text)
+    {
+        return text;
+    }
+    public virtual bool UpdateDreamnailReaction(EnemyDreamnailReaction enemyDreamnailReaction)
+    {
+        return false;
+    }
 }

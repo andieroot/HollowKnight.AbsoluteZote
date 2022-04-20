@@ -4,15 +4,6 @@ public class Arena : Module
     public Arena(AbsoluteZote absoluteZote) : base(absoluteZote)
     {
     }
-    public override List<(string, string)> GetPreloadNames()
-    {
-        return new List<(string, string)>
-        {
-        };
-    }
-    public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
-    {
-    }
     public override void Initialize(UnityEngine.SceneManagement.Scene scene)
     {
         if (scene.name == "GG_Grey_Prince_Zote")
@@ -64,12 +55,5 @@ public class Arena : Module
             GameObject.Find("Mighty_Zote_0004_18 (6)").gameObject.SetActive(false);
             GameObject.Find("Mighty_Zote_0004_18 (5)").gameObject.SetActive(false);
         }
-    }
-    public override void UpdateFSM(PlayMakerFSM fsm)
-    {
-    }
-    public override string UpdateText(string key, string sheet, string text)
-    {
-        return text;
     }
 }

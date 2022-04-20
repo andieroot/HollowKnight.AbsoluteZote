@@ -18,7 +18,7 @@ public class Control : Module
     }
     public override void UpdateFSM(PlayMakerFSM fsm)
     {
-        if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince" && fsm.FsmName == "Control")
+        if (IsGreyPrince(fsm.gameObject) && fsm.FsmName == "Control")
         {
             fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
             fsm.InsertCustomAction("Roar", absoluteZote_.title.ShowTitle, 0);

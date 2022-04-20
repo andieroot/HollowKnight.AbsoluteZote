@@ -5,6 +5,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     private Arena arena;
     private Skin skin;
     public Title title;
+    private DreamNail dreamNail;
     private Control control;
     public List<Module> modules = new();
     public AbsoluteZote() : base("AbsoluteZote")
@@ -13,6 +14,7 @@ public class AbsoluteZote : Mod, ITogglableMod
         arena = new(this);
         skin = new(this);
         title = new(this);
+        dreamNail = new(this);
         control = new(this);
     }
     public override string GetVersion() => "1.0.0.0";
@@ -34,6 +36,7 @@ public class AbsoluteZote : Mod, ITogglableMod
         ModHooks.LanguageGetHook += LanguageGetHook;
         ModHooks.HeroUpdateHook += HeroUpdateHook;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
+        On.EnemyDreamnailReaction.RecieveDreamImpact += RecieveDreamImpact;
         if (preloadedObjects != null)
         {
             foreach (var module in modules)
@@ -49,7 +52,7 @@ public class AbsoluteZote : Mod, ITogglableMod
         ModHooks.HeroUpdateHook -= HeroUpdateHook;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
     }
-    private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable original, PlayMakerFSM fsm)
+    private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable onEnable, PlayMakerFSM fsm)
     {
         try
         {
@@ -57,7 +60,7 @@ public class AbsoluteZote : Mod, ITogglableMod
             {
                 module.UpdateFSM(fsm);
             }
-            original(fsm);
+            onEnable(fsm);
         }
         catch (Exception exception)
         {
@@ -99,6 +102,24 @@ public class AbsoluteZote : Mod, ITogglableMod
         {
             foreach (var module in modules)
                 module.Initialize(to);
+        }
+        catch (Exception exception)
+        {
+            LogError(exception.Message);
+        }
+    }
+    private void RecieveDreamImpact(On.EnemyDreamnailReaction.orig_RecieveDreamImpact receiveDreamImpact, EnemyDreamnailReaction enemyDreamnailReaction)
+    {
+        try
+        {
+            foreach (var module in modules)
+            {
+                if (module.UpdateDreamnailReaction(enemyDreamnailReaction))
+                {
+                    return;
+                }
+            }
+            receiveDreamImpact(enemyDreamnailReaction);
         }
         catch (Exception exception)
         {

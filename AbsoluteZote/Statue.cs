@@ -29,9 +29,6 @@ public class Statue : Module
             dream.name = "dream";
         }
     }
-    public override void UpdateFSM(PlayMakerFSM fsm)
-    {
-    }
     public override string UpdateText(string key, string sheet, string text)
     {
         if (key == "NAME_GREY_PRINCE" && sheet == "Journal")

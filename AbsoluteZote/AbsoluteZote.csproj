@@ -39,6 +39,9 @@
 		<Reference Include="PlayMaker">
 			<HintPath>$(ReferenceInstallation)/PlayMaker.dll</HintPath>
 		</Reference>
+		<Reference Include="MMHOOK_Assembly-CSharp">
+			<HintPath>$(ReferenceInstallation)/MMHOOK_Assembly-CSharp.dll</HintPath>
+		</Reference>
 		<Reference Include="MMHOOK_PlayMaker">
 			<HintPath>$(ReferenceInstallation)/MMHOOK_PlayMaker.dll</HintPath>
 		</Reference>
