@@ -14,6 +14,8 @@ public class DreamNail : Module
             fsm.FsmVariables.GetFsmInt("Convo Amount").Value = 5;
             fsm.FsmVariables.GetFsmString("Convo Title").Value = "GREY_PRINCE";
             fsm.SendEvent("DISPLAY ENEMY DREAM");
+            var dreamImpactPrefab = typeof(EnemyDreamnailReaction).GetField("dreamImpactPrefab", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(enemyDreamnailReaction) as GameObject;
+            dreamImpactPrefab.Spawn().transform.position = enemyDreamnailReaction.transform.position;
             enemyDreamnailReaction.gameObject.GetComponent<SpriteFlash>().flashDreamImpact();
             return true;
         }
