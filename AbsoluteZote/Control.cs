@@ -59,9 +59,26 @@ public class Control : Module
     private void UpdateStateDashSlashJumpAntic(PlayMakerFSM fsm)
     {
         var dashSlashJumpAntic = fsm.AddState("Dash Slash Jump Antic");
+        var dashSlashJump = fsm.AddState("Dash Slash Jump");
         fsm.AddCustomAction(dashSlashJumpAntic.Name, fsm.CreateSetVelocity2d(0, 0));
-        fsm.AddAction(dashSlashJumpAntic.Name, fsm.CreateFaceObject(HeroController.instance.gameObject, true));
         fsm.AddAction(dashSlashJumpAntic.Name, fsm.CreateTk2dPlayAnimationWithEvents("Antic", FsmEvent.Finished));
-        fsm.AddTransition(dashSlashJumpAntic.Name, "FINISHED", "Idle Start");
+        fsm.AddTransition(dashSlashJumpAntic.Name, "FINISHED", dashSlashJump.Name);
+        fsm.AddCustomAction(dashSlashJump.Name, () =>
+        {
+            float destination, targetLeft = 8.19f, targetRight = 44.61f;
+            if (HeroController.instance.transform.position.x - targetLeft > targetRight - HeroController.instance.transform.position.x)
+            {
+                destination = targetLeft;
+            }
+            else
+            {
+                destination = targetRight;
+            }
+            float velocityX = 2*(destination - fsm.gameObject.transform.position.x);
+            float velocityY = 90;
+            var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
+            rigidbody2D.gravityScale = 6;
+            rigidbody2D.velocity = new Vector2(velocityX, velocityY);
+        });
     }
 }
