@@ -33,6 +33,9 @@
 		<Reference Include="UnityEngine.ParticleSystemModule">
 			<HintPath>$(ReferenceInstallation)/UnityEngine.ParticleSystemModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.Physics2DModule">
+			<HintPath>$(ReferenceInstallation)/UnityEngine.Physics2DModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.UI">
 			<HintPath>$(ReferenceInstallation)/UnityEngine.UI.dll</HintPath>
 		</Reference>
