@@ -1,6 +1,17 @@
 ﻿namespace AbsoluteZote;
 public static class FSM
 {
+    public static FsmEvent GetFSMEvent(this PlayMakerFSM fsm, string name)
+    {
+        foreach (var fsmEvent in fsm.FsmEvents)
+        {
+            if (fsmEvent.Name == name)
+            {
+                return fsmEvent;
+            }
+        }
+        throw new Exception();
+    }
     public static Tk2dPlayAnimationWithEvents CreateTk2dPlayAnimationWithEvents(this PlayMakerFSM fsm, string clip, FsmEvent fsmEvent)
     {
         var fsmOwnerDefault = new FsmOwnerDefault
@@ -35,5 +46,35 @@ public static class FSM
             everyFrame = false,
         };
         return faceObject;
+    }
+    public static CheckCollisionSide CreateCheckCollisionSide(this PlayMakerFSM fsm, FsmEvent fsmEvent)
+    {
+        var checkCollisionSide = new CheckCollisionSide()
+        {
+            topHit = false,
+            rightHit = false,
+            bottomHit = false,
+            leftHit = false,
+            bottomHitEvent = fsmEvent,
+            otherLayer = false,
+            otherLayerNumber = 0,
+            ignoreTriggers = false,
+        };
+        return checkCollisionSide;
+    }
+    public static CheckCollisionSideEnter CreateCheckCollisionSideEnter(this PlayMakerFSM fsm, FsmEvent fsmEvent)
+    {
+        var checkCollisionSideEnter = new CheckCollisionSideEnter()
+        {
+            topHit = false,
+            rightHit = false,
+            bottomHit = false,
+            leftHit = false,
+            bottomHitEvent = fsmEvent,
+            otherLayer = false,
+            otherLayerNumber = 0,
+            ignoreTriggers = false,
+        };
+        return checkCollisionSideEnter;
     }
 }
