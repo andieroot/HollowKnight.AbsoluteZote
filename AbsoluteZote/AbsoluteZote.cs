@@ -1,6 +1,7 @@
 ﻿namespace AbsoluteZote;
 public class AbsoluteZote : Mod, ITogglableMod
 {
+    static public AbsoluteZote absoluteZote;
     private Statue statue;
     private Arena arena;
     private Skin skin;
@@ -10,6 +11,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     public List<Module> modules = new();
     public AbsoluteZote() : base("AbsoluteZote")
     {
+        absoluteZote = this;
         statue = new(this);
         arena = new(this);
         skin = new(this);

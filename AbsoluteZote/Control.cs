@@ -76,7 +76,7 @@ public class Control : Module
             var x = HeroController.instance.transform.position.x;
             float destination;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
-            var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargeRight").Value;
+            var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
             if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
             {
                 destination = dashSlashTargetRight;
@@ -112,46 +112,51 @@ public class Control : Module
         {
             var x = fsm.gameObject.transform.position.x;
             float destination;
+            int direction;
             var slack = 5;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
-            var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargeRight").Value;
+            var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
             if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
             {
                 destination = dashSlashTargetLeft + slack;
+                direction = -1;
             }
             else
             {
                 destination = dashSlashTargetRight - slack;
+                direction = 1;
             }
             fsm.AccessFloatVariable("dashSlashDestination").Value = destination;
+            fsm.AccessIntVariable("dashSlashDirection").Value = direction;
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.gravityScale = 3;
             rigidbody2D.velocity = Vector2.zero;
         });
         fsm.AddCustomAction("Dash Slash Charge", fsm.CreateFacePosition("dashSlashDestination", true));
-        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(2, fsm.GetFSMEvent("FINISHED")));
+        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(1, fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Charge", "FINISHED", "Dash Slash Dash");
     }
     private void UpdateStateDashSlashDash(PlayMakerFSM fsm)
     {
         fsm.AddCustomAction("Dash Slash Dash", () =>
         {
-            var x = fsm.gameObject.transform.position.x;
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
-            var v = 32;
-            if (x < fsm.AccessFloatVariable("dashSlashDestination").Value)
-                rigidbody2D.velocity = new Vector2(v, 0);
-            else
-                rigidbody2D.velocity = new Vector2(-v, 0);
+            var v = fsm.AccessIntVariable("dashSlashDirection").Value * 64;
+            rigidbody2D.velocity = new Vector2(v, 0);
 
         });
-        fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation("dashSlashDestination", "dashSlashDirecton", fsm.GetFSMEvent("FINISHED")));
-        fsm.AddCustomAction("Dash Slash Dash", () => fsm.SendEvent("FINISHED"));
+        fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation("dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Dash", "FINISHED", "Dash Slash Slash");
     }
     private void UpdateStateDashSlashSlash(PlayMakerFSM fsm)
     {
-        fsm.AddCustomAction("Dash Slash Slash", () => fsm.SendEvent("FINISHED"));
+        fsm.AddCustomAction("Dash Slash Slash", () =>
+        {
+            var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
+            rigidbody2D.velocity = new Vector2(0, 0);
+
+        });
+        fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.5f, fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Slash", "FINISHED", "Idle Start");
     }
 }
