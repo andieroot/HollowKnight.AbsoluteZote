@@ -1,6 +1,7 @@
 ﻿namespace AbsoluteZote;
 public class Title : Module
 {
+    private readonly bool enabled = true;
     private GameObject superTitle;
     private GameObject title;
     private GameObject titleBackground;
@@ -86,6 +87,10 @@ public class Title : Module
     }
     public void HideHUD()
     {
+        if (!enabled)
+        {
+            return;
+        }
         foreach (var fsm in GameCameras.instance.hudCanvas.GetComponents<PlayMakerFSM>())
         {
             fsm.SendEvent("OUT");
@@ -106,6 +111,10 @@ public class Title : Module
     }
     public void ShowTitle()
     {
+        if (!enabled)
+        {
+            return;
+        }
         var coroutine = ShowTitle_();
         title.GetComponent<TMPro.TextMeshPro>().StartCoroutine(coroutine);
     }
@@ -127,6 +136,10 @@ public class Title : Module
     }
     public void HideTitle()
     {
+        if (!enabled)
+        {
+            return;
+        }
         var coroutine = HideTitle_();
         title.GetComponent<TMPro.TextMeshPro>().StartCoroutine(coroutine);
     }

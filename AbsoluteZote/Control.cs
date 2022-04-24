@@ -48,6 +48,8 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashSlashFlash1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashSlashFlash2").gameObject.SetActive(false);
         }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
