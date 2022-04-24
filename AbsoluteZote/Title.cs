@@ -24,7 +24,6 @@ public class Title : Module
         var superTitle = title.transform.Find("Boss Title (1)").gameObject;
         superTitle.GetComponent<SetTextMeshProGameText>().convName = "ABSOLUTE_ZOTE_SUPER";
         superTitle.name = "superTitle";
-        title.name = "title";
         prefabs["title"] = title;
         var titleBackground = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
         var spriteRenderer = titleBackground.GetComponent<SpriteRenderer>();
@@ -34,19 +33,18 @@ public class Title : Module
         spriteRenderer.color = new Color(.3f, 0, .3f, 0);
         titleBackground.transform.position = new Vector3(0, 0, -16);
         titleBackground.transform.localScale = Vector3.one * 256;
-        titleBackground.name = "titleBackground";
         prefabs["titleBackground"] = titleBackground;
     }
     public override void Initialize(UnityEngine.SceneManagement.Scene scene)
     {
         if (scene.name == "GG_Grey_Prince_Zote")
         {
-            title = UnityEngine.Object.Instantiate(absoluteZote_.title.prefabs["title"]);
+            title = UnityEngine.Object.Instantiate(prefabs["title"] as GameObject);
             title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
             superTitle = title.transform.Find("superTitle").gameObject;
             superTitle.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
             title.name = "title";
-            titleBackground = UnityEngine.Object.Instantiate(absoluteZote_.title.prefabs["titleBackground"]);
+            titleBackground = UnityEngine.Object.Instantiate(prefabs["titleBackground"] as GameObject);
             titleBackground.SetActive(true);
             titleBackground.name = "titleBackground";
             var gameCameras = GameObject.Find("_GameCameras").gameObject;

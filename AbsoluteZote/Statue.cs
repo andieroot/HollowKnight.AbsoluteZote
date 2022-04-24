@@ -17,7 +17,6 @@ public class Statue : Module
         var dream = ggStatueGrimm.transform.Find("dream_version_switch").gameObject;
         dream.transform.Find("GG_statue_plinth_dream").gameObject.SetActive(false);
         dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
-        dream.name = "dream";
         prefabs["dream"] = dream;
     }
     public override void Initialize(UnityEngine.SceneManagement.Scene scene)
@@ -25,7 +24,7 @@ public class Statue : Module
         if (scene.name == "GG_Workshop")
         {
             var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
-            var dream = UnityEngine.Object.Instantiate(prefabs["dream"], ggStatueGreyPrince.transform);
+            var dream = UnityEngine.Object.Instantiate(prefabs["dream"] as GameObject, ggStatueGreyPrince.transform);
             dream.name = "dream";
         }
     }

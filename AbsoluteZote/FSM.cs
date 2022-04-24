@@ -46,11 +46,27 @@ public static class FSM
         fsm.FsmVariables.IntVariables = fsm.FsmVariables.IntVariables.Append(fsmInt).ToArray();
         return fsmInt;
     }
-    public static Tk2dPlayAnimationWithEvents CreateTk2dPlayAnimationWithEvents(this PlayMakerFSM fsm, string clip, FsmEvent fsmEvent)
+    public static Tk2dPlayAnimation CreateTk2dPlayAnimation(this PlayMakerFSM fsm, GameObject gameObject, string clip)
     {
         var fsmOwnerDefault = new FsmOwnerDefault
         {
-            GameObject = fsm.gameObject,
+            OwnerOption = OwnerDefaultOption.SpecifyGameObject,
+            GameObject = gameObject,
+        };
+        var tk2DPlayAnimation = new Tk2dPlayAnimation()
+        {
+            gameObject = fsmOwnerDefault,
+            animLibName = "",
+            clipName = clip,
+        };
+        return tk2DPlayAnimation;
+    }
+    public static Tk2dPlayAnimationWithEvents CreateTk2dPlayAnimationWithEvents(this PlayMakerFSM fsm, GameObject gameObject, string clip, FsmEvent fsmEvent)
+    {
+        var fsmOwnerDefault = new FsmOwnerDefault
+        {
+            OwnerOption = OwnerDefaultOption.SpecifyGameObject,
+            GameObject = gameObject,
         };
         var tk2DPlayAnimationWithEvents = new Tk2dPlayAnimationWithEvents()
         {
@@ -101,6 +117,10 @@ public static class FSM
                 {
                     localScale.x = -localScale.x;
                 }
+            }
+            if (!spriteFaceRight)
+            {
+                localScale.x *= -1;
             }
             fsm.transform.localScale = localScale;
         };
@@ -153,6 +173,51 @@ public static class FSM
             destination = fsm.AccessFloatVariable(destination),
             direction = fsm.AccessIntVariable(direction),
             finishEvent = finishEvent,
+        };
+    }
+    public static AudioPlaySimple CreateAudioPlaySimple(this PlayMakerFSM fsm, float volume, FsmObject oneShotClip)
+    {
+        var fsmOwnerDefault = new FsmOwnerDefault
+        {
+            GameObject = fsm.gameObject,
+        };
+        return new AudioPlaySimple()
+        {
+            gameObject = fsmOwnerDefault,
+            volume = volume,
+            oneShotClip = oneShotClip,
+        };
+    }
+    public static AudioPlayerOneShot CreateAudioPlayerOneShot(
+        this PlayMakerFSM fsm, FsmGameObject audioPlayer, GameObject spawnPoint, AudioClip[] audioClips,
+        float[] weights, float pitchMin, float pitchMax, float volume, float delay)
+    {
+        var weights_ = new FsmFloat[weights.Length];
+        for (int i = 0; i < weights_.Length; i++)
+        {
+            weights_[i] = weights[i];
+        }
+        return new AudioPlayerOneShot()
+        {
+            audioPlayer = audioPlayer,
+            spawnPoint = spawnPoint,
+            audioClips = audioClips,
+            weights = weights_,
+            pitchMin = pitchMin,
+            pitchMax = pitchMax,
+            volume = volume,
+            delay = delay,
+            storePlayer = new FsmGameObject(),
+        };
+    }
+    public static SendEventByName CreateSendEventByName(this PlayMakerFSM fsm, FsmEventTarget eventTarget, string sendEvent,float delay)
+    {
+        return new SendEventByName()
+        {
+            eventTarget = eventTarget,
+            sendEvent = sendEvent,
+            delay = delay,
+            everyFrame = false,
         };
     }
 }

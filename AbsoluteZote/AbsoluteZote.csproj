@@ -21,6 +21,9 @@
 		<Reference Include="UnityEngine">
 			<HintPath>$(ReferenceInstallation)/UnityEngine.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.AudioModule">
+			<HintPath>$(ReferenceInstallation)/UnityEngine.AudioModule.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.CoreModule">
 			<HintPath>$(ReferenceInstallation)/UnityEngine.CoreModule.dll</HintPath>
 		</Reference>
