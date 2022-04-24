@@ -28,9 +28,15 @@ public class Control : Module
         dashSlashChargeChargeEffect.transform.localPosition = new Vector3(0, -3f, 0.001f);
         dashSlashChargeChargeEffect.transform.localScale = new Vector3(2, 1, 1);
         prefabs["dashSlashChargeChargeEffect"] = dashSlashChargeChargeEffect;
-    }
-    public override void Initialize(UnityEngine.SceneManagement.Scene scene)
-    {
+        var dashSlashChargeNACharge = oro.transform.Find("NA Charge").gameObject;
+        dashSlashChargeNACharge.transform.localPosition = new Vector3(0, -2f, -0.001f);
+        prefabs["dashSlashChargeNACharge"] = dashSlashChargeNACharge;
+        var dashSlashChargeNACharged = oro.transform.Find("NA Charged").gameObject;
+        dashSlashChargeNACharged.transform.localPosition = new Vector3(0, -2f, -0.001f);
+        prefabs["dashSlashChargeNACharged"] = dashSlashChargeNACharged;
+        var dashSlashChargePtDash = oro.transform.Find("Pt Dash").gameObject;
+        dashSlashChargePtDash.transform.localPosition = new Vector3(-0.63f, -4.69f, 0.001f);
+        prefabs["dashSlashChargePtDash"] = dashSlashChargePtDash;
     }
     public override void UpdateFSM(PlayMakerFSM fsm)
     {
@@ -39,19 +45,28 @@ public class Control : Module
             var greyPrince = GameObject.Find("Grey Prince");
             var dashSlashChargeChargeEffect = UnityEngine.Object.Instantiate(prefabs["dashSlashChargeChargeEffect"] as GameObject, greyPrince.transform);
             dashSlashChargeChargeEffect.name = "dashSlashChargeChargeEffect";
+            var dashSlashChargeNACharge = UnityEngine.Object.Instantiate(prefabs["dashSlashChargeNACharge"] as GameObject, greyPrince.transform);
+            dashSlashChargeNACharge.name = "dashSlashChargeNACharge";
+            var dashSlashChargeNACharged = UnityEngine.Object.Instantiate(prefabs["dashSlashChargeNACharged"] as GameObject, greyPrince.transform);
+            dashSlashChargeNACharged.name = "dashSlashChargeNACharged";
+            var dashSlashChargePtDash = UnityEngine.Object.Instantiate(prefabs["dashSlashChargePtDash"] as GameObject, greyPrince.transform);
+            dashSlashChargePtDash.name = "dashSlashChargePtDash";
             UpdateStateEnter1(fsm);
             UpdateStateRoar(fsm);
             UpdateStateRoarEnd(fsm);
+            UpdateStateSendEvent(fsm);
             UpdateStateStun(fsm);
             UpdateStateMoveChoice3(fsm);
             fsm.AddState("Dash Slash Jump Antic");
             fsm.AddState("Dash Slash Jump");
             fsm.AddState("Dash Slash Charge");
+            fsm.AddState("Dash Slash Charged");
             fsm.AddState("Dash Slash Dash");
             fsm.AddState("Dash Slash Slash");
             UpdateStateDashSlashAntic(fsm);
             UpdateStateDashSlashJump(fsm);
             UpdateStateDashSlashCharge(fsm);
+            UpdateStateDashSlashCharged(fsm);
             UpdateStateDashSlashDash(fsm);
             UpdateStateDashSlashSlash(fsm);
         }
@@ -67,6 +82,15 @@ public class Control : Module
     private void UpdateStateRoar(PlayMakerFSM fsm)
     {
         fsm.InsertCustomAction("Roar", absoluteZote_.title.ShowTitle, 0);
+    }
+    private void UpdateStateSendEvent(PlayMakerFSM fsm)
+    {
+        fsm.InsertCustomAction("Send Event", () =>
+        {
+            fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(false);
+        }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
     {
@@ -94,18 +118,21 @@ public class Control : Module
         {
             var x = HeroController.instance.transform.position.x;
             float destination;
+            float destinationNext;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
             var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
-            if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
+            if (x - dashSlashTargetLeft < dashSlashTargetRight - x)
             {
                 destination = dashSlashTargetRight;
+                destinationNext = dashSlashTargetLeft - 128;
             }
             else
             {
                 destination = dashSlashTargetLeft;
+                destinationNext = dashSlashTargetRight + 128;
             }
             fsm.AccessFloatVariable("dashSlashDestination").Value = destination;
-            fsm.AccessFloatVariable("dashSlashDestinationNext").Value = dashSlashTargetLeft + dashSlashTargetRight - destination;
+            fsm.AccessFloatVariable("dashSlashDestinationNext").Value = destinationNext;
         });
         fsm.AddCustomAction("Dash Slash Jump Antic", fsm.CreateFacePosition("dashSlashDestinationNext", true));
         fsm.AddAction("Dash Slash Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(fsm.gameObject, "Antic", FsmEvent.Finished));
@@ -160,18 +187,29 @@ public class Control : Module
             rigidbody2D.gravityScale = 3;
             rigidbody2D.velocity = Vector2.zero;
             fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(true);
         });
-        var dashSlashChargeChargeEffect = fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject;
-        fsm.AddAction("Dash Slash Charge", fsm.CreateTk2dPlayAnimation(dashSlashChargeChargeEffect, "Charge Effect"));
         fsm.AddCustomAction("Dash Slash Charge", fsm.CreateFacePosition("dashSlashDestination", true));
-        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(1, fsm.GetFSMEvent("FINISHED")));
-        fsm.AddTransition("Dash Slash Charge", "FINISHED", "Dash Slash Dash");
+        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(0.75f, fsm.GetFSMEvent("FINISHED")));
+        fsm.AddTransition("Dash Slash Charge", "FINISHED", "Dash Slash Charged");
+    }
+    private void UpdateStateDashSlashCharged(PlayMakerFSM fsm)
+    {
+        fsm.AddCustomAction("Dash Slash Charged", () =>
+        {
+            fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(true);
+        });
+        fsm.AddAction("Dash Slash Charged", fsm.CreateWait(0.25f, fsm.GetFSMEvent("FINISHED")));
+        fsm.AddTransition("Dash Slash Charged", "FINISHED", "Dash Slash Dash");
     }
     private void UpdateStateDashSlashDash(PlayMakerFSM fsm)
     {
+        fsm.AddAction("Dash Slash Dash", fsm.CreatePlayParticleEmitterInState(fsm.gameObject.transform.Find("dashSlashChargePtDash").gameObject));
         fsm.AddCustomAction("Dash Slash Dash", () =>
         {
             fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(false);
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             var v = fsm.AccessIntVariable("dashSlashDirection").Value * 64;
             rigidbody2D.velocity = new Vector2(v, 0);

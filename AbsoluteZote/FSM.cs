@@ -210,7 +210,7 @@ public static class FSM
             storePlayer = new FsmGameObject(),
         };
     }
-    public static SendEventByName CreateSendEventByName(this PlayMakerFSM fsm, FsmEventTarget eventTarget, string sendEvent,float delay)
+    public static SendEventByName CreateSendEventByName(this PlayMakerFSM fsm, FsmEventTarget eventTarget, string sendEvent, float delay)
     {
         return new SendEventByName()
         {
@@ -218,6 +218,18 @@ public static class FSM
             sendEvent = sendEvent,
             delay = delay,
             everyFrame = false,
+        };
+    }
+    public static PlayParticleEmitterInState CreatePlayParticleEmitterInState(this PlayMakerFSM fsm, GameObject gameObject)
+    {
+        var fsmOwnerDefault = new FsmOwnerDefault
+        {
+            OwnerOption = OwnerDefaultOption.SpecifyGameObject,
+            GameObject = gameObject,
+        };
+        return new PlayParticleEmitterInState()
+        {
+            gameObject = fsmOwnerDefault,
         };
     }
 }
