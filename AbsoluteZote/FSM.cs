@@ -210,6 +210,22 @@ public static class FSM
             storePlayer = new FsmGameObject(),
         };
     }
+    public static AudioPlayerOneShotSingle CreateAudioPlayerOneShotSingle(
+        this PlayMakerFSM fsm, FsmGameObject audioPlayer, GameObject spawnPoint, FsmObject audioClip,
+        float pitchMin, float pitchMax, float volume, float delay)
+    {
+        return new AudioPlayerOneShotSingle()
+        {
+            audioPlayer = audioPlayer,
+            spawnPoint = spawnPoint,
+            audioClip = audioClip,
+            pitchMin = pitchMin,
+            pitchMax = pitchMax,
+            volume = volume,
+            delay = delay,
+            storePlayer = new FsmGameObject(),
+        };
+    }
     public static SendEventByName CreateSendEventByName(this PlayMakerFSM fsm, FsmEventTarget eventTarget, string sendEvent, float delay)
     {
         return new SendEventByName()

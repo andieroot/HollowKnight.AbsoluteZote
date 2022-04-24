@@ -24,6 +24,7 @@ public class Control : Module
         prefabs["dashSlashChargeAudio"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioClips;
         var brothers = preloadedObjects["GG_Nailmasters"]["Brothers"];
         var oro = brothers.transform.Find("Oro").gameObject;
+        fsm = oro.LocateMyFSM("nailmaster");
         var dashSlashChargeChargeEffect = oro.transform.Find("Charge Effect").gameObject;
         dashSlashChargeChargeEffect.transform.localPosition = new Vector3(0, -3f, 0.001f);
         dashSlashChargeChargeEffect.transform.localScale = new Vector3(2, 1, 1);
@@ -37,6 +38,20 @@ public class Control : Module
         var dashSlashChargePtDash = oro.transform.Find("Pt Dash").gameObject;
         dashSlashChargePtDash.transform.localPosition = new Vector3(-0.63f, -4.69f, 0.001f);
         prefabs["dashSlashChargePtDash"] = dashSlashChargePtDash;
+        prefabs["dashSlashSlashAudioPlayer"] = (fsm.GetState("D Slash").Actions[1] as AudioPlayerOneShotSingle).audioPlayer;
+        prefabs["dashSlashSlashAudio"] = (fsm.GetState("D Slash").Actions[1] as AudioPlayerOneShotSingle).audioClip;
+        var dashSlashSlashFlash1 = oro.transform.Find("Dash Slash").gameObject;
+        dashSlashSlashFlash1.transform.localPosition = new Vector3(2.69f, -1.37f, 0);
+        var localScale = dashSlashSlashFlash1.transform.localScale;
+        localScale.x *= -1;
+        dashSlashSlashFlash1.transform.localScale = localScale;
+        prefabs["dashSlashSlashFlash1"] = dashSlashSlashFlash1;
+        var dashSlashSlashFlash2 = oro.transform.Find("Sharp Flash").gameObject;
+        dashSlashSlashFlash2.transform.localPosition = new Vector3(7, -1.5f, 0);
+        localScale = dashSlashSlashFlash2.transform.localScale;
+        localScale.x *= -1;
+        dashSlashSlashFlash2.transform.localScale = localScale;
+        prefabs["dashSlashSlashFlash2"] = dashSlashSlashFlash2;
     }
     public override void UpdateFSM(PlayMakerFSM fsm)
     {
@@ -51,6 +66,10 @@ public class Control : Module
             dashSlashChargeNACharged.name = "dashSlashChargeNACharged";
             var dashSlashChargePtDash = UnityEngine.Object.Instantiate(prefabs["dashSlashChargePtDash"] as GameObject, greyPrince.transform);
             dashSlashChargePtDash.name = "dashSlashChargePtDash";
+            var dashSlashSlashFlash1 = UnityEngine.Object.Instantiate(prefabs["dashSlashSlashFlash1"] as GameObject, greyPrince.transform);
+            dashSlashSlashFlash1.name = "dashSlashSlashFlash1";
+            var dashSlashSlashFlash2 = UnityEngine.Object.Instantiate(prefabs["dashSlashSlashFlash2"] as GameObject, greyPrince.transform);
+            dashSlashSlashFlash2.name = "dashSlashSlashFlash2";
             UpdateStateEnter1(fsm);
             UpdateStateRoar(fsm);
             UpdateStateRoarEnd(fsm);
@@ -135,12 +154,14 @@ public class Control : Module
             fsm.AccessFloatVariable("dashSlashDestinationNext").Value = destinationNext;
         });
         fsm.AddCustomAction("Dash Slash Jump Antic", fsm.CreateFacePosition("dashSlashDestinationNext", true));
-        fsm.AddAction("Dash Slash Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(fsm.gameObject, "Antic", FsmEvent.Finished));
+        fsm.AddAction("Dash Slash Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(
+            fsm.gameObject, "Antic", FsmEvent.Finished));
         fsm.AddTransition("Dash Slash Jump Antic", "FINISHED", "Dash Slash Jump");
     }
     private void UpdateStateDashSlashJump(PlayMakerFSM fsm)
     {
-        fsm.AddAction("Dash Slash Jump", fsm.CreateAudioPlaySimple(1, prefabs["dashSlashJumpAudio1"] as FsmObject));
+        fsm.AddAction("Dash Slash Jump", fsm.CreateAudioPlaySimple(
+            1, prefabs["dashSlashJumpAudio1"] as FsmObject));
         fsm.AddAction("Dash Slash Jump", fsm.CreateAudioPlayerOneShot(
             prefabs["dashSlashJumpAudioPlayer"] as FsmGameObject, fsm.gameObject,
             prefabs["dashSlashJumpAudio2"] as AudioClip[], new float[3] { 1, 1, 1 }, 1, 1, 1, 0));
@@ -159,7 +180,8 @@ public class Control : Module
     }
     private void UpdateStateDashSlashCharge(PlayMakerFSM fsm)
     {
-        fsm.AddAction("Dash Slash Charge", fsm.CreateSendEventByName(prefabs["dashSlashJumpLandCamera"] as FsmEventTarget, "AverageShake", 0));
+        fsm.AddAction("Dash Slash Charge", fsm.CreateSendEventByName(
+            prefabs["dashSlashJumpLandCamera"] as FsmEventTarget, "AverageShake", 0));
         fsm.AddAction("Dash Slash Charge", fsm.CreateAudioPlayerOneShot(
             prefabs["dashSlashChargeAudioPlayer"] as FsmGameObject, fsm.gameObject,
             prefabs["dashSlashChargeAudio"] as AudioClip[], new float[2] { 1, 1 }, 1, 1, 1, 0));
@@ -168,7 +190,7 @@ public class Control : Module
             var x = fsm.gameObject.transform.position.x;
             float destination;
             int direction;
-            var slack = 5;
+            var slack = 10;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
             var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
             if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
@@ -205,7 +227,8 @@ public class Control : Module
     }
     private void UpdateStateDashSlashDash(PlayMakerFSM fsm)
     {
-        fsm.AddAction("Dash Slash Dash", fsm.CreatePlayParticleEmitterInState(fsm.gameObject.transform.Find("dashSlashChargePtDash").gameObject));
+        fsm.AddAction("Dash Slash Dash", fsm.CreatePlayParticleEmitterInState(
+            fsm.gameObject.transform.Find("dashSlashChargePtDash").gameObject));
         fsm.AddCustomAction("Dash Slash Dash", () =>
         {
             fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(false);
@@ -214,16 +237,21 @@ public class Control : Module
             var v = fsm.AccessIntVariable("dashSlashDirection").Value * 64;
             rigidbody2D.velocity = new Vector2(v, 0);
         });
-        fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation("dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("FINISHED")));
+        fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation(
+            "dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Dash", "FINISHED", "Dash Slash Slash");
     }
     private void UpdateStateDashSlashSlash(PlayMakerFSM fsm)
     {
+        fsm.AddAction("Dash Slash Slash", fsm.CreateAudioPlayerOneShotSingle(
+            prefabs["dashSlashSlashAudioPlayer"] as FsmGameObject, fsm.gameObject,
+            prefabs["dashSlashSlashAudio"] as FsmObject, 1, 1, 1, 0));
         fsm.AddCustomAction("Dash Slash Slash", () =>
         {
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.velocity = new Vector2(0, 0);
-
+            fsm.gameObject.transform.Find("dashSlashSlashFlash1").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("dashSlashSlashFlash2").gameObject.SetActive(true);
         });
         fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.5f, fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Slash", "FINISHED", "Idle Start");
