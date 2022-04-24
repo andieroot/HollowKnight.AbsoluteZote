@@ -35,9 +35,9 @@ public class Title : Module
         titleBackground.transform.localScale = Vector3.one * 256;
         prefabs["titleBackground"] = titleBackground;
     }
-    public override void Initialize(UnityEngine.SceneManagement.Scene scene)
+    public override void UpdateFSM(PlayMakerFSM fsm)
     {
-        if (scene.name == "GG_Grey_Prince_Zote")
+        if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince Title" && fsm.FsmName == "Control")
         {
             title = UnityEngine.Object.Instantiate(prefabs["title"] as GameObject);
             title.GetComponent<TMPro.TextMeshPro>().color = new Color(1, 1, 1);
@@ -51,12 +51,6 @@ public class Title : Module
             var hudCamera = gameCameras.transform.Find("HudCamera").gameObject;
             var dialogueManager = hudCamera.transform.Find("DialogueManager").gameObject;
             dreamMsg = dialogueManager.transform.Find("Dream Msg").gameObject;
-        }
-    }
-    public override void UpdateFSM(PlayMakerFSM fsm)
-    {
-        if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Grey Prince Title" && fsm.FsmName == "Control")
-        {
             for (int i = 1; i <= 13; ++i)
             {
                 fsm.RemoveAction("Extra " + i.ToString(), 1);
