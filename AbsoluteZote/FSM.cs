@@ -17,6 +17,36 @@ public class ReachDestination : FsmStateAction
 }
 public static class FSM
 {
+    public static void AddAnimationTest(this PlayMakerFSM fsm)
+    {
+        var i = 0;
+        foreach (var clip in fsm.gameObject.GetComponent<tk2dSpriteAnimator>().Library.clips)
+        {
+            fsm.AddState("Animation Test " + i);
+            ++i;
+        }
+        var n = i;
+        i = 0;
+        foreach (var clip in fsm.gameObject.GetComponent<tk2dSpriteAnimator>().Library.clips)
+        {
+            fsm.AddAction("Animation Test " + i, fsm.CreateTk2dPlayAnimationWithEvents(
+                fsm.gameObject, clip.name, fsm.GetFSMEvent("FINISHED")));
+            fsm.AddCustomAction("Animation Test " + i, () =>
+            {
+                AbsoluteZote.absoluteZote.Log(clip.name);
+            });
+            fsm.AddAction("Animation Test " + i, fsm.CreateWait(2.5f, fsm.GetFSMEvent("FINISHED")));
+            if (i + 1 != n)
+            {
+                fsm.AddTransition("Animation Test " + i, "FINISHED", "Animation Test " + (i + 1));
+            }
+            else
+            {
+                fsm.AddTransition("Animation Test " + i, "FINISHED", "Animation Test " + 0);
+            }
+            ++i;
+        }
+    }
     public static FsmEvent GetFSMEvent(this PlayMakerFSM fsm, string name)
     {
         foreach (var fsmEvent in fsm.FsmEvents)

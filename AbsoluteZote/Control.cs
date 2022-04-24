@@ -129,7 +129,6 @@ public class Control : Module
     }
     private void UpdateStateDashSlashAntic(PlayMakerFSM fsm)
     {
-
         fsm.AddCustomAction("Dash Slash Jump Antic", fsm.CreateSetVelocity2d(0, 0));
         fsm.AccessFloatVariable("dashSlashTargetLeft").Value = 8.19f;
         fsm.AccessFloatVariable("dashSlashTargetRight").Value = 44.61f;
@@ -155,7 +154,7 @@ public class Control : Module
         });
         fsm.AddCustomAction("Dash Slash Jump Antic", fsm.CreateFacePosition("dashSlashDestinationNext", true));
         fsm.AddAction("Dash Slash Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(
-            fsm.gameObject, "Antic", FsmEvent.Finished));
+            fsm.gameObject, "Antic", fsm.GetFSMEvent("FINISHED")));
         fsm.AddTransition("Dash Slash Jump Antic", "FINISHED", "Dash Slash Jump");
     }
     private void UpdateStateDashSlashJump(PlayMakerFSM fsm)
@@ -187,6 +186,17 @@ public class Control : Module
             prefabs["dashSlashChargeAudio"] as AudioClip[], new float[2] { 1, 1 }, 1, 1, 1, 0));
         fsm.AddCustomAction("Dash Slash Charge", () =>
         {
+            var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
+            var oldClip = tk2dSpriteAnimator_.GetClipByName("Spit");
+            var newClip = new tk2dSpriteAnimationClip();
+            newClip.CopyFrom(oldClip);
+            newClip.frames = new tk2dSpriteAnimationFrame[2];
+            newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Once;
+            for (int i = 0; i < newClip.frames.Length; i++)
+            {
+                newClip.frames[i] = oldClip.frames[oldClip.frames.Length - i - 1];
+            }
+            tk2dSpriteAnimator_.Play(newClip);
             var x = fsm.gameObject.transform.position.x;
             float destination;
             int direction;
@@ -212,8 +222,8 @@ public class Control : Module
             fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(true);
         });
         fsm.AddCustomAction("Dash Slash Charge", fsm.CreateFacePosition("dashSlashDestination", true));
-        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(0.75f, fsm.GetFSMEvent("FINISHED")));
-        fsm.AddTransition("Dash Slash Charge", "FINISHED", "Dash Slash Charged");
+        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(0.75f, fsm.GetFSMEvent("1")));
+        fsm.AddTransition("Dash Slash Charge", "1", "Dash Slash Charged");
     }
     private void UpdateStateDashSlashCharged(PlayMakerFSM fsm)
     {
@@ -231,6 +241,17 @@ public class Control : Module
             fsm.gameObject.transform.Find("dashSlashChargePtDash").gameObject));
         fsm.AddCustomAction("Dash Slash Dash", () =>
         {
+            var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
+            var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
+            var newClip = new tk2dSpriteAnimationClip();
+            newClip.CopyFrom(oldClip); 
+            newClip.frames = new tk2dSpriteAnimationFrame[1];
+            newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Once;
+            for (int i = 0; i < newClip.frames.Length; i++)
+            {
+                newClip.frames[i] = oldClip.frames[oldClip.frames.Length - i - 1];
+            }
+            tk2dSpriteAnimator_.Play(newClip);
             fsm.gameObject.transform.Find("dashSlashChargeChargeEffect").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(false);
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
@@ -238,8 +259,8 @@ public class Control : Module
             rigidbody2D.velocity = new Vector2(v, 0);
         });
         fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation(
-            "dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("FINISHED")));
-        fsm.AddTransition("Dash Slash Dash", "FINISHED", "Dash Slash Slash");
+            "dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("1")));
+        fsm.AddTransition("Dash Slash Dash", "1", "Dash Slash Slash");
     }
     private void UpdateStateDashSlashSlash(PlayMakerFSM fsm)
     {
@@ -248,12 +269,24 @@ public class Control : Module
             prefabs["dashSlashSlashAudio"] as FsmObject, 1, 1, 1, 0));
         fsm.AddCustomAction("Dash Slash Slash", () =>
         {
+
+            var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
+            var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
+            var newClip = new tk2dSpriteAnimationClip();
+            newClip.CopyFrom(oldClip);
+            newClip.frames = new tk2dSpriteAnimationFrame[3];
+            newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Once;
+            for (int i = 0; i < newClip.frames.Length; i++)
+            {
+                newClip.frames[i] = oldClip.frames[oldClip.frames.Length - i - 1];
+            }
+            tk2dSpriteAnimator_.Play(newClip);
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.velocity = new Vector2(0, 0);
             fsm.gameObject.transform.Find("dashSlashSlashFlash1").gameObject.SetActive(true);
             fsm.gameObject.transform.Find("dashSlashSlashFlash2").gameObject.SetActive(true);
         });
-        fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.5f, fsm.GetFSMEvent("FINISHED")));
-        fsm.AddTransition("Dash Slash Slash", "FINISHED", "Idle Start");
+        fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.5f, fsm.GetFSMEvent("1")));
+        fsm.AddTransition("Dash Slash Slash", "1", "Idle Start");
     }
 }
