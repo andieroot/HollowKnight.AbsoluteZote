@@ -21,8 +21,10 @@ public partial class Control : Module
             {
                 var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
                 var velocity = rigidbody2D.velocity;
-                velocity.y *= -1;
-                rigidbody2D.velocity = velocity;
+                var random = new System.Random();
+                var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
+                var velocityY = -velocity.y;
+                rigidbody2D.velocity = new Vector2(velocityX, velocityY);
             }
             fsm.SetState("Roll Rolling Hard");
         }
