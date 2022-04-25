@@ -54,6 +54,9 @@ public abstract class Module
     {
         return false;
     }
+    public virtual void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
+    {
+    }
     public virtual void UpdateFSM(PlayMakerFSM fsm)
     {
     }

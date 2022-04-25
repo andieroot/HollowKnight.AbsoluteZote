@@ -35,9 +35,9 @@ public class AbsoluteZote : Mod, ITogglableMod
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
         ModHooks.HeroUpdateHook += HeroUpdateHook;
-        ModHooks.HitInstanceHook += HitInstanceHook;
         ModHooks.LanguageGetHook += LanguageGetHook;
         On.EnemyDreamnailReaction.RecieveDreamImpact += RecieveDreamImpact;
+        On.HealthManager.Hit += HealthManagerHit;
         On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
         if (preloadedObjects != null)
@@ -51,9 +51,9 @@ public class AbsoluteZote : Mod, ITogglableMod
     public void Unload()
     {
         ModHooks.HeroUpdateHook -= HeroUpdateHook;
-        ModHooks.HitInstanceHook += HitInstanceHook;
         ModHooks.LanguageGetHook -= LanguageGetHook;
         On.EnemyDreamnailReaction.RecieveDreamImpact -= RecieveDreamImpact;
+        On.HealthManager.Hit += HealthManagerHit;
         On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
     }
@@ -70,21 +70,6 @@ public class AbsoluteZote : Mod, ITogglableMod
         {
             LogError(exception.Message);
         }
-    }
-    private HitInstance HitInstanceHook(Fsm fsm, HitInstance hitInstance)
-    {
-        try
-        {
-            foreach (var module in modules)
-            {
-                hitInstance = module.UpdateHit(fsm, hitInstance);
-            }
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
-        return hitInstance;
     }
     private string LanguageGetHook(string key, string sheet, string text)
     {
@@ -113,6 +98,21 @@ public class AbsoluteZote : Mod, ITogglableMod
                 }
             }
             receiveDreamImpact(enemyDreamnailReaction);
+        }
+        catch (Exception exception)
+        {
+            LogError(exception.Message);
+        }
+    }
+    private void HealthManagerHit(On.HealthManager.orig_Hit hit, HealthManager healthManager, HitInstance hitInstance)
+    {
+        try
+        {
+            foreach (var module in modules)
+            {
+                module.UpdateHitInstance(healthManager, hitInstance);
+            }
+            hit(healthManager, hitInstance);
         }
         catch (Exception exception)
         {

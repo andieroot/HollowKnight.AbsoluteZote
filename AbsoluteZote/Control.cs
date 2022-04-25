@@ -17,9 +17,12 @@ public partial class Control : Module
         LoadPrefabsDashSlash(preloadedObjects);
         LoadPrefabsRoll(preloadedObjects);
     }
-    public override string UpdateText(string key, string sheet, string text)
+    public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
-        return text;
+        if (IsGreyPrince(healthManager.gameObject))
+        {
+            UpdateHitInstanceRoll(healthManager, hitInstance);
+        }
     }
     public override void UpdateFSM(PlayMakerFSM fsm)
     {
