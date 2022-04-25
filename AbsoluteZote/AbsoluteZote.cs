@@ -34,11 +34,12 @@ public class AbsoluteZote : Mod, ITogglableMod
     }
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
-        On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
-        ModHooks.LanguageGetHook += LanguageGetHook;
         ModHooks.HeroUpdateHook += HeroUpdateHook;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
+        ModHooks.HitInstanceHook += HitInstanceHook;
+        ModHooks.LanguageGetHook += LanguageGetHook;
         On.EnemyDreamnailReaction.RecieveDreamImpact += RecieveDreamImpact;
+        On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
+        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
         if (preloadedObjects != null)
         {
             foreach (var module in modules)
@@ -49,25 +50,41 @@ public class AbsoluteZote : Mod, ITogglableMod
     }
     public void Unload()
     {
-        On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
-        ModHooks.LanguageGetHook -= LanguageGetHook;
         ModHooks.HeroUpdateHook -= HeroUpdateHook;
+        ModHooks.HitInstanceHook += HitInstanceHook;
+        ModHooks.LanguageGetHook -= LanguageGetHook;
+        On.EnemyDreamnailReaction.RecieveDreamImpact -= RecieveDreamImpact;
+        On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
     }
-    private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable onEnable, PlayMakerFSM fsm)
+    private void HeroUpdateHook()
     {
         try
         {
-            foreach (var module in modules)
+            if (Input.GetKeyDown(KeyCode.F2))
             {
-                module.UpdateFSM(fsm);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
             }
-            onEnable(fsm);
         }
         catch (Exception exception)
         {
             LogError(exception.Message);
         }
+    }
+    private HitInstance HitInstanceHook(Fsm fsm, HitInstance hitInstance)
+    {
+        try
+        {
+            foreach (var module in modules)
+            {
+                hitInstance = module.UpdateHit(fsm, hitInstance);
+            }
+        }
+        catch (Exception exception)
+        {
+            LogError(exception.Message);
+        }
+        return hitInstance;
     }
     private string LanguageGetHook(string key, string sheet, string text)
     {
@@ -84,32 +101,6 @@ public class AbsoluteZote : Mod, ITogglableMod
         }
         return text;
     }
-    private void HeroUpdateHook()
-    {
-        try
-        {
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
-            }
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
-    }
-    private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
-    {
-        try
-        {
-            foreach (var module in modules)
-                module.Initialize(to);
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
-    }
     private void RecieveDreamImpact(On.EnemyDreamnailReaction.orig_RecieveDreamImpact receiveDreamImpact, EnemyDreamnailReaction enemyDreamnailReaction)
     {
         try
@@ -122,6 +113,33 @@ public class AbsoluteZote : Mod, ITogglableMod
                 }
             }
             receiveDreamImpact(enemyDreamnailReaction);
+        }
+        catch (Exception exception)
+        {
+            LogError(exception.Message);
+        }
+    }
+    private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable onEnable, PlayMakerFSM fsm)
+    {
+        try
+        {
+            foreach (var module in modules)
+            {
+                module.UpdateFSM(fsm);
+            }
+            onEnable(fsm);
+        }
+        catch (Exception exception)
+        {
+            LogError(exception.Message);
+        }
+    }
+    private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
+    {
+        try
+        {
+            foreach (var module in modules)
+                module.Initialize(to);
         }
         catch (Exception exception)
         {

@@ -42,11 +42,9 @@ public abstract class Module
     public virtual void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
     }
-    public virtual void Initialize(UnityEngine.SceneManagement.Scene scene)
+    public virtual HitInstance UpdateHit(Fsm fsm, HitInstance hitInstance)
     {
-    }
-    public virtual void UpdateFSM(PlayMakerFSM fsm)
-    {
+        return hitInstance;
     }
     public virtual string UpdateText(string key, string sheet, string text)
     {
@@ -55,5 +53,11 @@ public abstract class Module
     public virtual bool UpdateDreamnailReaction(EnemyDreamnailReaction enemyDreamnailReaction)
     {
         return false;
+    }
+    public virtual void UpdateFSM(PlayMakerFSM fsm)
+    {
+    }
+    public virtual void Initialize(UnityEngine.SceneManagement.Scene scene)
+    {
     }
 }

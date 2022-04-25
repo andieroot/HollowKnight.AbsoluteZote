@@ -16,6 +16,10 @@ public partial class Control : Module
     {
         LoadPrefabsDashSlash(preloadedObjects);
     }
+    public override string UpdateText(string key, string sheet, string text)
+    {
+        return text;
+    }
     public override void UpdateFSM(PlayMakerFSM fsm)
     {
         if (IsGreyPrince(fsm.gameObject) && fsm.FsmName == "Control")
@@ -28,10 +32,6 @@ public partial class Control : Module
             UpdateStateMoveChoice3(fsm);
             UpdateFSMDashSlash(fsm);
         }
-    }
-    public override string UpdateText(string key, string sheet, string text)
-    {
-        return text;
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
     {

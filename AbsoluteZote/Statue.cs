@@ -19,15 +19,6 @@ public class Statue : Module
         dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
         prefabs["dream"] = dream;
     }
-    public override void Initialize(UnityEngine.SceneManagement.Scene scene)
-    {
-        if (scene.name == "GG_Workshop")
-        {
-            var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
-            var dream = UnityEngine.Object.Instantiate(prefabs["dream"] as GameObject, ggStatueGreyPrince.transform);
-            dream.name = "dream";
-        }
-    }
     public override string UpdateText(string key, string sheet, string text)
     {
         if (key == "NAME_GREY_PRINCE" && sheet == "Journal")
@@ -53,5 +44,14 @@ public class Statue : Module
             }
         }
         return text;
+    }
+    public override void Initialize(UnityEngine.SceneManagement.Scene scene)
+    {
+        if (scene.name == "GG_Workshop")
+        {
+            var ggStatueGreyPrince = GameObject.Find("GG_Statue_GreyPrince");
+            var dream = UnityEngine.Object.Instantiate(prefabs["dream"] as GameObject, ggStatueGreyPrince.transform);
+            dream.name = "dream";
+        }
     }
 }
