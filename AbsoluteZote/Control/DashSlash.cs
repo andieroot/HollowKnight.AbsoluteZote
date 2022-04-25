@@ -64,14 +64,14 @@ public partial class Control : Module
         fsm.AddState("Dash Slash Charged");
         fsm.AddState("Dash Slash Dash");
         fsm.AddState("Dash Slash Slash");
-        UpdateStateDashSlashAntic(fsm);
+        UpdateStateDashSlashJumpAntic(fsm);
         UpdateStateDashSlashJump(fsm);
         UpdateStateDashSlashCharge(fsm);
         UpdateStateDashSlashCharged(fsm);
         UpdateStateDashSlashDash(fsm);
         UpdateStateDashSlashSlash(fsm);
     }
-    private void UpdateStateDashSlashAntic(PlayMakerFSM fsm)
+    private void UpdateStateDashSlashJumpAntic(PlayMakerFSM fsm)
     {
         fsm.AddCustomAction("Dash Slash Jump Antic", fsm.CreateSetVelocity2d(0, 0));
         fsm.AccessFloatVariable("dashSlashTargetLeft").Value = 8.19f;
@@ -117,8 +117,8 @@ public partial class Control : Module
             rigidbody2D.gravityScale = 6;
             rigidbody2D.velocity = new Vector2(velocityX, velocityY);
         });
-        fsm.AddAction("Dash Slash Jump", fsm.CreateCheckCollisionSide(fsm.GetFSMEvent("LAND")));
-        fsm.AddAction("Dash Slash Jump", fsm.CreateCheckCollisionSideEnter(fsm.GetFSMEvent("LAND")));
+        fsm.AddAction("Dash Slash Jump", fsm.CreateCheckCollisionSide(null, null, fsm.GetFSMEvent("LAND")));
+        fsm.AddAction("Dash Slash Jump", fsm.CreateCheckCollisionSideEnter(null, null, fsm.GetFSMEvent("LAND")));
         fsm.AddTransition("Dash Slash Jump", "LAND", "Dash Slash Charge");
     }
     private void UpdateStateDashSlashCharge(PlayMakerFSM fsm)

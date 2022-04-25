@@ -155,30 +155,34 @@ public static class FSM
             fsm.transform.localScale = localScale;
         };
     }
-    public static CheckCollisionSide CreateCheckCollisionSide(this PlayMakerFSM fsm, FsmEvent fsmEvent)
+    public static CheckCollisionSide CreateCheckCollisionSide(this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
     {
         var checkCollisionSide = new CheckCollisionSide()
         {
-            topHit = false,
+            leftHit = false,
             rightHit = false,
             bottomHit = false,
-            leftHit = false,
-            bottomHitEvent = fsmEvent,
+            topHit = false,
+            leftHitEvent = leftHitEvent,
+            rightHitEvent = rightHitEvent,
+            bottomHitEvent = bottomHitEvent,
             otherLayer = false,
             otherLayerNumber = 0,
             ignoreTriggers = false,
         };
         return checkCollisionSide;
     }
-    public static CheckCollisionSideEnter CreateCheckCollisionSideEnter(this PlayMakerFSM fsm, FsmEvent fsmEvent)
+    public static CheckCollisionSideEnter CreateCheckCollisionSideEnter(this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
     {
         var checkCollisionSideEnter = new CheckCollisionSideEnter()
         {
-            topHit = false,
+            leftHit = false,
             rightHit = false,
             bottomHit = false,
-            leftHit = false,
-            bottomHitEvent = fsmEvent,
+            topHit = false,
+            leftHitEvent = leftHitEvent,
+            rightHitEvent = rightHitEvent,
+            bottomHitEvent = bottomHitEvent,
             otherLayer = false,
             otherLayerNumber = 0,
             ignoreTriggers = false,

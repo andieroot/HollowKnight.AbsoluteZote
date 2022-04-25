@@ -15,6 +15,7 @@ public partial class Control : Module
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
         LoadPrefabsDashSlash(preloadedObjects);
+        LoadPrefabsRoll(preloadedObjects);
     }
     public override string UpdateText(string key, string sheet, string text)
     {
@@ -31,6 +32,7 @@ public partial class Control : Module
             UpdateStateStun(fsm);
             UpdateStateMoveChoice3(fsm);
             UpdateFSMDashSlash(fsm);
+            UpdateFSMRoll(fsm);
         }
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
@@ -65,7 +67,7 @@ public partial class Control : Module
     {
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("Dash Slash Jump Antic");
+            fsm.SetState("Roll Jump Antic");
         }, 0);
     }
 }

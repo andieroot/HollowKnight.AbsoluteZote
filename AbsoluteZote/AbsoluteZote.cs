@@ -1,13 +1,13 @@
 ﻿namespace AbsoluteZote;
 public class AbsoluteZote : Mod, ITogglableMod
 {
-    static public AbsoluteZote absoluteZote;
-    private Statue statue;
-    private Arena arena;
-    private Skin skin;
-    public Title title;
-    private DreamNail dreamNail;
-    private Control control;
+    public static AbsoluteZote absoluteZote;
+    private readonly Statue statue;
+    private readonly Arena arena;
+    private readonly Skin skin;
+    public readonly Title title;
+    private readonly DreamNail dreamNail;
+    private readonly Control control;
     public List<Module> modules = new();
     public AbsoluteZote() : base("AbsoluteZote")
     {
