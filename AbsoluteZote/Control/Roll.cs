@@ -75,6 +75,14 @@ public partial class Control : Module
                     velocity.x = -25;
                 }
             }
+            if (rigidbody2D.position.x < 7.69)
+            {
+                velocity.x = Math.Abs(velocity.x);
+            }
+            else if (rigidbody2D.position.x > 45.31)
+            {
+                velocity.x = -Math.Abs(velocity.x);
+            }
             rigidbody2D.velocity = velocity;
         }
     }
@@ -237,7 +245,7 @@ public partial class Control : Module
                 {
                     velocityX = Math.Abs(velocityX);
                 }
-                if (rigidbody2D.position.x > 45.31)
+                else if (rigidbody2D.position.x > 45.31)
                 {
                     velocityX = -Math.Abs(velocityX);
                 }
