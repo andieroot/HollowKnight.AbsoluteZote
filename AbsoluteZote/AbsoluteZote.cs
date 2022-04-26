@@ -37,7 +37,7 @@ public class AbsoluteZote : Mod, ITogglableMod
         ModHooks.HeroUpdateHook += HeroUpdateHook;
         ModHooks.LanguageGetHook += LanguageGetHook;
         On.EnemyDreamnailReaction.RecieveDreamImpact += RecieveDreamImpact;
-        On.HealthManager.Hit += HealthManagerHit;
+        On.HealthManager.TakeDamage += HealthManagerTakeDamage;
         On.PlayMakerFSM.OnEnable += PlayMakerFSMOnEnable;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ActiveSceneChanged;
         if (preloadedObjects != null)
@@ -53,7 +53,7 @@ public class AbsoluteZote : Mod, ITogglableMod
         ModHooks.HeroUpdateHook -= HeroUpdateHook;
         ModHooks.LanguageGetHook -= LanguageGetHook;
         On.EnemyDreamnailReaction.RecieveDreamImpact -= RecieveDreamImpact;
-        On.HealthManager.Hit += HealthManagerHit;
+        On.HealthManager.TakeDamage += HealthManagerTakeDamage;
         On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
     }
@@ -104,7 +104,7 @@ public class AbsoluteZote : Mod, ITogglableMod
             LogError(exception.Message);
         }
     }
-    private void HealthManagerHit(On.HealthManager.orig_Hit hit, HealthManager healthManager, HitInstance hitInstance)
+    private void HealthManagerTakeDamage(On.HealthManager.orig_TakeDamage takeDamage, HealthManager healthManager, HitInstance hitInstance)
     {
         try
         {
@@ -112,7 +112,7 @@ public class AbsoluteZote : Mod, ITogglableMod
             {
                 module.UpdateHitInstance(healthManager, hitInstance);
             }
-            hit(healthManager, hitInstance);
+            takeDamage(healthManager, hitInstance);
         }
         catch (Exception exception)
         {

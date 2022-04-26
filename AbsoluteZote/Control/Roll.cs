@@ -17,16 +17,65 @@ public partial class Control : Module
         var fsm = gameObject.GetComponent<PlayMakerFSM>();
         if (fsm.ActiveStateName == "Roll Rolling")
         {
-            if (hitInstance.Direction == 90)
+            var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
+            var velocity = rigidbody2D.velocity;
+            if (hitInstance.AttackType == AttackTypes.Nail)
             {
-                var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
-                var velocity = rigidbody2D.velocity;
-                var random = new System.Random();
-                var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
-                var velocityY = -velocity.y;
-                rigidbody2D.velocity = new Vector2(velocityX, velocityY);
+                if (hitInstance.Direction == 0)
+                {
+                    velocity.x = 25;
+                }
+                else if (hitInstance.Direction == 90)
+                {
+                    velocity.x = (float)((1 - 2 * random.NextDouble()) * 20);
+                    velocity.y = Math.Abs(velocity.y) + 5;
+                }
+                else if (hitInstance.Direction == 270)
+                {
+                    velocity.x = (float)((1 - 2 * random.NextDouble()) * 20);
+                    velocity.y = -Math.Abs(velocity.y) - 5;
+                }
+                else
+                {
+                    velocity.x = -25;
+                }
             }
-            fsm.SetState("Roll Rolling Hard");
+            else if (hitInstance.AttackType == AttackTypes.Spell)
+            {
+                if (hitInstance.Direction == 0)
+                {
+                    velocity.x = 25;
+                }
+                else if (hitInstance.Direction == 90)
+                {
+                    if (HeroController.instance.transform.position.x < rigidbody2D.transform.position.x)
+                    {
+                        velocity.x = 25;
+                    }
+                    else
+                    {
+                        velocity.x = -25;
+                    }
+                    velocity.y = Math.Abs(velocity.y) + 5;
+                }
+                else if (hitInstance.Direction == 270)
+                {
+                    if (HeroController.instance.transform.position.x < rigidbody2D.transform.position.x)
+                    {
+                        velocity.x = 25;
+                    }
+                    else
+                    {
+                        velocity.x = -25;
+                    }
+                    velocity.y = -Math.Abs(velocity.y) - 5;
+                }
+                else
+                {
+                    velocity.x = -25;
+                }
+            }
+            rigidbody2D.velocity = velocity;
         }
     }
     private void UpdateFSMRoll(PlayMakerFSM fsm)
@@ -35,7 +84,6 @@ public partial class Control : Module
         fsm.AddState("Roll Jump");
         fsm.AddState("Roll Antic");
         fsm.AddState("Roll Rolling");
-        fsm.AddState("Roll Rolling Hard");
         fsm.AddState("Roll Rolling Start");
         fsm.AddState("Roll Rolling Left Wall");
         fsm.AddState("Roll Rolling Right Wall");
@@ -44,7 +92,6 @@ public partial class Control : Module
         UpdateStateRollJump(fsm);
         UpdateStateRollAntic(fsm);
         UpdateStateRollRolling(fsm);
-        UpdateStateRollRollingHard(fsm);
         UpdateStateRollRollingStart(fsm);
         UpdateStateRollRollingLeftWall(fsm);
         UpdateStateRollRollingRightWall(fsm);
@@ -65,7 +112,7 @@ public partial class Control : Module
         fsm.AddAction("Roll Jump", fsm.CreateAudioPlayerOneShot(
             prefabs["rollJumpAudioPlayer"] as FsmGameObject, fsm.gameObject,
             prefabs["rollJumpAudio2"] as AudioClip[], new float[3] { 1, 1, 1 }, 1, 1, 1, 0));
-        var velocity = 60;
+        var velocity = (float)(50 + (1 - random.NextDouble() * 2) * 5);
         fsm.AddCustomAction("Roll Jump", () =>
         {
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
@@ -131,45 +178,16 @@ public partial class Control : Module
         fsm.AddTransition("Roll Rolling", "R", "Roll Rolling Right Wall");
         fsm.AddTransition("Roll Rolling", "LAND", "Roll Rolling Land");
     }
-    private void UpdateStateRollRollingHard(PlayMakerFSM fsm)
-    {
-        var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
-        var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Antic");
-        var newClip = new tk2dSpriteAnimationClip();
-        newClip.CopyFrom(oldClip);
-        newClip.frames = new tk2dSpriteAnimationFrame[2];
-        newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Loop;
-        newClip.fps /= 3;
-        for (int i = 0; i < newClip.frames.Length; i++)
-        {
-            newClip.frames[i] = oldClip.frames[i + 1];
-        }
-        fsm.AddCustomAction("Roll Rolling Hard", () => tk2dSpriteAnimator_.Play(newClip));
-        fsm.AddAction("Roll Rolling Hard", fsm.CreateCheckCollisionSide(
-            fsm.GetFSMEvent("L"), fsm.GetFSMEvent("R"), fsm.GetFSMEvent("LAND")));
-        fsm.AddAction("Roll Rolling Hard", fsm.CreateCheckCollisionSideEnter(
-            fsm.GetFSMEvent("L"), fsm.GetFSMEvent("R"), fsm.GetFSMEvent("LAND")));
-        fsm.AddAction("Roll Rolling Hard", fsm.CreateWait(0.1f, fsm.GetFSMEvent("1")));
-        fsm.AddTransition("Roll Rolling Hard", "L", "Roll Rolling Left Wall");
-        fsm.AddTransition("Roll Rolling Hard", "R", "Roll Rolling Right Wall");
-        fsm.AddTransition("Roll Rolling Hard", "LAND", "Roll Rolling Land");
-        fsm.AddTransition("Roll Rolling Hard", "1", "Roll Rolling");
-    }
     private void UpdateStateRollRollingLeftWall(PlayMakerFSM fsm)
     {
         fsm.AddCustomAction("Roll Rolling Left Wall", () =>
         {
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
-            var random = new System.Random();
-            var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
-            if (velocityX < 0)
-            {
-                velocityX *= -1;
-            }
+            var velocityX = 0;
             var velocityY = rigidbody2D.velocity.y;
             rigidbody2D.velocity = new Vector2(velocityX, velocityY);
             var positon = rigidbody2D.position;
-            positon.x += 1e-2f;
+            positon.x += 1e-1f;
             rigidbody2D.position = positon;
             fsm.SendEvent("FINISHED");
         });
@@ -180,16 +198,11 @@ public partial class Control : Module
         fsm.AddCustomAction("Roll Rolling Right Wall", () =>
         {
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
-            var random = new System.Random();
-            var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
-            if (velocityX > 0)
-            {
-                velocityX *= -1;
-            }
+            var velocityX = 0;
             var velocityY = rigidbody2D.velocity.y;
             rigidbody2D.velocity = new Vector2(velocityX, velocityY);
             var positon = rigidbody2D.position;
-            positon.x -= 1e-2f;
+            positon.x -= 1e-1f;
             rigidbody2D.position = positon;
             fsm.SendEvent("FINISHED");
         });
@@ -219,12 +232,24 @@ public partial class Control : Module
             else
             {
                 var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
-                var random = new System.Random();
                 var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
-                var velocityY = 50;
-                rigidbody2D.velocity = new Vector2(velocityX, velocityY);
+                if (rigidbody2D.position.x < 7.69)
+                {
+                    velocityX = Math.Abs(velocityX);
+                }
+                if (rigidbody2D.position.x > 45.31)
+                {
+                    velocityX = -Math.Abs(velocityX);
+                }
+                var velocityY = (float)(50 + (1 - random.NextDouble() * 2) * 5);
+                var velocity = new Vector2(velocityX, velocityY);
+                var heroPositon = HeroController.instance.transform.position;
+                var tracking = new Vector2(heroPositon.x - rigidbody2D.position.x, heroPositon.y - rigidbody2D.position.y);
+                tracking.y = Math.Max(0, tracking.y);
+                tracking *= 1.5f;
+                rigidbody2D.velocity = velocity + tracking;
                 var positon = rigidbody2D.position;
-                positon.y += 1e-2f;
+                positon.y += 1e-1f;
                 rigidbody2D.position = positon;
                 fsm.SendEvent("1");
             }

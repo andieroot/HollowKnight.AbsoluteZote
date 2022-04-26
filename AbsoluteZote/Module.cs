@@ -3,6 +3,7 @@ public abstract class Module
 {
     protected readonly AbsoluteZote absoluteZote_;
     protected readonly Dictionary<string, object> prefabs = new();
+    protected readonly System.Random random = new();
     public Module(AbsoluteZote absoluteZote)
     {
         absoluteZote_ = absoluteZote;
