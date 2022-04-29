@@ -10,6 +10,7 @@ public partial class Control : Module
         prefabs["rollJumpAudioPlayer"] = (fsm.GetState("Jump").Actions[1] as AudioPlayerOneShot).audioPlayer;
         prefabs["rollJumpAudio2"] = (fsm.GetState("Jump").Actions[1] as AudioPlayerOneShot).audioClips;
         prefabs["rollRollingLandCamera"] = (fsm.GetState("Land Normal").Actions[1] as SendEventByName).eventTarget;
+        prefabs["shockwave"] = (fsm.GetState("Slash Waves R").Actions[0] as SpawnObjectFromGlobalPool).gameObject.Value;
     }
     private void UpdateHitInstanceRoll(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -96,6 +97,7 @@ public partial class Control : Module
         fsm.AddState("Roll Rolling Left Wall");
         fsm.AddState("Roll Rolling Right Wall");
         fsm.AddState("Roll Rolling Land");
+        fsm.AddState("Roll Rolling Wave");
         UpdateStateRollJumpAntic(fsm);
         UpdateStateRollJump(fsm);
         UpdateStateRollAntic(fsm);
@@ -104,6 +106,7 @@ public partial class Control : Module
         UpdateStateRollRollingLeftWall(fsm);
         UpdateStateRollRollingRightWall(fsm);
         UpdateStateRollRollingLand(fsm);
+        UpdateStateRollRollingWave(fsm);
     }
     private void UpdateStateRollJumpAntic(PlayMakerFSM fsm)
     {
@@ -263,6 +266,37 @@ public partial class Control : Module
             }
         });
         fsm.AddTransition("Roll Rolling Land", "FINISHED", "Idle Start");
-        fsm.AddTransition("Roll Rolling Land", "1", "Roll Rolling");
+        fsm.AddTransition("Roll Rolling Land", "1", "Roll Rolling Wave");
+    }
+    private void UpdateStateRollRollingWave(PlayMakerFSM fsm)
+    {
+        var spawnObjectFromGlobalPool = fsm.CreateSpawnObjectFromGlobalPool(
+            prefabs["shockwave"] as GameObject, fsm.gameObject, new Vector3(4, 0, 0), new Vector3(0, 0, 0));
+        fsm.AddAction("Roll Rolling Wave", spawnObjectFromGlobalPool);
+        fsm.AddCustomAction("Roll Rolling Wave", () =>
+        {
+            var shockwave = spawnObjectFromGlobalPool.storeObject.Value;
+            var localScale=shockwave.transform.localScale;
+            localScale.x = 1.4f;
+            shockwave.transform.localScale = localScale;
+            var position = shockwave.transform.position;
+            position.y = 4.8f;
+            position.z = 0.003f;
+            if (fsm.gameObject.transform.position.x < HeroController.instance.transform.position.x)
+            {
+                position.x -= 2.5f;
+                shockwave.LocateMyFSM("shockwave").AccessBoolVariable("Facing Right").Value = true;
+            }
+            else
+            {
+                position.x -= 6;
+                shockwave.LocateMyFSM("shockwave").AccessBoolVariable("Facing Right").Value = false;
+            }
+            shockwave.transform.position = position;
+            shockwave.LocateMyFSM("Spawn").AccessIntVariable("Damage").Value = 1;
+            shockwave.LocateMyFSM("shockwave").AccessFloatVariable("Speed").Value = 26;
+            fsm.SendEvent("FINISHED");
+        });
+        fsm.AddTransition("Roll Rolling Wave", "FINISHED", "Roll Rolling");
     }
 }

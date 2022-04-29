@@ -76,6 +76,15 @@ public static class FSM
         fsm.FsmVariables.IntVariables = fsm.FsmVariables.IntVariables.Append(fsmInt).ToArray();
         return fsmInt;
     }
+    public static FsmBool AccessBoolVariable(this PlayMakerFSM fsm, string name)
+    {
+        FsmBool fsmBool = fsm.FsmVariables.BoolVariables.FirstOrDefault(x => x.Name == name);
+        if (fsmBool != null)
+            return fsmBool;
+        fsmBool = new FsmBool(name);
+        fsm.FsmVariables.BoolVariables = fsm.FsmVariables.BoolVariables.Append(fsmBool).ToArray();
+        return fsmBool;
+    }
     public static Tk2dPlayAnimation CreateTk2dPlayAnimation(this PlayMakerFSM fsm, GameObject gameObject, string clip)
     {
         var fsmOwnerDefault = new FsmOwnerDefault
@@ -91,7 +100,8 @@ public static class FSM
         };
         return tk2DPlayAnimation;
     }
-    public static Tk2dPlayAnimationWithEvents CreateTk2dPlayAnimationWithEvents(this PlayMakerFSM fsm, GameObject gameObject, string clip, FsmEvent fsmEvent)
+    public static Tk2dPlayAnimationWithEvents CreateTk2dPlayAnimationWithEvents(
+        this PlayMakerFSM fsm, GameObject gameObject, string clip, FsmEvent fsmEvent)
     {
         var fsmOwnerDefault = new FsmOwnerDefault
         {
@@ -155,7 +165,8 @@ public static class FSM
             fsm.transform.localScale = localScale;
         };
     }
-    public static CheckCollisionSide CreateCheckCollisionSide(this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
+    public static CheckCollisionSide CreateCheckCollisionSide(
+        this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
     {
         var checkCollisionSide = new CheckCollisionSide()
         {
@@ -172,7 +183,8 @@ public static class FSM
         };
         return checkCollisionSide;
     }
-    public static CheckCollisionSideEnter CreateCheckCollisionSideEnter(this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
+    public static CheckCollisionSideEnter CreateCheckCollisionSideEnter(
+        this PlayMakerFSM fsm, FsmEvent leftHitEvent, FsmEvent rightHitEvent, FsmEvent bottomHitEvent)
     {
         var checkCollisionSideEnter = new CheckCollisionSideEnter()
         {
@@ -280,6 +292,18 @@ public static class FSM
         return new PlayParticleEmitterInState()
         {
             gameObject = fsmOwnerDefault,
+        };
+    }
+    public static SpawnObjectFromGlobalPool CreateSpawnObjectFromGlobalPool(
+        this PlayMakerFSM fsm, GameObject gameObject, GameObject spawnPoint, Vector3 positon, Vector3 rotation)
+    {
+        return new SpawnObjectFromGlobalPool()
+        {
+            gameObject = gameObject,
+            spawnPoint = spawnPoint,
+            position = positon,
+            rotation = rotation,
+            storeObject = new FsmGameObject(),
         };
     }
 }
