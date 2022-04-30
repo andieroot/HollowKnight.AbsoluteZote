@@ -15,6 +15,14 @@ public class ReachDestination : FsmStateAction
     public FsmInt direction;
     public FsmEvent finishEvent;
 }
+public class GeneralAction : FsmStateAction
+{
+    public override void OnUpdate()
+    {
+        action();
+    }
+    public Action action;
+}
 public static class FSM
 {
     public static void AddAnimationTest(this PlayMakerFSM fsm)
@@ -304,6 +312,13 @@ public static class FSM
             position = positon,
             rotation = rotation,
             storeObject = new FsmGameObject(),
+        };
+    }
+    public static GeneralAction CreateGeneralAction(this PlayMakerFSM fsm, Action action)
+    {
+        return new GeneralAction()
+        {
+            action = action,
         };
     }
 }

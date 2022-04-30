@@ -16,6 +16,7 @@ public partial class Control : Module
     {
         LoadPrefabsDashSlash(preloadedObjects);
         LoadPrefabsRoll(preloadedObjects);
+        LoadPrefabsJump(preloadedObjects);
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -36,6 +37,7 @@ public partial class Control : Module
             UpdateStateMoveChoice3(fsm);
             UpdateFSMDashSlash(fsm);
             UpdateFSMRoll(fsm);
+            UpdateFSMJump(fsm);
         }
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
@@ -68,9 +70,13 @@ public partial class Control : Module
     }
     private void UpdateStateMoveChoice3(PlayMakerFSM fsm)
     {
+        //2400: Blade Dance Antic
+        //1600: Roll Jump Antic
+        //800: Laser Net Antic
+        //Any: Set Jumps
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("Roll Jump Antic");
+            fsm.SetState("Set Jumps");
         }, 0);
     }
 }
