@@ -11,6 +11,13 @@ public partial class Control : Module
         prefabs["rollJumpAudio2"] = (fsm.GetState("Jump").Actions[1] as AudioPlayerOneShot).audioClips;
         prefabs["rollRollingLandCamera"] = (fsm.GetState("Land Normal").Actions[1] as SendEventByName).eventTarget;
         prefabs["shockwave"] = (fsm.GetState("Slash Waves R").Actions[0] as SpawnObjectFromGlobalPool).gameObject.Value;
+        var brothers = preloadedObjects["GG_Nailmasters"]["Brothers"];
+        var oro = brothers.transform.Find("Oro").gameObject;
+        var rollRollingLandDust = oro.transform.Find("Pt Dash").gameObject;
+        rollRollingLandDust.transform.localPosition = new Vector3(-0.63f, -4.69f, 0.001f);
+        prefabs["rollRollingLandDust"] = rollRollingLandDust;
+        prefabs["rollRollingLandAudioPlayer"] = (fsm.GetState("Enter 2").Actions[6] as AudioPlayerOneShotSingle).audioPlayer;
+        prefabs["rollRollingLandAudio"] = (fsm.GetState("Enter 2").Actions[6] as AudioPlayerOneShotSingle).audioClip.Value;
     }
     private void UpdateHitInstanceRoll(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -89,6 +96,9 @@ public partial class Control : Module
     }
     private void UpdateFSMRoll(PlayMakerFSM fsm)
     {
+        var greyPrince = GameObject.Find("Grey Prince");
+        var rollRollingLandDust = UnityEngine.Object.Instantiate(prefabs["rollRollingLandDust"] as GameObject, greyPrince.transform);
+        rollRollingLandDust.name = "rollRollingLandDust";
         fsm.AddState("Roll Jump Antic");
         fsm.AddState("Roll Jump");
         fsm.AddState("Roll Antic");
@@ -97,7 +107,7 @@ public partial class Control : Module
         fsm.AddState("Roll Rolling Left Wall");
         fsm.AddState("Roll Rolling Right Wall");
         fsm.AddState("Roll Rolling Land");
-        fsm.AddState("Roll Rolling Wave");
+        fsm.AddState("Roll Rolling Land Effects");
         UpdateStateRollJumpAntic(fsm);
         UpdateStateRollJump(fsm);
         UpdateStateRollAntic(fsm);
@@ -106,7 +116,7 @@ public partial class Control : Module
         UpdateStateRollRollingLeftWall(fsm);
         UpdateStateRollRollingRightWall(fsm);
         UpdateStateRollRollingLand(fsm);
-        UpdateStateRollRollingWave(fsm);
+        UpdateStateRollRollingLandEffects(fsm);
     }
     private void UpdateStateRollJumpAntic(PlayMakerFSM fsm)
     {
@@ -266,14 +276,19 @@ public partial class Control : Module
             }
         });
         fsm.AddTransition("Roll Rolling Land", "FINISHED", "Idle Start");
-        fsm.AddTransition("Roll Rolling Land", "1", "Roll Rolling Wave");
+        fsm.AddTransition("Roll Rolling Land", "1", "Roll Rolling Land Effects");
     }
-    private void UpdateStateRollRollingWave(PlayMakerFSM fsm)
+    private void UpdateStateRollRollingLandEffects(PlayMakerFSM fsm)
     {
         var spawnObjectFromGlobalPool = fsm.CreateSpawnObjectFromGlobalPool(
             prefabs["shockwave"] as GameObject, fsm.gameObject, new Vector3(4, 0, 0), new Vector3(0, 0, 0));
-        fsm.AddAction("Roll Rolling Wave", spawnObjectFromGlobalPool);
-        fsm.AddCustomAction("Roll Rolling Wave", () =>
+        fsm.AddAction("Roll Rolling Land Effects", fsm.CreateAudioPlayerOneShotSingle(
+          prefabs["rollRollingLandAudioPlayer"] as FsmGameObject, fsm.gameObject,
+          prefabs["rollRollingLandAudio"] as AudioClip, 1, 1, 1, 0));
+        fsm.AddAction("Roll Rolling Land Effects", fsm.CreatePlayParticleEmitterInState(
+            fsm.gameObject.transform.Find("rollRollingLandDust").gameObject));
+        fsm.AddAction("Roll Rolling Land Effects", spawnObjectFromGlobalPool);
+        fsm.AddCustomAction("Roll Rolling Land Effects", () =>
         {
             var shockwave = spawnObjectFromGlobalPool.storeObject.Value;
             var localScale=shockwave.transform.localScale;
@@ -297,6 +312,6 @@ public partial class Control : Module
             shockwave.LocateMyFSM("shockwave").AccessFloatVariable("Speed").Value = 26;
             fsm.SendEvent("FINISHED");
         });
-        fsm.AddTransition("Roll Rolling Wave", "FINISHED", "Roll Rolling");
+        fsm.AddTransition("Roll Rolling Land Effects", "FINISHED", "Roll Rolling");
     }
 }

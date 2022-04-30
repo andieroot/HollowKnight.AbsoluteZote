@@ -1,5 +1,10 @@
 ﻿namespace AbsoluteZote;
-public class AbsoluteZote : Mod, ITogglableMod
+[Serializable]
+public class Settings
+{
+    public int status = 0;
+}
+public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
 {
     public static AbsoluteZote absoluteZote;
     private readonly Statue statue;
@@ -9,6 +14,8 @@ public class AbsoluteZote : Mod, ITogglableMod
     private readonly DreamNail dreamNail;
     private readonly Control control;
     public List<Module> modules = new();
+    private Settings settings_ = new();
+    public bool ToggleButtonInsideMenu => true;
     public AbsoluteZote() : base("AbsoluteZote")
     {
         absoluteZote = this;
@@ -48,14 +55,23 @@ public class AbsoluteZote : Mod, ITogglableMod
             }
         }
     }
-    public void Unload()
+    private List<Module> GetActiveModules()
     {
-        ModHooks.HeroUpdateHook -= HeroUpdateHook;
-        ModHooks.LanguageGetHook -= LanguageGetHook;
-        On.EnemyDreamnailReaction.RecieveDreamImpact -= RecieveDreamImpact;
-        On.HealthManager.TakeDamage += HealthManagerTakeDamage;
-        On.PlayMakerFSM.OnEnable -= PlayMakerFSMOnEnable;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= ActiveSceneChanged;
+        if (settings_.status == 0)
+        {
+            return modules;
+        }
+        else if (settings_.status == 1)
+        {
+            return new List<Module>()
+            {
+                skin,
+            };
+        }
+        else
+        {
+            return new List<Module>() { };
+        }
     }
     private void HeroUpdateHook()
     {
@@ -75,7 +91,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     {
         try
         {
-            foreach (var module in modules)
+            foreach (var module in GetActiveModules())
             {
                 text = module.UpdateText(key, sheet, text);
             }
@@ -90,7 +106,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     {
         try
         {
-            foreach (var module in modules)
+            foreach (var module in GetActiveModules())
             {
                 if (module.UpdateDreamnailReaction(enemyDreamnailReaction))
                 {
@@ -108,7 +124,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     {
         try
         {
-            foreach (var module in modules)
+            foreach (var module in GetActiveModules())
             {
                 module.UpdateHitInstance(healthManager, hitInstance);
             }
@@ -123,7 +139,7 @@ public class AbsoluteZote : Mod, ITogglableMod
     {
         try
         {
-            foreach (var module in modules)
+            foreach (var module in GetActiveModules())
             {
                 module.UpdateFSM(fsm);
             }
@@ -134,16 +150,39 @@ public class AbsoluteZote : Mod, ITogglableMod
             LogError(exception.Message);
         }
     }
+
     private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
     {
         try
         {
-            foreach (var module in modules)
+            foreach (var module in GetActiveModules())
+            {
                 module.Initialize(to);
+            }
         }
         catch (Exception exception)
         {
             LogError(exception.Message);
         }
+    }
+    public void OnLoadGlobal(Settings settings) => settings_ = settings;
+    public Settings OnSaveGlobal() => settings_;
+    public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? menu)
+    {
+        List<IMenuMod.MenuEntry> menus = new();
+        menus.Add(
+            new()
+            {
+                Values = new string[]
+                {
+                    Language.Language.Get("MOH_ON", "MainMenu"),
+                    "SKIN-ONLY",
+                    Language.Language.Get("MOH_OFF", "MainMenu"),
+                },
+                Saver = i => settings_.status = i,
+                Loader = () => settings_.status
+            }
+        );
+        return menus;
     }
 }
