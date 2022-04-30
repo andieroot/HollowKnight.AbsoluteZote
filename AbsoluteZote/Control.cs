@@ -20,6 +20,7 @@ public partial class Control : Module
         LoadPrefabsJump(preloadedObjects);
         LoadPrefabsFall(preloadedObjects);
         LoadPrefabsRoar(preloadedObjects);
+        LoadPrefabsJumpSlash(preloadedObjects);
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -42,6 +43,7 @@ public partial class Control : Module
             UpdateFSMRoll(fsm);
             UpdateFSMJump(fsm);
             UpdateFSMFall(fsm);
+            UpdateFSMJumpSlash(fsm);
         }
         UpdateFSMRoar(fsm);
     }
@@ -81,9 +83,10 @@ public partial class Control : Module
         //Any: Set Jumps
         //Any: FT Through
         //Any: B Roar Antic
+        //Any: JS Antic
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("B Roar Antic");
+            fsm.SetState("JS Antic");
         }, 0);
     }
 }
