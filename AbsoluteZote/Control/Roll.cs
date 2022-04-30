@@ -131,6 +131,8 @@ public partial class Control : Module
     }
     private void UpdateStateRollJump(PlayMakerFSM fsm)
     {
+        fsm.AddAction("Roll Jump", fsm.CreateTk2dPlayAnimationWithEvents(
+            fsm.gameObject, "Jump", null));
         fsm.AddAction("Roll Jump", fsm.CreateAudioPlaySimple(
             1, prefabs["rollJumpAudio1"] as FsmObject));
         fsm.AddAction("Roll Jump", fsm.CreateAudioPlayerOneShot(
