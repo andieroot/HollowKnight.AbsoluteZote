@@ -10,6 +10,7 @@ public partial class Control : Module
         {
             ("GG_Grey_Prince_Zote", "Grey Prince"),
             ("GG_Nailmasters", "Brothers"),
+            ("GG_Mighty_Zote","Battle Control"),
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -18,6 +19,7 @@ public partial class Control : Module
         LoadPrefabsRoll(preloadedObjects);
         LoadPrefabsJump(preloadedObjects);
         LoadPrefabsFall(preloadedObjects);
+        LoadPrefabsRoar(preloadedObjects);
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -41,6 +43,7 @@ public partial class Control : Module
             UpdateFSMJump(fsm);
             UpdateFSMFall(fsm);
         }
+        UpdateFSMRoar(fsm);
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
     {
@@ -77,9 +80,10 @@ public partial class Control : Module
         //800: Laser Net Antic
         //Any: Set Jumps
         //Any: FT Through
+        //Any: B Roar Antic
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("FT Through");
+            fsm.SetState("B Roar Antic");
         }, 0);
     }
 }
