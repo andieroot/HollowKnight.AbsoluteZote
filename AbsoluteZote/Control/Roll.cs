@@ -291,7 +291,7 @@ public partial class Control : Module
         fsm.AddCustomAction("Roll Rolling Land Effects", () =>
         {
             var shockwave = spawnObjectFromGlobalPool.storeObject.Value;
-            var localScale=shockwave.transform.localScale;
+            var localScale = shockwave.transform.localScale;
             localScale.x = 1.4f;
             shockwave.transform.localScale = localScale;
             var position = shockwave.transform.position;
