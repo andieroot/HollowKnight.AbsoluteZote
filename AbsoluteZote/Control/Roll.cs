@@ -97,7 +97,8 @@ public partial class Control : Module
     private void UpdateFSMRoll(PlayMakerFSM fsm)
     {
         var greyPrince = GameObject.Find("Grey Prince");
-        var rollRollingLandDust = UnityEngine.Object.Instantiate(prefabs["rollRollingLandDust"] as GameObject, greyPrince.transform);
+        var rollRollingLandDust = UnityEngine.Object.Instantiate(
+            prefabs["rollRollingLandDust"] as GameObject, greyPrince.transform);
         rollRollingLandDust.name = "rollRollingLandDust";
         fsm.AddState("Roll Jump Antic");
         fsm.AddState("Roll Jump");
@@ -120,6 +121,8 @@ public partial class Control : Module
     }
     private void UpdateStateRollJumpAntic(PlayMakerFSM fsm)
     {
+        fsm.AddCustomAction(
+            "Roll Jump Antic",() => fsm.gameObject.LocateMyFSM("Stun").SendEvent("STUN CONTROL STOP"));
         fsm.AddCustomAction("Roll Jump Antic", fsm.CreateSetVelocity2d(0, 0));
         fsm.AddAction("Roll Jump Antic", fsm.CreateFaceObject(HeroController.instance.gameObject, true));
         fsm.AddAction("Roll Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(
@@ -249,6 +252,7 @@ public partial class Control : Module
                 var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
                 rigidbody2D.velocity = Vector2.zero;
                 tk2dSpriteAnimator_.Play(newClip);
+                fsm.gameObject.LocateMyFSM("Stun").SendEvent("STUN CONTROL START");
             }
             else
             {
