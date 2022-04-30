@@ -52,6 +52,10 @@ public partial class Control : Module
     private void UpdateStateEnter1(PlayMakerFSM fsm)
     {
         fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
+        fsm.AddCustomAction("Enter 1", () =>
+        {
+            fsm.SetState("Enter Short");
+        });
     }
     private void UpdateStateRoar(PlayMakerFSM fsm)
     {
