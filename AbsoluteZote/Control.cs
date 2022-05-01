@@ -97,14 +97,14 @@ public partial class Control : Module
         var index = 0;
         var last = new Dictionary<string, int>();
         var regluarMoves = new List<string>()
-            {
-                "Set Jumps",
-                "FT Through",
-                "Roar Check",
-                "JS Antic",
-                "Charge Antic",
-                "Dash Slash Jump Antic",
-            };
+        {
+            "Set Jumps",
+            "FT Through",
+            "Roar Check",
+            "JS Antic",
+            "Charge Antic",
+            "Dash Slash Jump Antic",
+        };
         foreach (var regluarMove in regluarMoves)
         {
             last[regluarMove] = -1;
@@ -126,7 +126,7 @@ public partial class Control : Module
                     return;
                 }
             }
-            var chosenMove = regluarMoves[random.Next(regluarMoves.Count)];
+            var chosenMove = regluarMoves[UnityEngine.Random.Range(0, regluarMoves.Count)];
             fsm.SetState(chosenMove);
             last[chosenMove] = index;
             index += 1;
