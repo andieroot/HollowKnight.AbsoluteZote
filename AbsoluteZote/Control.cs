@@ -84,18 +84,45 @@ public partial class Control : Module
     }
     private void UpdateStateMoveChoice3(PlayMakerFSM fsm)
     {
-        //2400: Blade Dance Antic
-        //1600: Roll Jump Antic
-        //800: Laser Net Antic
+        //2000: Roll Jump Antic
+        //1000: Laser Net Antic
         //Any: Set Jumps
         //Any: FT Through
         //Any: B Roar Antic
         //Any: JS Antic
         //Any: Charge Antic
         //Any: Dash Slash Jump Antic
+        var index = 0;
+        var last = new Dictionary<string, int>();
+        var regluarMoves = new List<string>()
+            {
+                "Set Jumps",
+                "FT Through",
+                "Roar Check",
+                "JS Antic",
+                "Charge Antic",
+                "Dash Slash Jump Antic",
+            };
+        foreach (var regluarMove in regluarMoves)
+        {
+            last[regluarMove] = -1;
+        }
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("Dash Slash Jump Antic");
+            foreach (var regularMove in regluarMoves)
+            {
+                if ((index - last[regularMove]) > 1.5 * regularMove.Length)
+                {
+                    fsm.SetState(regularMove);
+                    last[regularMove] = index;
+                    index += 1;
+                    return;
+                }
+            }
+            var chosenMove = regluarMoves[random.Next(regluarMoves.Count)];
+            fsm.SetState(chosenMove);
+            last[chosenMove] = index;
+            index += 1;
         }, 0);
     }
 }

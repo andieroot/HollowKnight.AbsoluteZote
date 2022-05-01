@@ -24,7 +24,12 @@ public partial class Control : Module
     }
     private void UpdateFSMRoar(PlayMakerFSM fsm)
     {
-        if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name.StartsWith("Zote Balloon ") && fsm.FsmName == "Control")
+        if (IsGreyPrince(fsm.gameObject) && fsm.FsmName == "Control")
+        {
+            fsm.AddState("Roar Check");
+            UpdateStateRoarCheck(fsm);
+        }
+        else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name.StartsWith("Zote Balloon ") && fsm.FsmName == "Control")
         {
             fsm.AddCustomAction("Set Pos", () =>
             {
@@ -79,5 +84,20 @@ public partial class Control : Module
             }, 0);
             fsm.RemoveAction("Rise", 7);
         }
+    }
+    private void UpdateStateRoarCheck(PlayMakerFSM fsm)
+    {
+        fsm.AddCustomAction("Roar Check", () =>
+        {
+            var gameObject = GameObject.Find("Zote Thwomp(Clone)");
+            if (gameObject != null)
+            {
+                fsm.SetState("Move Choice 3");
+            }
+            else
+            {
+                fsm.SetState("B Roar Antic");
+            }
+        });
     }
 }
