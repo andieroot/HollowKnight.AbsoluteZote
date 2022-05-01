@@ -35,6 +35,7 @@ public partial class Control : Module
     {
         if (IsGreyPrince(fsm.gameObject) && fsm.FsmName == "Control")
         {
+            fsm.AccessBoolVariable("rolled").Value = false;
             UpdateStateEnter1(fsm);
             UpdateStateRoar(fsm);
             UpdateStateRoarEnd(fsm);
@@ -55,6 +56,7 @@ public partial class Control : Module
         fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
         fsm.AddCustomAction("Enter 1", () =>
         {
+            fsm.gameObject.GetComponent<HealthManager>().hp = 3000;
             fsm.SetState("Enter Short");
         });
     }
@@ -84,7 +86,7 @@ public partial class Control : Module
     }
     private void UpdateStateMoveChoice3(PlayMakerFSM fsm)
     {
-        //2000: Roll Jump Antic
+        //2000: 
         //1000: Laser Net Antic
         //Any: Set Jumps
         //Any: FT Through
@@ -109,6 +111,11 @@ public partial class Control : Module
         }
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
+            if (fsm.gameObject.GetComponent<HealthManager>().hp < 1500 && !fsm.AccessBoolVariable("rolled").Value)
+            {
+                fsm.SetState("Roll Jump Antic");
+                fsm.AccessBoolVariable("rolled").Value = true;
+            }
             foreach (var regularMove in regluarMoves)
             {
                 if ((index - last[regularMove]) > 1.5 * regularMove.Length)
