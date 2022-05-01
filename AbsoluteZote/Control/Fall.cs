@@ -10,7 +10,7 @@ public partial class Control : Module
         fsm.AddState("Fall Next");
         fsm.InsertCustomAction("FT Through", () =>
         {
-            (fsm.GetState("FT Through").Actions[6] as Wait).time = 0.25f;
+            (fsm.GetState("FT Through").Actions[6] as Wait).time = 0.5f;
         }, 0);
         fsm.AddAction("FT Through", fsm.CreateTk2dPlayAnimationWithEvents(
             fsm.gameObject, "Jump", null));

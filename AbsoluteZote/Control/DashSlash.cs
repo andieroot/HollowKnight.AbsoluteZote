@@ -88,7 +88,7 @@ public partial class Control : Module
             float destinationNext;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
             var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
-            if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
+            if (random.Next(2) == 1)
             {
                 destination = dashSlashTargetRight;
                 destinationNext = dashSlashTargetLeft - 128;

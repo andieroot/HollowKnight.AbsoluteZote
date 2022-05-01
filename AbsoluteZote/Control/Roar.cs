@@ -61,9 +61,9 @@ public partial class Control : Module
                 minion.SetActive(true);
                 minion.SetActiveChildren(true);
                 minion.transform.position = new Vector3(26.4f + (float)(1 - random.NextDouble() * 2) * 10, 23.4f, fsm.gameObject.transform.position.z + 1e-2f);
-                minion.transform.SetScaleX(1.25f * minion.transform.localScale.x);
-                minion.transform.SetScaleY(1.25f * minion.transform.localScale.y);
-                minion.transform.SetScaleZ(1.25f * minion.transform.localScale.z);
+                minion.transform.SetScaleX(0.75f * minion.transform.localScale.x);
+                minion.transform.SetScaleY(0.75f * minion.transform.localScale.y);
+                minion.transform.SetScaleZ(0.75f * minion.transform.localScale.z);
                 fsm.SetState("Dormant");
             });
         }
