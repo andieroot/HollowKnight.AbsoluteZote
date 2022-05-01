@@ -86,14 +86,6 @@ public partial class Control : Module
     }
     private void UpdateStateMoveChoice3(PlayMakerFSM fsm)
     {
-        //2000: 
-        //1000: Laser Net Antic
-        //Any: Set Jumps
-        //Any: FT Through
-        //Any: B Roar Antic
-        //Any: JS Antic
-        //Any: Charge Antic
-        //Any: Dash Slash Jump Antic
         var index = 0;
         var last = new Dictionary<string, int>();
         var regluarMoves = new List<string>()
