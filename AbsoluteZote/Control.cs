@@ -115,6 +115,7 @@ public partial class Control : Module
             {
                 fsm.SetState("Roll Jump Antic");
                 fsm.AccessBoolVariable("rolled").Value = true;
+                return;
             }
             foreach (var regularMove in regluarMoves)
             {
