@@ -10,7 +10,8 @@ public partial class Control : Module
         {
             ("GG_Grey_Prince_Zote", "Grey Prince"),
             ("GG_Nailmasters", "Brothers"),
-            ("GG_Mighty_Zote","Battle Control"),
+            ("GG_Mighty_Zote", "Battle Control"),
+            ("GG_Nosk_Hornet", "Battle Scene"),
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -91,9 +92,10 @@ public partial class Control : Module
         //Any: B Roar Antic
         //Any: JS Antic
         //Any: Charge Antic
+        //Any: Dash Slash Jump Antic
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.SetState("Charge Antic");
+            fsm.SetState("Dash Slash Jump Antic");
         }, 0);
     }
 }

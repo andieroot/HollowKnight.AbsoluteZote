@@ -42,6 +42,11 @@ public partial class Control : Module
         localScale.x *= -1;
         dashSlashSlashFlash2.transform.localScale = localScale;
         prefabs["dashSlashSlashFlash2"] = dashSlashSlashFlash2;
+        var battleScene = preloadedObjects["GG_Nosk_Hornet"]["Battle Scene"];
+        var hornetNosk = battleScene.transform.Find("Hornet Nosk").gameObject;
+        fsm = hornetNosk.LocateMyFSM("Hornet Nosk");
+        var dashSlashChargeBlob = (fsm.GetState("Spit 1").Actions[1] as FlingObjectsFromGlobalPool).gameObject;
+        prefabs["dashSlashChargeBlob"] = dashSlashChargeBlob;
     }
     private void UpdateFSMDashSlash(PlayMakerFSM fsm)
     {
@@ -83,7 +88,7 @@ public partial class Control : Module
             float destinationNext;
             var dashSlashTargetLeft = fsm.AccessFloatVariable("dashSlashTargetLeft").Value;
             var dashSlashTargetRight = fsm.AccessFloatVariable("dashSlashTargetRight").Value;
-            if (x - dashSlashTargetLeft < dashSlashTargetRight - x)
+            if (x - dashSlashTargetLeft > dashSlashTargetRight - x)
             {
                 destination = dashSlashTargetRight;
                 destinationNext = dashSlashTargetLeft - 128;
@@ -123,6 +128,31 @@ public partial class Control : Module
     }
     private void UpdateStateDashSlashCharge(PlayMakerFSM fsm)
     {
+        fsm.AddCustomAction("Dash Slash Charge", () =>
+        {
+            var gameObjectPrefab = (prefabs["dashSlashChargeBlob"] as FsmGameObject).Value;
+            Vector3 a = fsm.gameObject.transform.position;
+            int num = UnityEngine.Random.Range(8, 17);
+            for (int i = 1; i <= num; i++)
+            {
+                GameObject gameObject = gameObjectPrefab.Spawn(a, Quaternion.Euler(Vector3.zero));
+                float x = gameObject.transform.position.x;
+                float y = gameObject.transform.position.y;
+                float z = gameObject.transform.position.z;
+                float num2 = 45 * (float)i / num;
+                float num3 = UnityEngine.Random.Range(50, 71);
+                if (fsm.gameObject.transform.localScale.x < 0)
+                {
+                    num3 = 180 - num3;
+                }
+                var vectorX = num2 * Mathf.Cos(num3 * 0.017453292f);
+                var vectorY = num2 * Mathf.Sin(num3 * 0.017453292f);
+                Vector2 velocity;
+                velocity.x = vectorX;
+                velocity.y = vectorY;
+                gameObject.GetComponent<Rigidbody2D>().velocity = velocity;
+            }
+        });
         fsm.AddAction("Dash Slash Charge", fsm.CreateSendEventByName(
             prefabs["dashSlashJumpLandCamera"] as FsmEventTarget, "AverageShake", 0));
         fsm.AddAction("Dash Slash Charge", fsm.CreateAudioPlayerOneShot(
@@ -166,7 +196,7 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("dashSlashChargeNACharge").gameObject.SetActive(true);
         });
         fsm.AddCustomAction("Dash Slash Charge", fsm.CreateFacePosition("dashSlashDestination", true));
-        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(0.75f, fsm.GetFSMEvent("1")));
+        fsm.AddAction("Dash Slash Charge", fsm.CreateWait(1, fsm.GetFSMEvent("1")));
         fsm.AddTransition("Dash Slash Charge", "1", "Dash Slash Charged");
     }
     private void UpdateStateDashSlashCharged(PlayMakerFSM fsm)
@@ -202,8 +232,20 @@ public partial class Control : Module
             var v = fsm.AccessIntVariable("dashSlashDirection").Value * 64;
             rigidbody2D.velocity = new Vector2(v, 0);
         });
-        fsm.AddAction("Dash Slash Dash", fsm.CreateReachDestionation(
-            "dashSlashDestination", "dashSlashDirection", fsm.GetFSMEvent("1")));
+        fsm.AddAction("Dash Slash Dash", fsm.CreateGeneralAction(() =>
+        {
+            var destination = fsm.AccessFloatVariable("dashSlashDestination");
+            var direction = fsm.AccessIntVariable("dashSlashDirection");
+            var x = fsm.gameObject.transform.position.x;
+            if ((x - destination.Value) * direction.Value >= 0)
+            {
+                fsm.SendEvent("1");
+            }
+            if ((x - HeroController.instance.transform.position.x) * direction.Value >= 0)
+            {
+                fsm.SendEvent("1");
+            }
+        }));
         fsm.AddTransition("Dash Slash Dash", "1", "Dash Slash Slash");
     }
     private void UpdateStateDashSlashSlash(PlayMakerFSM fsm)
@@ -230,7 +272,7 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("dashSlashSlashFlash1").gameObject.SetActive(true);
             fsm.gameObject.transform.Find("dashSlashSlashFlash2").gameObject.SetActive(true);
         });
-        fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.5f, fsm.GetFSMEvent("1")));
-        fsm.AddTransition("Dash Slash Slash", "1", "Idle Start");
+        fsm.AddAction("Dash Slash Slash", fsm.CreateWait(0.25f, fsm.GetFSMEvent("1")));
+        fsm.AddTransition("Dash Slash Slash", "1", "Move Choice 3");
     }
 }
