@@ -105,9 +105,6 @@ public partial class Control : Module
         }
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
-            fsm.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            fsm.SetState("Idle Start");
-            return;
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 1500 && !fsm.AccessBoolVariable("rolled").Value)
             {
                 fsm.SetState("Roll Jump Antic");
