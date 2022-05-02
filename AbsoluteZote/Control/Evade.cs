@@ -30,10 +30,23 @@ public partial class Control : Module
                         var xDiff = myPosition.x - fireballPositon.x;
                         if (Math.Abs(xDiff) <= 11 && Math.Sign(fireballVelocity.x) == Math.Sign(xDiff))
                         {
-                            fsm.AccessIntVariable("evadeDirection").Value = Math.Sign(fireballVelocity.x);
+                            fsm.AccessFloatVariable("evadeVelocityX").Value = Math.Sign(fireballVelocity.x) * 5;
+                            fsm.AccessFloatVariable("evadeVelocityY").Value = 90;
                             fsm.SetState("Evade Jump Antic");
                         }
                     }
+                }
+            }
+            var spells = HeroController.instance.gameObject.transform.Find("Spells").gameObject;
+            if (spells.transform.Find("Scr Heads 2").gameObject.activeSelf)
+            {
+                var myPosition = fsm.gameObject.transform.position;
+                var heroPositon = HeroController.instance.gameObject.transform.position;
+                if (Math.Abs(myPosition.x - heroPositon.x) <= 5)
+                {
+                    fsm.AccessFloatVariable("evadeVelocityX").Value = Math.Sign(myPosition.x - heroPositon.x) * 20;
+                    fsm.AccessFloatVariable("evadeVelocityY").Value = 45;
+                    fsm.SetState("Evade Jump Antic");
                 }
             }
         };
@@ -69,8 +82,8 @@ public partial class Control : Module
             prefabs["evadeJumpAudio2"] as AudioClip[], new float[3] { 1, 1, 1 }, 1, 1, 1, 0));
         fsm.AddCustomAction("Evade Jump In Air", () =>
         {
-            float velocityX = fsm.AccessIntVariable("evadeDirection").Value * 10;
-            float velocityY = 90;
+            float velocityX = fsm.AccessFloatVariable("evadeVelocityX").Value;
+            float velocityY = fsm.AccessFloatVariable("evadeVelocityY").Value;
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.gravityScale = 6;
             rigidbody2D.velocity = new Vector2(velocityX, velocityY);
