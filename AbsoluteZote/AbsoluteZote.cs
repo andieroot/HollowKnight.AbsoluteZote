@@ -75,94 +75,53 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
     }
     private void HeroUpdateHook()
     {
-        try
+        if (Input.GetKeyDown(KeyCode.F2))
         {
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
-            }
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
         }
     }
     private string LanguageGetHook(string key, string sheet, string text)
     {
-        try
+        foreach (var module in GetActiveModules())
         {
-            foreach (var module in GetActiveModules())
-            {
-                text = module.UpdateText(key, sheet, text);
-            }
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
+            text = module.UpdateText(key, sheet, text);
         }
         return text;
     }
     private void RecieveDreamImpact(On.EnemyDreamnailReaction.orig_RecieveDreamImpact receiveDreamImpact, EnemyDreamnailReaction enemyDreamnailReaction)
     {
-        try
+
+        foreach (var module in GetActiveModules())
         {
-            foreach (var module in GetActiveModules())
+            if (module.UpdateDreamnailReaction(enemyDreamnailReaction))
             {
-                if (module.UpdateDreamnailReaction(enemyDreamnailReaction))
-                {
-                    return;
-                }
+                return;
             }
-            receiveDreamImpact(enemyDreamnailReaction);
         }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
+        receiveDreamImpact(enemyDreamnailReaction);
     }
     private void HealthManagerTakeDamage(On.HealthManager.orig_TakeDamage takeDamage, HealthManager healthManager, HitInstance hitInstance)
     {
-        try
+        foreach (var module in GetActiveModules())
         {
-            foreach (var module in GetActiveModules())
-            {
-                module.UpdateHitInstance(healthManager, hitInstance);
-            }
-            takeDamage(healthManager, hitInstance);
+            module.UpdateHitInstance(healthManager, hitInstance);
         }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
+        takeDamage(healthManager, hitInstance);
     }
     private void PlayMakerFSMOnEnable(On.PlayMakerFSM.orig_OnEnable onEnable, PlayMakerFSM fsm)
     {
-        try
+        foreach (var module in GetActiveModules())
         {
-            foreach (var module in GetActiveModules())
-            {
-                module.UpdateFSM(fsm);
-            }
-            onEnable(fsm);
+            module.UpdateFSM(fsm);
         }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
-        }
+        onEnable(fsm);
     }
 
     private void ActiveSceneChanged(UnityEngine.SceneManagement.Scene from, UnityEngine.SceneManagement.Scene to)
     {
-        try
+        foreach (var module in GetActiveModules())
         {
-            foreach (var module in GetActiveModules())
-            {
-                module.Initialize(to);
-            }
-        }
-        catch (Exception exception)
-        {
-            LogError(exception.Message);
+            module.Initialize(to);
         }
     }
     public void OnLoadGlobal(Settings settings) => settings_ = settings;
