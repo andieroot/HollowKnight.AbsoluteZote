@@ -12,6 +12,13 @@ public partial class Control : Module
         prefabs["greatSlashJumpLandCamera"] = (fsm.GetState("Land Normal").Actions[1] as SendEventByName).eventTarget;
         prefabs["greatSlashChargeAudioPlayer"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioPlayer;
         prefabs["greatSlashChargeAudio"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioClips;
+        var sly = preloadedObjects["GG_Sly"]["Battle Scene"].transform.Find("Sly Boss").gameObject;
+        var gs1 = sly.transform.Find("GS1").gameObject;
+        prefabs["gs1"] = gs1;
+        var gse1 = sly.transform.Find("Sharp Flash").gameObject;
+        prefabs["gse1"] = gse1;
+        var gse2 = sly.transform.Find("GSlash Effect").gameObject;
+        prefabs["gse2"] = gse2;
         var brothers = preloadedObjects["GG_Nailmasters"]["Brothers"];
         var oro = brothers.transform.Find("Oro").gameObject;
         fsm = oro.LocateMyFSM("nailmaster");
@@ -51,6 +58,16 @@ public partial class Control : Module
         var greyPrince = GameObject.Find("Grey Prince");
         var greatSlashChargeChargeEffect = UnityEngine.Object.Instantiate(prefabs["greatSlashChargeChargeEffect"] as GameObject, greyPrince.transform);
         greatSlashChargeChargeEffect.name = "greatSlashChargeChargeEffect";
+        var gs1 = UnityEngine.Object.Instantiate(prefabs["gs1"] as GameObject, greyPrince.transform);
+        gs1.name = "gs1";
+        gs1.transform.localScale = new Vector3(-2.2f, 1.5f, 1);
+        gs1.transform.localPosition = new Vector3(0, -2, 0);
+        var gse1 = UnityEngine.Object.Instantiate(prefabs["gse1"] as GameObject, greyPrince.transform);
+        gse1.name = "gse1";
+        var gse2 = UnityEngine.Object.Instantiate(prefabs["gse2"] as GameObject, greyPrince.transform);
+        gse2.name = "gse2";
+        gse2.transform.localScale = new Vector3(-2.2f, 3, 1.2047f);
+        gse2.transform.localPosition = new Vector3(1.5f, 0.75f, 0);
         var greatSlashChargeNACharge = UnityEngine.Object.Instantiate(prefabs["greatSlashChargeNACharge"] as GameObject, greyPrince.transform);
         greatSlashChargeNACharge.name = "greatSlashChargeNACharge";
         var greatSlashChargeNACharged = UnityEngine.Object.Instantiate(prefabs["greatSlashChargeNACharged"] as GameObject, greyPrince.transform);
@@ -202,7 +219,7 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("greatSlashChargeNACharge").gameObject.SetActive(true);
         });
         fsm.AddCustomAction("Great Slash Charge", fsm.CreateFacePosition("greatSlashDestination", true));
-        fsm.AddAction("Great Slash Charge", fsm.CreateWait(0.25f, fsm.GetFSMEvent("1")));
+        fsm.AddAction("Great Slash Charge", fsm.CreateWait(0.4f, fsm.GetFSMEvent("1")));
         fsm.AddTransition("Great Slash Charge", "1", "Great Slash Charged");
     }
     private void UpdateStateGreatSlashCharged(PlayMakerFSM fsm)
@@ -268,8 +285,9 @@ public partial class Control : Module
             tk2dSpriteAnimator_.Play(newClip);
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.velocity = new Vector2(0, 0);
-            fsm.gameObject.transform.Find("greatSlashSlashFlash1").gameObject.SetActive(true);
-            fsm.gameObject.transform.Find("greatSlashSlashFlash2").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("gs1").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("gse1").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("gse2").gameObject.SetActive(true);
         });
         fsm.AddAction("Great Slash Slash", fsm.CreateWait(0.25f, fsm.GetFSMEvent("1")));
         fsm.AddTransition("Great Slash Slash", "1", "Move Choice 3");

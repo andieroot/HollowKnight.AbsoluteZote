@@ -12,6 +12,7 @@ public partial class Control : Module
             ("GG_Nailmasters", "Brothers"),
             ("GG_Mighty_Zote", "Battle Control"),
             ("GG_Nosk_Hornet", "Battle Scene"),
+            ("GG_Sly","Battle Scene")
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -82,6 +83,9 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("greatSlashChargeNACharged").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("greatSlashSlashFlash1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("greatSlashSlashFlash2").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("gs1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("gse1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("gse2").gameObject.SetActive(false);
         }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
@@ -113,6 +117,9 @@ public partial class Control : Module
         }
         fsm.InsertCustomAction("Move Choice 3", () =>
         {
+            fsm.gameObject.transform.Find("gs1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("gse1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("gse2").gameObject.SetActive(false);
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 1500 && !fsm.AccessBoolVariable("rolled").Value)
             {
                 fsm.SetState("Roll Jump Antic");
