@@ -13,6 +13,7 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
     public readonly Title title;
     private readonly DreamNail dreamNail;
     private readonly Control control;
+    private readonly Afterimage afterimage;
     public List<Module> modules = new();
     private Settings settings_ = new();
     public bool ToggleButtonInsideMenu => true;
@@ -25,8 +26,9 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
         title = new(this);
         dreamNail = new(this);
         control = new(this);
+        afterimage = new(this);
     }
-    public override string GetVersion() => "1.0.0.0";
+    public override string GetVersion() => "2.0.0.0";
     public override List<(string, string)> GetPreloadNames()
     {
         List<(string, string)> preloadNames = new();

@@ -8,7 +8,7 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<DebugType>portable</DebugType>
 		<RootNamespace>AbsoluteZote</RootNamespace>
-		<ReferenceInstallation>C:/Users/yunjo/Research/Hollow Knight Modding/Managed</ReferenceInstallation>
+		<ReferenceInstallation>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed Backup</ReferenceInstallation>
 		<ActualInstallation>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed</ActualInstallation>
 	</PropertyGroup>
 	<ItemGroup>
