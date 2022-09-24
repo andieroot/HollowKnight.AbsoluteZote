@@ -33,13 +33,11 @@ public partial class Control : Module
         var greatSlashSlashFlash1 = oro.transform.Find("Dash Slash").gameObject;
         greatSlashSlashFlash1.transform.localPosition = new Vector3(2.69f, -1.37f, 0);
         var localScale = greatSlashSlashFlash1.transform.localScale;
-        localScale.x *= -1;
         greatSlashSlashFlash1.transform.localScale = localScale;
         prefabs["greatSlashSlashFlash1"] = greatSlashSlashFlash1;
         var greatSlashSlashFlash2 = oro.transform.Find("Sharp Flash").gameObject;
         greatSlashSlashFlash2.transform.localPosition = new Vector3(7, -1.5f, 0);
         localScale = greatSlashSlashFlash2.transform.localScale;
-        localScale.x *= -1;
         greatSlashSlashFlash2.transform.localScale = localScale;
         prefabs["greatSlashSlashFlash2"] = greatSlashSlashFlash2;
         var battleScene = preloadedObjects["GG_Nosk_Hornet"]["Battle Scene"];
@@ -86,8 +84,8 @@ public partial class Control : Module
             var x = HeroController.instance.transform.position.x;
             float destination;
             float destinationNext;
-            var myX=fsm.gameObject.transform.position.x;
-            float dis = 5;
+            var myX = fsm.gameObject.transform.position.x;
+            float dis = 3;
             if (x < myX)
             {
                 if (Math.Abs(x - myX) < dis)
@@ -168,9 +166,6 @@ public partial class Control : Module
         });
         fsm.AddAction("Great Slash Charge", fsm.CreateSendEventByName(
             prefabs["greatSlashJumpLandCamera"] as FsmEventTarget, "AverageShake", 0));
-        fsm.AddAction("Great Slash Charge", fsm.CreateAudioPlayerOneShot(
-            prefabs["greatSlashChargeAudioPlayer"] as FsmGameObject, fsm.gameObject,
-            prefabs["greatSlashChargeAudio"] as AudioClip[], new float[2] { 1, 1 }, 1, 1, 1, 0));
         fsm.AddCustomAction("Great Slash Charge", () =>
         {
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
@@ -190,17 +185,15 @@ public partial class Control : Module
             var slack = 10;
             var greatSlashTargetLeft = fsm.AccessFloatVariable("greatSlashTargetLeft").Value;
             var greatSlashTargetRight = fsm.AccessFloatVariable("greatSlashTargetRight").Value;
-            if (x - greatSlashTargetLeft > greatSlashTargetRight - x)
+            if (x > HeroController.instance.transform.position.x)
             {
-                destination = greatSlashTargetLeft + slack;
                 direction = -1;
             }
             else
             {
-                destination = greatSlashTargetRight - slack;
                 direction = 1;
             }
-            fsm.AccessFloatVariable("greatSlashDestination").Value = destination;
+            fsm.AccessFloatVariable("greatSlashDestination").Value = HeroController.instance.transform.position.x;
             fsm.AccessIntVariable("greatSlashDirection").Value = direction;
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.gravityScale = 3;
@@ -209,7 +202,7 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("greatSlashChargeNACharge").gameObject.SetActive(true);
         });
         fsm.AddCustomAction("Great Slash Charge", fsm.CreateFacePosition("greatSlashDestination", true));
-        fsm.AddAction("Great Slash Charge", fsm.CreateWait(1, fsm.GetFSMEvent("1")));
+        fsm.AddAction("Great Slash Charge", fsm.CreateWait(0.25f, fsm.GetFSMEvent("1")));
         fsm.AddTransition("Great Slash Charge", "1", "Great Slash Charged");
     }
     private void UpdateStateGreatSlashCharged(PlayMakerFSM fsm)
@@ -250,14 +243,7 @@ public partial class Control : Module
             var destination = fsm.AccessFloatVariable("greatSlashDestination");
             var direction = fsm.AccessIntVariable("greatSlashDirection");
             var x = fsm.gameObject.transform.position.x;
-            if ((x - destination.Value) * direction.Value >= 0)
-            {
-                fsm.SendEvent("1");
-            }
-            if ((x - HeroController.instance.transform.position.x) * direction.Value >= 0)
-            {
-                fsm.SendEvent("1");
-            }
+            fsm.SendEvent("1");
         }));
         fsm.AddTransition("Great Slash Dash", "1", "Great Slash Slash");
     }
