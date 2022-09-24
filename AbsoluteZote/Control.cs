@@ -17,6 +17,7 @@ public partial class Control : Module
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
         LoadPrefabsDashSlash(preloadedObjects);
+        LoadPrefabsGreatSlash(preloadedObjects);
         LoadPrefabsRoll(preloadedObjects);
         LoadPrefabsJump(preloadedObjects);
         LoadPrefabsFall(preloadedObjects);
@@ -44,6 +45,7 @@ public partial class Control : Module
             UpdateStateStun(fsm);
             UpdateStateMoveChoice3(fsm);
             UpdateFSMDashSlash(fsm);
+            UpdateFSMGreatSlash(fsm);
             UpdateFSMRoll(fsm);
             UpdateFSMJump(fsm);
             UpdateFSMFall(fsm);
@@ -75,6 +77,11 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("dashSlashChargeNACharged").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("dashSlashSlashFlash1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("dashSlashSlashFlash2").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("greatSlashChargeChargeEffect").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("greatSlashChargeNACharge").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("greatSlashChargeNACharged").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("greatSlashSlashFlash1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("greatSlashSlashFlash2").gameObject.SetActive(false);
         }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
@@ -92,12 +99,13 @@ public partial class Control : Module
         var last = new Dictionary<string, int>();
         var regluarMoves = new List<string>()
         {
-            "Set Jumps",
-            "FT Through",
-            "Roar Check",
-            "JS Antic",
-            "Charge Antic",
-            "Dash Slash Jump Antic",
+            //"Set Jumps",
+            //"FT Through",
+            //"Roar Check",
+            //"JS Antic",
+            //"Charge Antic",
+            //"Dash Slash Jump Antic",
+            "Great Slash Jump Antic",
         };
         foreach (var regluarMove in regluarMoves)
         {
