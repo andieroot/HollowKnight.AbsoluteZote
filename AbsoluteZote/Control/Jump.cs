@@ -22,6 +22,8 @@ public partial class Control : Module
                 var tracking = new Vector2(heroPositon.x - rigidbody2D.position.x, heroPositon.y - rigidbody2D.position.y);
                 tracking.x *= 2.5f;
                 tracking.y *= 1.5f;
+                if (tracking.y > 0)
+                    tracking.y *= -1;
                 rigidbody2D.velocity += tracking;
             }
             fsm.AccessFloatVariable("jumpLastVelocityY").Value = y;
