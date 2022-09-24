@@ -253,6 +253,7 @@ public partial class Control : Module
             {
                 var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
                 rigidbody2D.velocity = Vector2.zero;
+                rigidbody2D.gravityScale = 3;
                 tk2dSpriteAnimator_.Play(newClip);
                 fsm.gameObject.LocateMyFSM("Stun").SendEvent("STUN CONTROL START");
             }
