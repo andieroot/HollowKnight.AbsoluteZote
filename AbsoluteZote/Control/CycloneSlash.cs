@@ -13,12 +13,8 @@ public partial class Control : Module
         prefabs["cycloneSlashChargeAudioPlayer"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioPlayer;
         prefabs["cycloneSlashChargeAudio"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioClips;
         var sly = preloadedObjects["GG_Sly"]["Battle Scene"].transform.Find("Sly Boss").gameObject;
-        var gs1 = sly.transform.Find("GS1").gameObject;
-        prefabs["gs1"] = gs1;
-        var gse1 = sly.transform.Find("Sharp Flash").gameObject;
-        prefabs["gse1"] = gse1;
-        var gse2 = sly.transform.Find("GSlash Effect").gameObject;
-        prefabs["gse2"] = gse2;
+        var cycloneTink = sly.transform.Find("S1").gameObject;
+        prefabs["cycloneTink"] = cycloneTink;
         var brothers = preloadedObjects["GG_Nailmasters"]["Brothers"];
         var oro = brothers.transform.Find("Oro").gameObject;
         fsm = oro.LocateMyFSM("nailmaster");
@@ -58,16 +54,9 @@ public partial class Control : Module
         var greyPrince = GameObject.Find("Grey Prince");
         var cycloneSlashChargeChargeEffect = UnityEngine.Object.Instantiate(prefabs["cycloneSlashChargeChargeEffect"] as GameObject, greyPrince.transform);
         cycloneSlashChargeChargeEffect.name = "cycloneSlashChargeChargeEffect";
-        var gs1 = UnityEngine.Object.Instantiate(prefabs["gs1"] as GameObject, greyPrince.transform);
-        gs1.name = "gs1";
-        gs1.transform.localScale = new Vector3(-2.2f, 1.5f, 1);
-        gs1.transform.localPosition = new Vector3(0, -2, 0);
-        var gse1 = UnityEngine.Object.Instantiate(prefabs["gse1"] as GameObject, greyPrince.transform);
-        gse1.name = "gse1";
-        var gse2 = UnityEngine.Object.Instantiate(prefabs["gse2"] as GameObject, greyPrince.transform);
-        gse2.name = "gse2";
-        gse2.transform.localScale = new Vector3(-2.2f, 3, 1.2047f);
-        gse2.transform.localPosition = new Vector3(1.5f, 0.75f, 0);
+        var cycloneTink = UnityEngine.Object.Instantiate(prefabs["cycloneTink"] as GameObject, greyPrince.transform);
+        cycloneTink.name = "cycloneTink";
+        cycloneTink.SetActive(false);
         var cycloneSlashChargeNACharge = UnityEngine.Object.Instantiate(prefabs["cycloneSlashChargeNACharge"] as GameObject, greyPrince.transform);
         cycloneSlashChargeNACharge.name = "cycloneSlashChargeNACharge";
         var cycloneSlashChargeNACharged = UnityEngine.Object.Instantiate(prefabs["cycloneSlashChargeNACharged"] as GameObject, greyPrince.transform);
@@ -248,6 +237,7 @@ public partial class Control : Module
             var position = rigidbody2D.position;
             position.y += 0.1f;
             rigidbody2D.position = position;
+            fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(true);
         });
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSide(null, null, fsm.GetFSMEvent("LAND")));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSideEnter(null, null, fsm.GetFSMEvent("LAND")));
@@ -270,6 +260,7 @@ public partial class Control : Module
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.velocity = new Vector2(0, 0);
             rigidbody2D.gravityScale = 3;
+            fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(false);
         });
         fsm.AddTransition("Cyclone Slash Slash", "FINISHED", "Move Choice 3");
     }

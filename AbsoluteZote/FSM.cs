@@ -75,6 +75,15 @@ public static class FSM
         fsm.FsmVariables.FloatVariables = fsm.FsmVariables.FloatVariables.Append(fsmFloat).ToArray();
         return fsmFloat;
     }
+    public static FsmGameObject AccessGameObjectVariable(this PlayMakerFSM fsm, string name)
+    {
+        FsmGameObject fsmGameObject = fsm.FsmVariables.GameObjectVariables.FirstOrDefault(x => x.Name == name);
+        if (fsmGameObject != null)
+            return fsmGameObject;
+        fsmGameObject = new FsmGameObject(name);
+        fsm.FsmVariables.GameObjectVariables = fsm.FsmVariables.GameObjectVariables.Append(fsmGameObject).ToArray();
+        return fsmGameObject;
+    }
     public static FsmInt AccessIntVariable(this PlayMakerFSM fsm, string name)
     {
         FsmInt fsmInt = fsm.FsmVariables.IntVariables.FirstOrDefault(x => x.Name == name);
