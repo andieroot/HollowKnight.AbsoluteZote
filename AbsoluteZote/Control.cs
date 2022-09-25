@@ -94,6 +94,8 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("cycloneSlashSlashFlash1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("cycloneSlashSlashFlash2").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneTink2").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneEffect").gameObject.SetActive(false);
         }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)

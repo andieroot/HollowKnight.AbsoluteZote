@@ -57,6 +57,24 @@ public partial class Control : Module
         var cycloneTink = UnityEngine.Object.Instantiate(prefabs["cycloneTink"] as GameObject, greyPrince.transform);
         cycloneTink.name = "cycloneTink";
         cycloneTink.SetActive(false);
+        cycloneTink.transform.localPosition = new Vector3(-8, -2.5f, 0);
+        cycloneTink.transform.localScale = new Vector3(3,1.15f,1);
+        cycloneTink.transform.localRotation = Quaternion.Euler(0, 0, 335);
+        cycloneTink = UnityEngine.Object.Instantiate(prefabs["cycloneTink"] as GameObject, greyPrince.transform);
+        cycloneTink.name = "cycloneTink2";
+        cycloneTink.SetActive(false);
+        cycloneTink.transform.localPosition = new Vector3(8, -2.5f, 0);
+        cycloneTink.transform.localScale = new Vector3(-3, 1.15f, 1);
+        cycloneTink.transform.localRotation = Quaternion.Euler(0, 0, 25);
+        var cycloneEffect = HeroController.instance.gameObject.transform.Find("Attacks").gameObject.transform.Find("Cyclone Slash").gameObject;
+        cycloneEffect = UnityEngine.Object.Instantiate(cycloneEffect as GameObject, greyPrince.transform);
+        cycloneEffect.name = "cycloneEffect";
+        cycloneEffect.SetActive(false);
+        cycloneEffect.transform.localPosition = new Vector3(0, -1.7f, -0.0013f);
+        cycloneEffect.transform.localScale = new Vector3(2.5f, 3, 1.3863f);
+        var hits = cycloneEffect.transform.Find("Hits").gameObject;
+        hits.transform.Find("Hit L").gameObject.RemoveComponent<PolygonCollider2D>();
+        hits.transform.Find("Hit R").gameObject.RemoveComponent<PolygonCollider2D>();
         var cycloneSlashChargeNACharge = UnityEngine.Object.Instantiate(prefabs["cycloneSlashChargeNACharge"] as GameObject, greyPrince.transform);
         cycloneSlashChargeNACharge.name = "cycloneSlashChargeNACharge";
         var cycloneSlashChargeNACharged = UnityEngine.Object.Instantiate(prefabs["cycloneSlashChargeNACharged"] as GameObject, greyPrince.transform);
@@ -124,7 +142,7 @@ public partial class Control : Module
         {
             var destination = fsm.AccessFloatVariable("cycloneSlashDestination").Value;
             float velocityX = 2 * (destination - fsm.gameObject.transform.position.x);
-            float velocityY = 90;
+            float velocityY = 60;
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.gravityScale = 6;
             rigidbody2D.velocity = new Vector2(velocityX, velocityY);
@@ -219,13 +237,18 @@ public partial class Control : Module
         {
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
             var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
+            var oldClip2 = tk2dSpriteAnimator_.GetClipByName("Stomp Shift");
             var newClip = new tk2dSpriteAnimationClip();
             newClip.CopyFrom(oldClip);
-            newClip.frames = new tk2dSpriteAnimationFrame[1];
-            newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.Once;
+            newClip.frames = new tk2dSpriteAnimationFrame[1+2];
+            newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.PingPong;
             for (int i = 0; i < newClip.frames.Length; i++)
             {
                 newClip.frames[i] = oldClip.frames[oldClip.frames.Length - i - 1];
+            }
+            for(int i = 0; i < 2; ++i)
+            {
+                newClip.frames[1 + i] = oldClip2.frames[i];
             }
             tk2dSpriteAnimator_.Play(newClip);
             fsm.gameObject.transform.Find("cycloneSlashChargeChargeEffect").gameObject.SetActive(false);
@@ -238,7 +261,21 @@ public partial class Control : Module
             position.y += 0.1f;
             rigidbody2D.position = position;
             fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("cycloneTink2").gameObject.SetActive(true);
+            fsm.gameObject.transform.Find("cycloneEffect").gameObject.SetActive(true);
         });
+        fsm.AddAction("Cyclone Slash Dash", fsm.CreateGeneralAction(() =>
+        {
+            var x = fsm.gameObject.transform.position.x;
+            var heroX = HeroController.instance.gameObject.transform.position.x;
+            if (Math.Abs(x - heroX) < 1)
+            {
+                var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
+                var v = rigidbody2D.velocity;
+                v.y = -32;
+                rigidbody2D.velocity = v;
+            }
+        }));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSide(null, null, fsm.GetFSMEvent("LAND")));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSideEnter(null, null, fsm.GetFSMEvent("LAND")));
         fsm.AddTransition("Cyclone Slash Dash", "LAND", "Cyclone Slash Slash");
@@ -261,6 +298,8 @@ public partial class Control : Module
             rigidbody2D.velocity = new Vector2(0, 0);
             rigidbody2D.gravityScale = 3;
             fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneTink2").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneEffect").gameObject.SetActive(false);
         });
         fsm.AddTransition("Cyclone Slash Slash", "FINISHED", "Move Choice 3");
     }
