@@ -120,6 +120,8 @@ public partial class Control : Module
             "Charge Antic",
             "Dash Slash Jump Antic",
             "Great Slash Jump Antic",
+            "Cyclone Slash Jump Antic",
+            "Great Slash Jump Antic",
             "Cyclone Slash Jump Antic"
         };
         foreach (var regluarMove in regluarMoves)
