@@ -19,6 +19,7 @@ public partial class Control : Module
     {
         LoadPrefabsDashSlash(preloadedObjects);
         LoadPrefabsGreatSlash(preloadedObjects);
+        LoadPrefabsCycloneSlash(preloadedObjects);
         LoadPrefabsRoll(preloadedObjects);
         LoadPrefabsJump(preloadedObjects);
         LoadPrefabsFall(preloadedObjects);
@@ -47,6 +48,7 @@ public partial class Control : Module
             UpdateStateMoveChoice3(fsm);
             UpdateFSMDashSlash(fsm);
             UpdateFSMGreatSlash(fsm);
+            UpdateFSMCycloneSlash(fsm);
             UpdateFSMRoll(fsm);
             UpdateFSMJump(fsm);
             UpdateFSMFall(fsm);
@@ -86,6 +88,11 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("gs1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("gse1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("gse2").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneSlashChargeChargeEffect").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneSlashChargeNACharge").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneSlashChargeNACharged").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneSlashSlashFlash1").gameObject.SetActive(false);
+            fsm.gameObject.transform.Find("cycloneSlashSlashFlash2").gameObject.SetActive(false);
         }, 0);
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
@@ -109,7 +116,8 @@ public partial class Control : Module
             //"JS Antic",
             //"Charge Antic",
             //"Dash Slash Jump Antic",
-            "Great Slash Jump Antic",
+            //"Great Slash Jump Antic",
+            "Cyclone Slash Jump Antic"
         };
         foreach (var regluarMove in regluarMoves)
         {
