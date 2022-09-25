@@ -28,7 +28,7 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
         control = new(this);
         afterimage = new(this);
     }
-    public override string GetVersion() => "1.5.0.0";
+    public override string GetVersion() => "2.0.0.0";
     public override List<(string, string)> GetPreloadNames()
     {
         List<(string, string)> preloadNames = new();

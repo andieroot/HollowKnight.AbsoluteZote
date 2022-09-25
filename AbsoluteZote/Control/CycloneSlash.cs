@@ -13,6 +13,9 @@ public partial class Control : Module
         prefabs["cycloneSlashChargeAudioPlayer"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioPlayer;
         prefabs["cycloneSlashChargeAudio"] = (fsm.GetState("FT Through").Actions[2] as AudioPlayerOneShot).audioClips;
         var sly = preloadedObjects["GG_Sly"]["Battle Scene"].transform.Find("Sly Boss").gameObject;
+        fsm = sly.LocateMyFSM("Control");
+        prefabs["cyclonePlayer"] = (fsm.GetState("Cycloning").Actions[3] as AudioPlayerOneShotSingle).audioPlayer;
+        prefabs["cycloneAudio"] = (fsm.GetState("Cycloning").Actions[3] as AudioPlayerOneShotSingle).audioClip;
         var cycloneTink = sly.transform.Find("S1").gameObject;
         prefabs["cycloneTink"] = cycloneTink;
         var brothers = preloadedObjects["GG_Nailmasters"]["Brothers"];
@@ -278,6 +281,9 @@ public partial class Control : Module
         }));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSide(null, null, fsm.GetFSMEvent("LAND")));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSideEnter(null, null, fsm.GetFSMEvent("LAND")));
+        fsm.AddAction("Cyclone Slash Dash", fsm.CreateAudioPlayerOneShot(
+            prefabs["cycloneSlashJumpAudioPlayer"] as FsmGameObject, fsm.gameObject,
+            prefabs["cycloneSlashJumpAudio2"] as AudioClip[], new float[3] { 1, 1, 1 }, 1, 1, 1, 0));
         fsm.AddTransition("Cyclone Slash Dash", "LAND", "Cyclone Slash Slash");
     }
     private void UpdateStateCycloneSlashSlash(PlayMakerFSM fsm)

@@ -113,13 +113,13 @@ public partial class Control : Module
         var last = new Dictionary<string, int>();
         var regluarMoves = new List<string>()
         {
-            //"Set Jumps",
-            //"FT Through",
-            //"Roar Check",
-            //"JS Antic",
-            //"Charge Antic",
-            //"Dash Slash Jump Antic",
-            //"Great Slash Jump Antic",
+            "Set Jumps",
+            "FT Through",
+            "Roar Check",
+            "JS Antic",
+            "Charge Antic",
+            "Dash Slash Jump Antic",
+            "Great Slash Jump Antic",
             "Cyclone Slash Jump Antic"
         };
         foreach (var regluarMove in regluarMoves)
