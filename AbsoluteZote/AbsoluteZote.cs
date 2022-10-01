@@ -68,6 +68,7 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
             return new List<Module>()
             {
                 skin,
+                arena,
             };
         }
         else
