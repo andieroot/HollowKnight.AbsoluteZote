@@ -9,9 +9,9 @@ using SFCore;
 
 public static class FakeSatchel
 {
-    public static void InsertCustomAction(this PlayMakerFSM fsm, string state,System.Action action,int index)
+    public static void InsertCustomAction(this PlayMakerFSM fsm, string state, System.Action action, int index)
     {
-        SFCore.Utils.FsmUtil.InsertMethod(fsm,state,action,index);
+        SFCore.Utils.FsmUtil.InsertMethod(fsm, state, action, index);
     }
     public static void AddCustomAction(this PlayMakerFSM fsm, string state, System.Action action)
     {
@@ -21,15 +21,28 @@ public static class FakeSatchel
     {
         fsm.GetState(state).AddAction(action);
     }
-    public static void AddState(this PlayMakerFSM fsm, string state)
+    public static FsmState AddState(this PlayMakerFSM fsm, FsmState state)
     {
-        SFCore.Utils.FsmUtil.AddFsmState(fsm, state);
+        var currStates = fsm.Fsm.States;
+        var states = new FsmState[currStates.Length + 1];
+        var i = 0;
+        for (; i < currStates.Length; i++)
+        {
+            states[i] = currStates[i];
+        }
+        states[i] = state;
+        fsm.Fsm.States = states;
+        return states[i];
+    }
+    public static FsmState AddState(this PlayMakerFSM fsm, string stateName)
+    {
+        return fsm.AddState(new FsmState(fsm.Fsm) { Name = stateName });
     }
     public static void RemoveAction(this PlayMakerFSM fsm, string state, int index)
     {
         fsm.GetState(state).RemoveAction(index);
     }
-    public static void AddTransition(this PlayMakerFSM fsm, string from, string e,string to)
+    public static void AddTransition(this PlayMakerFSM fsm, string from, string e, string to)
     {
         fsm.GetState(from).AddTransition(e, to);
     }
