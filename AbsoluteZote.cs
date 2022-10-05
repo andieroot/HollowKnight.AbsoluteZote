@@ -17,7 +17,6 @@ namespace AbsoluteZote {
         public static AbsoluteZote absoluteZote;
         private readonly Statue statue;
         private readonly Arena arena;
-        private readonly Skin skin;
         public readonly Title title;
         private readonly DreamNail dreamNail;
         private readonly Control control;
@@ -29,7 +28,6 @@ namespace AbsoluteZote {
         {
             absoluteZote = this;
             arena = new Arena(this);
-            skin = new Skin(this);
             title = new Title(this);
             dreamNail = new DreamNail(this);
             control = new Control(this);
@@ -75,7 +73,6 @@ namespace AbsoluteZote {
             {
                 return new List<Module>()
             {
-                skin,
                 arena,
             };
             }
