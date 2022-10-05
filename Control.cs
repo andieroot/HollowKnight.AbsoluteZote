@@ -18,7 +18,7 @@ namespace AbsoluteZote
             if (fsm.ActiveStateName == "Roar")
             {
                 time += Time.deltaTime;
-                if (time > 3)
+                if (time > 4)
                 {
                     fsm.SetState("Music");
                 }

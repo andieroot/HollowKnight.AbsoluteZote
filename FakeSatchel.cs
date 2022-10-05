@@ -42,8 +42,26 @@ public static class FakeSatchel
     {
         fsm.GetState(state).RemoveAction(index);
     }
-    public static void AddTransition(this PlayMakerFSM fsm, string from, string e, string to)
+    public static void AddTransition(this FsmState state, string onEventName, string toStateName)
     {
-        fsm.GetState(from).AddTransition(e, to);
+        var currTransitions = state.Transitions;
+        var transitions = new FsmTransition[currTransitions.Length + 1];
+        var newTransiton = new FsmTransition
+        {
+            ToState = toStateName,
+            FsmEvent = FsmEvent.GetFsmEvent(onEventName)
+        };
+        var i = 0;
+        for (; i < currTransitions.Length; i++)
+        {
+            transitions[i] = currTransitions[i];
+        }
+        transitions[i] = newTransiton;
+        state.Transitions = transitions;
+    }
+    public static void AddTransition(this PlayMakerFSM fsm, string fromStateName, string onEventName, string toStateName)
+    {
+        var state = fsm.Fsm.GetState(fromStateName);
+        state.AddTransition(onEventName, toStateName);
     }
 }
