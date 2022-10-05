@@ -66,6 +66,7 @@ namespace AbsoluteZote
                     minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
                     minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
                     minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                    Object.Destroy(minion.transform.Find("Enemy Crusher").gameObject);
                     minion = prefabs["Thwomp Zoteling"] as GameObject;
                     minion = UnityEngine.Object.Instantiate(minion);
                     minion.SetActive(true);
