@@ -9,6 +9,22 @@ using SFCore;
 
 namespace AbsoluteZote
 {
+    class RoarHelper : MonoBehaviour
+    {
+        float time = 0;
+        void Update()
+        {
+            var fsm = gameObject.LocateMyFSM("Control");
+            if (fsm.ActiveStateName == "Roar")
+            {
+                time += Time.deltaTime;
+                if (time > 3)
+                {
+                    fsm.SetState("Music");
+                }
+            }
+        }
+    }
     public partial class Control : Module
     {
         public Control(AbsoluteZote absoluteZote) : base(absoluteZote)
@@ -65,6 +81,7 @@ namespace AbsoluteZote
                 UpdateFSMJumpSlash(fsm);
                 UpdateFSMCharge(fsm);
                 UpdateFSMEvade(fsm);
+                fsm.gameObject.AddComponent<RoarHelper>();
             }
             UpdateFSMRoar(fsm);
         }
