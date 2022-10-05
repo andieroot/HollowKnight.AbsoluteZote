@@ -42,7 +42,7 @@ namespace AbsoluteZote
             spriteRenderer.sortingLayerID = -349214895;
             var whiteFader = bossControl.transform.Find("White Fader").gameObject;
             spriteRenderer.sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
-            spriteRenderer.color = new Color(.3f, 0, .3f, 0);
+            spriteRenderer.color = new Color(.45f, 0, .3f, 0);
             titleBackground.transform.position = new Vector3(0, 0, -16);
             titleBackground.transform.localScale = Vector3.one * 256;
             prefabs["titleBackground"] = titleBackground;
@@ -69,33 +69,6 @@ namespace AbsoluteZote
                 }
                 fsm.RemoveAction("Main Title", 0);
             }
-        }
-        public override string UpdateText(string key, string sheet)
-        {
-            string text = null;
-            if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
-            {
-                if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
-                {
-                    text = "无上左特";
-                }
-                else
-                {
-                    text = "ZOTE";
-                }
-            }
-            else if (key == "ABSOLUTE_ZOTE_SUPER" && sheet == "Titles")
-            {
-                if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
-                {
-                    text = "";
-                }
-                else
-                {
-                    text = "ABSOLUTE";
-                }
-            }
-            return text;
         }
         public void HideHUD()
         {

@@ -6,6 +6,7 @@ using Modding;
 using System.Collections.Generic;
 using Vasi;
 using SFCore;
+using Language;
 
 namespace AbsoluteZote {
     public abstract class Module
@@ -58,7 +59,7 @@ namespace AbsoluteZote {
         }
         public virtual string UpdateText(string key, string sheet)
         {
-            return null;
+            return Language.Language.GetInternal(key, sheet);
         }
         public virtual bool UpdateDreamnailReaction(EnemyDreamnailReaction enemyDreamnailReaction)
         {

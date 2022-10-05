@@ -28,13 +28,13 @@ namespace AbsoluteZote {
         public AbsoluteZote() : base("AbsoluteZote")
         {
             absoluteZote = this;
-            statue = new Statue(this);
             arena = new Arena(this);
             skin = new Skin(this);
             title = new Title(this);
             dreamNail = new DreamNail(this);
             control = new Control(this);
             afterimage = new Afterimage(this);
+            statue = new Statue(this);
         }
         public override string GetVersion() => "2.0.0.0";
         public override List<(string, string)> GetPreloadNames()
