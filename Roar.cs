@@ -50,6 +50,7 @@ namespace AbsoluteZote
                     minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
                     minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
                     minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                    Object.Destroy(minion.transform.Find("Enemy Crusher").gameObject);
                     fsm.SetState("Dormant");
                 });
             }
@@ -73,6 +74,7 @@ namespace AbsoluteZote
                     minion.transform.SetScaleX(0.75f * minion.transform.localScale.x);
                     minion.transform.SetScaleY(0.75f * minion.transform.localScale.y);
                     minion.transform.SetScaleZ(0.75f * minion.transform.localScale.z);
+                    Object.Destroy(minion.transform.Find("Enemy Crusher").gameObject);
                     fsm.SetState("Dormant");
                 });
             }
