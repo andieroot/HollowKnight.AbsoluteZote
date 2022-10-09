@@ -35,13 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\PlayMaker.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,43 +50,43 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.Physics2DModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
     <Reference Include="Vasi">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\Mods/Vasi.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\Mods/Vasi.dll</HintPath>
     </Reference>
     <Reference Include="SFCore">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\Mods/SFCore.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\Mods/SFCore.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.4.3.2\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
