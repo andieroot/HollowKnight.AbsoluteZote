@@ -8,7 +8,7 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<DebugType>portable</DebugType>
 		<RootNamespace>AbsoluteZote</RootNamespace>
-		<ReferenceInstallation>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed Backup</ReferenceInstallation>
+		<ReferenceInstallation>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.5.78.11833</ReferenceInstallation>
 		<ActualInstallation>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed</ActualInstallation>
 	</PropertyGroup>
 	<ItemGroup>
@@ -56,9 +56,6 @@
 		</Reference>
 	</ItemGroup>
 	<Target Name="Installation" AfterTargets="PostBuildEvent">
-		<RemoveDir Condition="Exists('$(ReferenceInstallation)/Mods/$(TargetName)')" Directories="$(ReferenceInstallation)/Mods/$(TargetName)" />
-		<MakeDir Directories="$(ReferenceInstallation)/Mods/$(TargetName)" />
-		<Copy SourceFiles="$(TargetDir)/$(TargetName).dll;$(TargetDir)/$(TargetName).pdb" DestinationFolder="$(ReferenceInstallation)/Mods/$(TargetName)" />
 		<RemoveDir Condition="Exists('$(ActualInstallation)/Mods/$(TargetName)')" Directories="$(ActualInstallation)/Mods/$(TargetName)" />
 		<MakeDir Directories="$(ActualInstallation)/Mods/$(TargetName)" />
 		<Copy SourceFiles="$(TargetDir)/$(TargetName).dll;$(TargetDir)/$(TargetName).pdb" DestinationFolder="$(ActualInstallation)/Mods/$(TargetName)" />
