@@ -86,7 +86,7 @@ namespace AbsoluteZote {
         }
         private void HeroUpdateHook()
         {
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(KeyCode.F3))
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("GG_Grey_Prince_Zote");
             }
