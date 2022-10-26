@@ -60,16 +60,29 @@ public partial class Control : Module
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
     {
-        fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
+        if (absoluteZote_.settings_.skipIntro == 0)
+        {
+            fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
+        }
         fsm.AddCustomAction("Enter 1", () =>
         {
             fsm.gameObject.GetComponent<HealthManager>().hp = 3000;
-            fsm.SetState("Enter Short");
+            if (absoluteZote_.settings_.skipIntro == 0)
+            {
+                fsm.SetState("Enter Short");
+            }
+            else
+            {
+                fsm.SetState("Roar End");
+            }
         });
     }
     private void UpdateStateRoar(PlayMakerFSM fsm)
     {
-        fsm.InsertCustomAction("Roar", absoluteZote_.title.ShowTitle, 0);
+        if (absoluteZote_.settings_.skipIntro == 0)
+        {
+            fsm.InsertCustomAction("Roar", absoluteZote_.title.ShowTitle, 0);
+        }
     }
     private void UpdateStateSendEvent(PlayMakerFSM fsm)
     {
@@ -100,7 +113,10 @@ public partial class Control : Module
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
     {
-        fsm.AddCustomAction("Roar End", absoluteZote_.title.HideTitle);
+        if (absoluteZote_.settings_.skipIntro == 0)
+        {
+            fsm.AddCustomAction("Roar End", absoluteZote_.title.HideTitle);
+        }
     }
     private void UpdateStateStun(PlayMakerFSM fsm)
     {

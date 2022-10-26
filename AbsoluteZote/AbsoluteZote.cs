@@ -3,6 +3,7 @@
 public class Settings
 {
     public int status = 0;
+    public int skipIntro = 0;
 }
 public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
 {
@@ -15,7 +16,7 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
     private readonly Control control;
     private readonly Afterimage afterimage;
     public List<Module> modules = new();
-    private Settings settings_ = new();
+    public Settings settings_ = new();
     public bool ToggleButtonInsideMenu => true;
     public AbsoluteZote() : base("AbsoluteZote")
     {
@@ -143,6 +144,18 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
                 },
                 Saver = i => settings_.status = i,
                 Loader = () => settings_.status
+            }
+        );
+        menus.Add(
+            new()
+            {
+                Values = new string[]
+                {
+                    "KEEP INTRO",
+                    "SKIP INTRO"
+                },
+                Saver = i => settings_.skipIntro = i,
+                Loader = () => settings_.skipIntro
             }
         );
         return menus;
