@@ -83,18 +83,6 @@ public partial class Control : Module
             fsm.AddCustomAction("Set Pos", () =>
             {
                 GameObject minion;
-                if (random.Next(2) == 0)
-                {
-                    minion = prefabs["Thwomp Zoteling"] as GameObject;
-                    minion = UnityEngine.Object.Instantiate(minion);
-                    minion.SetActive(true);
-                    minion.SetActiveChildren(true);
-                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
-                    minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
-                    minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
-                    minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
-                    fsm.SetState("Dormant");
-                }
                 var greyPrince = GameObject.Find("Grey Prince");
                 if (greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value > 0)
                 {
@@ -112,17 +100,35 @@ public partial class Control : Module
                     var ghostMovement = minion.GetComponent<PlayMakerFSM>().GetAction<GhostMovement>("Sucking", 8);
                     ghostMovement.yPosMin = ghostMovement.yPosMin.Value + 5;
                     ghostMovement.yPosMax = ghostMovement.yPosMax.Value + 5;
+                    fsm.SetState("Dormant");
                 }
                 else
                 {
-                    minion = prefabs["Fluke Zoteling"] as GameObject;
-                    minion = UnityEngine.Object.Instantiate(minion);
-                    minion.SetActive(true);
-                    minion.SetActiveChildren(true);
-                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 6, fsm.gameObject.transform.position.z);
-                    minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
-                    minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
-                    minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                    var i = random.Next(3);
+                    if (i == 1)
+                    {
+                        minion = prefabs["Thwomp Zoteling"] as GameObject;
+                        minion = UnityEngine.Object.Instantiate(minion);
+                        minion.SetActive(true);
+                        minion.SetActiveChildren(true);
+                        minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
+                        minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
+                        minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
+                        minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                        fsm.SetState("Dormant");
+                    }
+                    else if (i == 2)
+                    {
+                        minion = prefabs["Fluke Zoteling"] as GameObject;
+                        minion = UnityEngine.Object.Instantiate(minion);
+                        minion.SetActive(true);
+                        minion.SetActiveChildren(true);
+                        minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 6, fsm.gameObject.transform.position.z);
+                        minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
+                        minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
+                        minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                        fsm.SetState("Dormant");
+                    }
                 }
             });
         }
@@ -131,18 +137,6 @@ public partial class Control : Module
             fsm.AddCustomAction("Set Pos", () =>
             {
                 GameObject minion;
-                if (random.Next(2) == 0)
-                {
-                    minion = prefabs["Thwomp Zoteling"] as GameObject;
-                    minion = UnityEngine.Object.Instantiate(minion);
-                    minion.SetActive(true);
-                    minion.SetActiveChildren(true);
-                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
-                    minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
-                    minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
-                    minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
-                    fsm.SetState("Dormant");
-                }
                 var greyPrince = GameObject.Find("Grey Prince");
                 if (greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value > 0)
                 {
@@ -157,17 +151,35 @@ public partial class Control : Module
                     var ghostMovement = minion.GetComponent<PlayMakerFSM>().GetAction<GhostMovement>("Sucking", 8);
                     ghostMovement.yPosMin = ghostMovement.yPosMin.Value + 5;
                     ghostMovement.yPosMax = ghostMovement.yPosMax.Value + 5;
+                    fsm.SetState("Dormant");
                 }
                 else
                 {
-                    minion = prefabs["Fluke Zoteling"] as GameObject;
-                    minion = UnityEngine.Object.Instantiate(minion);
-                    minion.SetActive(true);
-                    minion.SetActiveChildren(true);
-                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 6, fsm.gameObject.transform.position.z);
-                    minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
-                    minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
-                    minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                    var i = random.Next(3);
+                    if (i == 1)
+                    {
+                        minion = prefabs["Thwomp Zoteling"] as GameObject;
+                        minion = UnityEngine.Object.Instantiate(minion);
+                        minion.SetActive(true);
+                        minion.SetActiveChildren(true);
+                        minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
+                        minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
+                        minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
+                        minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                        fsm.SetState("Dormant");
+                    }
+                    else if (i == 2)
+                    {
+                        minion = prefabs["Fluke Zoteling"] as GameObject;
+                        minion = UnityEngine.Object.Instantiate(minion);
+                        minion.SetActive(true);
+                        minion.SetActiveChildren(true);
+                        minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 6, fsm.gameObject.transform.position.z);
+                        minion.transform.SetScaleX(0.5f * minion.transform.localScale.x);
+                        minion.transform.SetScaleY(0.5f * minion.transform.localScale.y);
+                        minion.transform.SetScaleZ(0.5f * minion.transform.localScale.z);
+                        fsm.SetState("Dormant");
+                    }
                 }
                 minion = prefabs["Thwomp Zoteling"] as GameObject;
                 minion = UnityEngine.Object.Instantiate(minion);

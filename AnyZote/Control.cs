@@ -86,8 +86,6 @@ public partial class Control : Module
             fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value = 65536;
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value);
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value);
-            var shield = UnityEngine.Object.Instantiate(prefabs["Shield"] as GameObject, fsm.gameObject.transform);
-            shield.transform.position = fsm.gameObject.transform.position;
             fsm.gameObject.RefreshHPBar();
         });
     }

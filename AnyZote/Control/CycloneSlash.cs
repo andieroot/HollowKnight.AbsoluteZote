@@ -61,7 +61,7 @@ public partial class Control : Module
         cycloneTink.name = "cycloneTink";
         cycloneTink.SetActive(false);
         cycloneTink.transform.localPosition = new Vector3(-8, -2.5f, 0);
-        cycloneTink.transform.localScale = new Vector3(3,1.15f,1);
+        cycloneTink.transform.localScale = new Vector3(3, 1.15f, 1);
         cycloneTink.transform.localRotation = Quaternion.Euler(0, 0, 335);
         cycloneTink = UnityEngine.Object.Instantiate(prefabs["cycloneTink"] as GameObject, greyPrince.transform);
         cycloneTink.name = "cycloneTink2";
@@ -128,6 +128,7 @@ public partial class Control : Module
             destinationNext = x;
             fsm.AccessFloatVariable("cycloneSlashDestination").Value = destination;
             fsm.AccessFloatVariable("cycloneSlashDestinationNext").Value = destinationNext;
+            fsm.AccessBoolVariable("cycloneSlashCancel").Value = false;
         });
         fsm.AddCustomAction("Cyclone Slash Jump Antic", fsm.CreateFacePosition("cycloneSlashDestinationNext", true));
         fsm.AddAction("Cyclone Slash Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(
@@ -243,13 +244,13 @@ public partial class Control : Module
             var oldClip2 = tk2dSpriteAnimator_.GetClipByName("Stomp Shift");
             var newClip = new tk2dSpriteAnimationClip();
             newClip.CopyFrom(oldClip);
-            newClip.frames = new tk2dSpriteAnimationFrame[1+2];
+            newClip.frames = new tk2dSpriteAnimationFrame[1 + 2];
             newClip.wrapMode = tk2dSpriteAnimationClip.WrapMode.PingPong;
             for (int i = 0; i < newClip.frames.Length; i++)
             {
                 newClip.frames[i] = oldClip.frames[oldClip.frames.Length - i - 1];
             }
-            for(int i = 0; i < 2; ++i)
+            for (int i = 0; i < 2; ++i)
             {
                 newClip.frames[1 + i] = oldClip2.frames[i];
             }
@@ -277,6 +278,19 @@ public partial class Control : Module
                 var v = rigidbody2D.velocity;
                 v.y = -32;
                 rigidbody2D.velocity = v;
+                if (!fsm.AccessBoolVariable("cycloneSlashCancel").Value)
+                {
+                    fsm.AccessBoolVariable("cycloneSlashCancel").Value = true;
+                    if (random.Next(3) == 0)
+                    {
+                        rigidbody2D.velocity = new Vector2(0, 0);
+                        rigidbody2D.gravityScale = 0;
+                        fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(false);
+                        fsm.gameObject.transform.Find("cycloneTink2").gameObject.SetActive(false);
+                        fsm.gameObject.transform.Find("cycloneEffect").gameObject.SetActive(false);
+                        fsm.SetState("Stomp");
+                    }
+                }
             }
         }));
         fsm.AddAction("Cyclone Slash Dash", fsm.CreateCheckCollisionSide(null, null, fsm.GetFSMEvent("LAND")));

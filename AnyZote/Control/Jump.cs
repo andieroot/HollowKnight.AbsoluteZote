@@ -44,5 +44,6 @@ public partial class Control : Module
             localScale.x *= 2;
             shockWave.transform.localScale = localScale;
         });
+        fsm.RemoveAction("Aim Jump", 5);
     }
 }

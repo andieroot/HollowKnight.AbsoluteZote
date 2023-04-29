@@ -238,6 +238,12 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("greatSlashChargePtDash").gameObject));
         fsm.AddCustomAction("Great Slash Dash", () =>
         {
+            if (Mathf.Sign(fsm.AccessFloatVariable("greatSlashDestination").Value - fsm.gameObject.transform.position.x) != Mathf.Sign(HeroController.instance.transform.position.x - fsm.gameObject.transform.position.x))
+            {
+                fsm.gameObject.transform.Find("greatSlashChargeNACharged").gameObject.SetActive(false);
+                fsm.gameObject.transform.Find("greatSlashChargeChargeEffect").gameObject.SetActive(false);
+                fsm.SetState("Jump Antic");
+            }
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
             var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
             var newClip = new tk2dSpriteAnimationClip();
