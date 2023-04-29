@@ -1,7 +1,7 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class Statue : Module
 {
-    public Statue(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Statue(AnyZote anyZote) : base(anyZote)
     {
     }
     public override List<(string, string)> GetPreloadNames()

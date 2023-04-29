@@ -1,10 +1,10 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class Skin : Module
 {
     Texture2D texture2D;
-    public Skin(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Skin(AnyZote anyZote) : base(anyZote)
     {
-        var stream = typeof(AbsoluteZote).Assembly.GetManifestResourceStream("AbsoluteZote.Resources.Skin.Texture2D.png");
+        var stream = typeof(AnyZote).Assembly.GetManifestResourceStream("AnyZote.Resources.Skin.Texture2D.png");
         MemoryStream memoryStream = new((int)stream.Length);
         stream.CopyTo(memoryStream);
         stream.Close();

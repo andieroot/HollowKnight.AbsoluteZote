@@ -1,13 +1,13 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 [Serializable]
 public class Settings
 {
     public int status = 0;
     public int skipIntro = 0;
 }
-public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
+public class AnyZote : Mod, IGlobalSettings<Settings>, IMenuMod
 {
-    public static AbsoluteZote absoluteZote;
+    public static AnyZote anyZote;
     private readonly Statue statue;
     private readonly Arena arena;
     private readonly Skin skin;
@@ -18,9 +18,9 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
     public List<Module> modules = new();
     public Settings settings_ = new();
     public bool ToggleButtonInsideMenu => true;
-    public AbsoluteZote() : base("AnyZote: AbsoluteZote")
+    public AnyZote() : base("AnyZote")
     {
-        absoluteZote = this;
+        anyZote = this;
         statue = new(this);
         arena = new(this);
         skin = new(this);

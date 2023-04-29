@@ -1,15 +1,15 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public abstract class Module
 {
-    protected readonly AbsoluteZote absoluteZote_;
+    protected readonly AnyZote anyZote_;
     protected readonly Dictionary<string, object> prefabs = new();
     protected readonly System.Random random = new();
-    public Module(AbsoluteZote absoluteZote)
+    public Module(AnyZote anyZote)
     {
-        absoluteZote_ = absoluteZote;
-        absoluteZote_.modules.Add(this);
+        anyZote_ = anyZote;
+        anyZote_.modules.Add(this);
     }
-    protected void Log(object message) => absoluteZote_.Log(message);
+    protected void Log(object message) => anyZote_.Log(message);
     protected void LogFSM(PlayMakerFSM fsm, System.Action function = null)
     {
         foreach (var state in fsm.FsmStates)

@@ -7,7 +7,7 @@
 		<Deterministic>true</Deterministic>
 		<ImplicitUsings>true</ImplicitUsings>
 		<DebugType>portable</DebugType>
-		<RootNamespace>AbsoluteZote</RootNamespace>
+		<RootNamespace>AnyZote</RootNamespace>
 		<ReferenceInstallation>C:\Users\yunjo\My Drive\Matroid\Games\Hollow Knight\Mods\Resources\Managed 1.5.78.11833</ReferenceInstallation>
 		<ActualInstallation>C:/Program Files (x86)/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed</ActualInstallation>
 	</PropertyGroup>
@@ -56,6 +56,6 @@
 		</Reference>
 	</ItemGroup>
 	<Target Name="Installation" AfterTargets="PostBuildEvent">
-		<Copy SourceFiles="$(TargetDir)/$(TargetName).dll" DestinationFolder="$(ActualInstallation)/Mods/AnyZote" />
+		<Copy SourceFiles="$(TargetDir)/$(TargetName).dll" DestinationFolder="$(ActualInstallation)/Mods/$(TargetName)" />
 	</Target>
 </Project>

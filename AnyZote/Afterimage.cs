@@ -1,4 +1,4 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public partial class Afterimage : Module
 {
     public class ImageAnimation : MonoBehaviour
@@ -81,7 +81,7 @@ public partial class Afterimage : Module
         }
     }
     GameObject knightTemplate;
-    public Afterimage(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Afterimage(AnyZote anyZote) : base(anyZote)
     {
     }
     public override List<(string, string)> GetPreloadNames()

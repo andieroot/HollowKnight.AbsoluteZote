@@ -1,4 +1,4 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class Title : Module
 {
     private readonly bool enabled = true;
@@ -6,7 +6,7 @@ public class Title : Module
     private GameObject title;
     private GameObject titleBackground;
     private GameObject dreamMsg;
-    public Title(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Title(AnyZote anyZote) : base(anyZote)
     {
     }
     public override List<(string, string)> GetPreloadNames()

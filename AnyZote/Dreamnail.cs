@@ -1,7 +1,7 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class DreamNail : Module
 {
-    public DreamNail(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public DreamNail(AnyZote anyZote) : base(anyZote)
     {
     }
     public override bool UpdateDreamnailReaction(EnemyDreamnailReaction enemyDreamnailReaction)

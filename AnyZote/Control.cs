@@ -1,7 +1,7 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public partial class Control : Module
 {
-    public Control(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Control(AnyZote anyZote) : base(anyZote)
     {
     }
     public override List<(string, string)> GetPreloadNames()
@@ -60,14 +60,14 @@ public partial class Control : Module
     }
     private void UpdateStateEnter1(PlayMakerFSM fsm)
     {
-        if (absoluteZote_.settings_.skipIntro == 0)
+        if (anyZote_.settings_.skipIntro == 0)
         {
-            fsm.InsertCustomAction("Enter 1", absoluteZote_.title.HideHUD, 0);
+            fsm.InsertCustomAction("Enter 1", anyZote_.title.HideHUD, 0);
         }
         fsm.AddCustomAction("Enter 1", () =>
         {
             fsm.gameObject.GetComponent<HealthManager>().hp = 3000;
-            if (absoluteZote_.settings_.skipIntro == 0)
+            if (anyZote_.settings_.skipIntro == 0)
             {
                 fsm.SetState("Enter Short");
             }
@@ -79,9 +79,9 @@ public partial class Control : Module
     }
     private void UpdateStateRoar(PlayMakerFSM fsm)
     {
-        if (absoluteZote_.settings_.skipIntro == 0)
+        if (anyZote_.settings_.skipIntro == 0)
         {
-            fsm.InsertCustomAction("Roar", absoluteZote_.title.ShowTitle, 0);
+            fsm.InsertCustomAction("Roar", anyZote_.title.ShowTitle, 0);
         }
     }
     private void UpdateStateSendEvent(PlayMakerFSM fsm)
@@ -113,9 +113,9 @@ public partial class Control : Module
     }
     private void UpdateStateRoarEnd(PlayMakerFSM fsm)
     {
-        if (absoluteZote_.settings_.skipIntro == 0)
+        if (anyZote_.settings_.skipIntro == 0)
         {
-            fsm.AddCustomAction("Roar End", absoluteZote_.title.HideTitle);
+            fsm.AddCustomAction("Roar End", anyZote_.title.HideTitle);
         }
     }
     private void UpdateStateStun(PlayMakerFSM fsm)

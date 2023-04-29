@@ -1,4 +1,4 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class ReachDestination : FsmStateAction
 {
     public override void OnUpdate()
@@ -41,7 +41,7 @@ public static class FSM
                 fsm.gameObject, clip.name, fsm.GetFSMEvent("FINISHED")));
             fsm.AddCustomAction("Animation Test " + i, () =>
             {
-                AbsoluteZote.absoluteZote.Log(clip.name);
+                AnyZote.anyZote.Log(clip.name);
             });
             fsm.AddAction("Animation Test " + i, fsm.CreateWait(2.5f, fsm.GetFSMEvent("FINISHED")));
             if (i + 1 != n)

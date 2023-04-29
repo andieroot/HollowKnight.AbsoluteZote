@@ -1,7 +1,7 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 public class Arena : Module
 {
-    public Arena(AbsoluteZote absoluteZote) : base(absoluteZote)
+    public Arena(AnyZote anyZote) : base(anyZote)
     {
     }
     public override void Initialize(UnityEngine.SceneManagement.Scene scene)

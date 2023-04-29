@@ -1,4 +1,4 @@
-﻿namespace AbsoluteZote;
+﻿namespace AnyZote;
 
 public partial class Control : Module
 {
