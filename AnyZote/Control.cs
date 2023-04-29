@@ -4,6 +4,8 @@ public partial class Control : Module
     private List<GameObject> toSpit;
     private List<GameObject> turrets = new List<GameObject>();
     private List<GameObject> beams = new List<GameObject>();
+    private List<GameObject> turrets2 = new List<GameObject>();
+    private List<GameObject> beams2 = new List<GameObject>();
     public Control(AnyZote anyZote) : base(anyZote)
     {
     }
@@ -104,6 +106,8 @@ public partial class Control : Module
             float g = (r - l) / (cnt - 1);
             turrets.Clear();
             beams.Clear();
+            turrets2.Clear();
+            beams2.Clear();
             for (int i = 0; i < cnt; i++)
             {
                 var minion = prefabs["Turret Zoteling"] as GameObject;
@@ -149,6 +153,10 @@ public partial class Control : Module
                 });
                 beams.Add(beam);
             }
+            turrets2.Add(turrets[0]);
+            turrets2.Add(turrets[turrets.Count - 1]);
+            beams2.Add(beams[0]);
+            beams2.Add(beams[beams.Count - 1]);
             fsm.gameObject.RefreshHPBar();
         });
     }

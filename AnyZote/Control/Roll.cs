@@ -122,7 +122,7 @@ public partial class Control : Module
     private void UpdateStateRollJumpAntic(PlayMakerFSM fsm)
     {
         fsm.AddCustomAction(
-            "Roll Jump Antic",() => fsm.gameObject.LocateMyFSM("Stun").SendEvent("STUN CONTROL STOP"));
+            "Roll Jump Antic", () => fsm.gameObject.LocateMyFSM("Stun").SendEvent("STUN CONTROL STOP"));
         fsm.AddCustomAction("Roll Jump Antic", fsm.CreateSetVelocity2d(0, 0));
         fsm.AddAction("Roll Jump Antic", fsm.CreateFaceObject(HeroController.instance.gameObject, true));
         fsm.AddAction("Roll Jump Antic", fsm.CreateTk2dPlayAnimationWithEvents(
@@ -172,6 +172,18 @@ public partial class Control : Module
     {
         fsm.AddCustomAction("Roll Rolling Start", () =>
         {
+            foreach (var t in turrets2)
+            {
+                t.LocateMyFSM("Control").SetState("Antic");
+            }
+            var dir = 1;
+            foreach (var b in beams2)
+            {
+                b.LocateMyFSM("Control").SetState("Antic");
+                b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value = -90;
+                b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value = dir;
+                dir *= -1;
+            }
             var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();
             var random = new System.Random();
             var velocityX = (float)((1 - 2 * random.NextDouble()) * 20);
@@ -195,6 +207,40 @@ public partial class Control : Module
         {
             newClip.frames[i] = oldClip.frames[i + 1];
         }
+        fsm.AddAction("Roll Rolling", fsm.CreateGeneralAction(() =>
+        {
+            foreach (var b in beams2)
+            {
+                if (b.LocateMyFSM("Control").ActiveStateName == "Inert")
+                {
+                    b.LocateMyFSM("Control").SetState("Antic");
+                }
+                if (b.LocateMyFSM("Control").ActiveStateName == "Antic")
+                {
+                    var a = b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value;
+                    var d = b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value;
+                    if (d > 0)
+                    {
+                        a = a + Time.deltaTime * 30;
+                        if (a > 0)
+                        {
+                            d = -1;
+                        }
+                    }
+                    else
+                    {
+                        a = a - Time.deltaTime * 30;
+                        if (a < -180)
+                        {
+                            d = 1;
+                        }
+                    }
+                    b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value = a;
+                    b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value = d;
+                    b.transform.rotation = Quaternion.Euler(0, 0, b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value);
+                }
+            }
+        }));
         fsm.AddCustomAction("Roll Rolling", () => tk2dSpriteAnimator_.Play(newClip));
         fsm.AddAction("Roll Rolling", fsm.CreateCheckCollisionSide(
             fsm.GetFSMEvent("L"), fsm.GetFSMEvent("R"), fsm.GetFSMEvent("LAND")));
@@ -215,6 +261,10 @@ public partial class Control : Module
             var positon = rigidbody2D.position;
             positon.x += 1e-1f;
             rigidbody2D.position = positon;
+            foreach (var b in beams2)
+            {
+                b.LocateMyFSM("Control").SetState("Fire");
+            }
             fsm.SendEvent("FINISHED");
         });
         fsm.AddTransition("Roll Rolling Left Wall", "FINISHED", "Roll Rolling");
@@ -230,6 +280,10 @@ public partial class Control : Module
             var positon = rigidbody2D.position;
             positon.x -= 1e-1f;
             rigidbody2D.position = positon;
+            foreach (var b in beams2)
+            {
+                b.LocateMyFSM("Control").SetState("Fire");
+            }
             fsm.SendEvent("FINISHED");
         });
         fsm.AddTransition("Roll Rolling Right Wall", "FINISHED", "Roll Rolling");
@@ -249,6 +303,10 @@ public partial class Control : Module
         fsm.AddCustomAction("Roll Rolling Land", () =>
         {
             fsm.AccessIntVariable("rollCount").Value += 1;
+            foreach (var b in beams2)
+            {
+                b.LocateMyFSM("Control").SetState("Fire");
+            }
             if (fsm.AccessIntVariable("rollCount").Value == 16)
             {
                 var rigidbody2D = fsm.gameObject.GetComponent<Rigidbody2D>();

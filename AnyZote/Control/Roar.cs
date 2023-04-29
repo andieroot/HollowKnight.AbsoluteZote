@@ -53,15 +53,15 @@ public partial class Control : Module
                 if (minion.name.StartsWith("Zote Salubra"))
                 {
                     minion.GetComponent<Rigidbody2D>().velocity = 0.5f * zoteling.GetComponent<Rigidbody2D>().velocity;
+                    var shield = UnityEngine.Object.Instantiate(prefabs["Shield"] as GameObject, minion.transform);
+                    shield.transform.localScale *= 0.75f;
+                    shield.transform.position = minion.transform.position;
+                    minion.LocateMyFSM("Control").AccessGameObjectVariable("shield").Value = shield;
                 }
                 else
                 {
                     minion.GetComponent<Rigidbody2D>().velocity = zoteling.GetComponent<Rigidbody2D>().velocity;
                 }
-                var shield = UnityEngine.Object.Instantiate(prefabs["Shield"] as GameObject, minion.transform);
-                shield.transform.localScale *= 0.75f;
-                shield.transform.position = minion.transform.position;
-                minion.LocateMyFSM("Control").AccessGameObjectVariable("shield").Value = shield;
             }
             fsm.RemoveAction("Spit L", 7);
             fsm.AddCustomAction("Spit L", () => Spit(fsm));
