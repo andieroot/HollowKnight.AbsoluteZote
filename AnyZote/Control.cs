@@ -2,7 +2,7 @@
 public partial class Control : Module
 {
     private List<GameObject> toSpit;
-    private List<GameObject> turrets=new List<GameObject>();
+    private List<GameObject> turrets = new List<GameObject>();
     private List<GameObject> beams = new List<GameObject>();
     public Control(AnyZote anyZote) : base(anyZote)
     {
@@ -35,9 +35,10 @@ public partial class Control : Module
         LoadPrefabsEvade(preloadedObjects);
         var markoth = preloadedObjects["GG_Ghost_Markoth"]["Warrior"].transform.Find("Ghost Warrior Markoth").gameObject;
         prefabs["Shield"] = markoth.LocateMyFSM("Shield Attack").GetAction<CreateObject>("Init", 1).gameObject.Value;
-        var radiance= preloadedObjects["GG_Radiance"]["Boss Control"].transform.Find("Absolute Radiance").gameObject;
-        var burst= radiance.transform.Find("Eye Beam Glow").gameObject.transform.Find("Burst 1").gameObject;
+        var radiance = preloadedObjects["GG_Radiance"]["Boss Control"].transform.Find("Absolute Radiance").gameObject;
+        var burst = radiance.transform.Find("Eye Beam Glow").gameObject.transform.Find("Burst 1").gameObject;
         prefabs["Beam"] = burst.transform.Find("Radiant Beam").gameObject;
+        prefabs["Radiance"] = radiance;
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -95,21 +96,29 @@ public partial class Control : Module
             var cnt = 6;
             float l = 8.19f, r = 44.61f;
             float g = (r - l) / (cnt - 1);
+            turrets.Clear();
+            beams.Clear();
             for (int i = 0; i < cnt; i++)
             {
                 var minion = prefabs["Turret Zoteling"] as GameObject;
                 minion = UnityEngine.Object.Instantiate(minion);
                 minion.SetActive(true);
                 minion.SetActiveChildren(true);
-                minion.transform.position = new Vector3(l + g * i, 19+(float)random.NextDouble()/2, fsm.gameObject.transform.position.z);
+                minion.transform.position = new Vector3(l + g * i, 19 + (float)random.NextDouble() / 2, fsm.gameObject.transform.position.z);
                 turrets.Add(minion);
                 var beam = prefabs["Beam"] as GameObject;
                 beam = UnityEngine.Object.Instantiate(beam);
                 beam.SetActive(true);
                 beam.SetActiveChildren(true);
-                beam.transform.position = new Vector3(minion.transform.position.x, minion.transform.position.y-2.05f, minion.transform.position.z);
+                beam.transform.position = new Vector3(minion.transform.position.x, minion.transform.position.y - 2.05f, minion.transform.position.z);
                 beam.transform.rotation = Quaternion.Euler(0, 0, -90);
                 beam.LocateMyFSM("Control").AddTransition("Fire", "FINISHED", "End");
+                var radiance = prefabs["Radiance"] as GameObject;
+                var action = radiance.LocateMyFSM("Attack Commands").GetAction<AudioPlayerOneShotSingle>("Aim", 3);
+                action.spawnPoint = minion;
+                action.delay = 0;
+                beam.LocateMyFSM("Control").AddAction("Fire", action);
+
                 beams.Add(beam);
             }
             fsm.gameObject.RefreshHPBar();
