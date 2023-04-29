@@ -148,11 +148,8 @@ public partial class Control : Module
                     minion.SetActive(true);
                     minion.SetActiveChildren(true);
                     minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 10, fsm.gameObject.transform.position.z);
-                    minion.GetComponent<PlayMakerFSM>().AddCustomAction("Idle", () =>
-                    {
-                        var voice = minion.transform.Find("Voice").gameObject;
-                        voice.SetActive(false);
-                    });
+                    var voice = minion.transform.Find("Voice").gameObject;
+                    voice.SetActive(false);
                     var ghostMovement = minion.GetComponent<PlayMakerFSM>().GetAction<GhostMovement>("Sucking", 8);
                     ghostMovement.yPosMin = ghostMovement.yPosMin.Value + 5;
                     ghostMovement.yPosMax = ghostMovement.yPosMax.Value + 5;
