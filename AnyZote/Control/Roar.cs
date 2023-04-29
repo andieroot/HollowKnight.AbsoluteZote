@@ -101,6 +101,8 @@ public partial class Control : Module
                     var ghostMovement = minion.GetComponent<PlayMakerFSM>().GetAction<GhostMovement>("Sucking", 8);
                     ghostMovement.yPosMin = ghostMovement.yPosMin.Value + 5;
                     ghostMovement.yPosMax = ghostMovement.yPosMax.Value + 5;
+                    minion.RemoveComponent<HealthManager>();
+                    minion.transform.localScale *= 1.5f;
                     fsm.SetState("Dormant");
                 }
                 else
@@ -147,12 +149,12 @@ public partial class Control : Module
                     minion.SetActive(true);
                     minion.SetActiveChildren(true);
                     minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 10, fsm.gameObject.transform.position.z);
-                    var voice = minion.transform.Find("Voice").gameObject;
-                    voice.SetActive(false);
                     var ghostMovement = minion.GetComponent<PlayMakerFSM>().GetAction<GhostMovement>("Sucking", 8);
                     ghostMovement.yPosMin = ghostMovement.yPosMin.Value + 5;
                     ghostMovement.yPosMax = ghostMovement.yPosMax.Value + 5;
                     fsm.SetState("Dormant");
+                    minion.transform.localScale *= 1.5f;
+                    minion.RemoveComponent<HealthManager>();
                 }
                 else
                 {
@@ -276,7 +278,8 @@ public partial class Control : Module
                 {
                     UnityEngine.Object.Destroy(fsm.AccessGameObjectVariable("shield").Value);
                 }
-                UnityEngine.Object.Destroy(fsm.gameObject);
+                // UnityEngine.Object.Destroy(fsm.gameObject);
+                fsm.gameObject.SetActive(false);
             });
         }
         else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Zote Turret(Clone)" && fsm.FsmName == "Control")

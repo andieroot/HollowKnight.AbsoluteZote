@@ -277,7 +277,7 @@ public partial class Control : Module
             {
                 fsm.SetState("B Roar Antic");
                 fsm.AccessBoolVariable("wave3").Value = true;
-                fsm.AccessIntVariable("wave3Cnt").Value = 4;
+                fsm.AccessIntVariable("wave3Cnt").Value = 1;
                 return;
             }
             foreach (var regularMove in regluarMoves)
