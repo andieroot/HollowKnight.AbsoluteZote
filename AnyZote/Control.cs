@@ -1,6 +1,7 @@
 ﻿namespace AnyZote;
 public partial class Control : Module
 {
+    private List<GameObject> toSpit;
     public Control(AnyZote anyZote) : base(anyZote)
     {
     }
@@ -161,12 +162,22 @@ public partial class Control : Module
             {
                 fsm.SetState("Spit Set");
                 fsm.AccessBoolVariable("wave1").Value = true;
+                toSpit = new List<GameObject>
+                {
+                    prefabs["Fat Zoteling"] as GameObject,
+                    prefabs["Salubra Zoteling"] as GameObject,
+                };
                 return;
             }
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 1800 && !fsm.AccessBoolVariable("wave2").Value)
             {
                 fsm.SetState("Spit Set");
                 fsm.AccessBoolVariable("wave2").Value = true;
+                toSpit = new List<GameObject>
+                {
+                    prefabs["Fat Zoteling"] as GameObject,
+                    prefabs["Fat Zoteling"] as GameObject,
+                };
                 return;
             }
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 1500 && !fsm.AccessBoolVariable("rolled").Value)
@@ -177,8 +188,9 @@ public partial class Control : Module
             }
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 800 && !fsm.AccessBoolVariable("wave3").Value)
             {
-                fsm.SetState("Spit Set");
+                fsm.SetState("B Roar Antic");
                 fsm.AccessBoolVariable("wave3").Value = true;
+                fsm.AccessIntVariable("wave3Cnt").Value = 4;
                 return;
             }
             foreach (var regularMove in regluarMoves)

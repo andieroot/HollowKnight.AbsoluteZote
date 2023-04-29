@@ -60,5 +60,6 @@
 	</ItemGroup>
 	<Target Name="Installation" AfterTargets="PostBuildEvent">
 		<Copy SourceFiles="$(TargetDir)/$(TargetName).dll" DestinationFolder="$(ActualInstallation)/Mods/$(TargetName)" />
+		<Copy SourceFiles="$(TargetDir)/$(TargetName).pdb" DestinationFolder="$(ActualInstallation)/Mods/$(TargetName)" />
 	</Target>
 </Project>
