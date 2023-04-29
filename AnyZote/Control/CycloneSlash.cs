@@ -281,7 +281,7 @@ public partial class Control : Module
                 if (!fsm.AccessBoolVariable("cycloneSlashCancel").Value)
                 {
                     fsm.AccessBoolVariable("cycloneSlashCancel").Value = true;
-                    if (random.Next(3) == 0)
+                    if (random.Next(2) == 0)
                     {
                         rigidbody2D.velocity = new Vector2(0, 0);
                         rigidbody2D.gravityScale = 0;
