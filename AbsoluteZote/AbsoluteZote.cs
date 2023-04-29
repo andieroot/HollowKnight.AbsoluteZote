@@ -18,7 +18,7 @@ public class AbsoluteZote : Mod, IGlobalSettings<Settings>, IMenuMod
     public List<Module> modules = new();
     public Settings settings_ = new();
     public bool ToggleButtonInsideMenu => true;
-    public AbsoluteZote() : base("AbsoluteZote")
+    public AbsoluteZote() : base("AnyZote: AbsoluteZote")
     {
         absoluteZote = this;
         statue = new(this);

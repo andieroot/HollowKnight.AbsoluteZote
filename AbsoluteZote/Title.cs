@@ -21,9 +21,9 @@ public class Title : Module
     {
         var bossControl = preloadedObjects["GG_Radiance"]["Boss Control"];
         var title = bossControl.transform.Find("Boss Title").gameObject;
-        title.GetComponent<SetTextMeshProGameText>().convName = "ABSOLUTE_ZOTE_MAIN";
+        title.GetComponent<SetTextMeshProGameText>().convName = "ANY_ZOTE_MAIN";
         var superTitle = title.transform.Find("Boss Title (1)").gameObject;
-        superTitle.GetComponent<SetTextMeshProGameText>().convName = "ABSOLUTE_ZOTE_SUPER";
+        superTitle.GetComponent<SetTextMeshProGameText>().convName = "ANY_ZOTE_SUPER";
         superTitle.name = "superTitle";
         prefabs["title"] = title;
         var titleBackground = preloadedObjects["GG_Grey_Prince_Zote"]["Mighty_Zote_0005_17"];
@@ -31,7 +31,7 @@ public class Title : Module
         spriteRenderer.sortingLayerID = -349214895;
         var whiteFader = bossControl.transform.Find("White Fader").gameObject;
         spriteRenderer.sprite = whiteFader.GetComponent<UnityEngine.SpriteRenderer>().sprite;
-        spriteRenderer.color = new Color(.3f, 0, .3f, 0);
+        spriteRenderer.color = new Color(.45f, 0, .3f, 0);
         titleBackground.transform.position = new Vector3(0, 0, -16);
         titleBackground.transform.localScale = Vector3.one * 256;
         prefabs["titleBackground"] = titleBackground;
@@ -61,18 +61,18 @@ public class Title : Module
     }
     public override string UpdateText(string key, string sheet, string text)
     {
-        if (key == "ABSOLUTE_ZOTE_MAIN" && sheet == "Titles")
+        if (key == "ANY_ZOTE_MAIN" && sheet == "Titles")
         {
             if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
-                text = "无上左特";
+                text = "Any 左特";
             }
             else
             {
                 text = "ZOTE";
             }
         }
-        else if (key == "ABSOLUTE_ZOTE_SUPER" && sheet == "Titles")
+        else if (key == "ANY_ZOTE_SUPER" && sheet == "Titles")
         {
             if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
@@ -80,7 +80,7 @@ public class Title : Module
             }
             else
             {
-                text = "ABSOLUTE";
+                text = "ANY";
             }
         }
         return text;

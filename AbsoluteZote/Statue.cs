@@ -16,7 +16,7 @@ public class Statue : Module
         var ggStatueGrimm = preloadedObjects["GG_Workshop"]["GG_Statue_Grimm"];
         var dream = ggStatueGrimm.transform.Find("dream_version_switch").gameObject;
         dream.transform.Find("GG_statue_plinth_dream").gameObject.SetActive(false);
-        dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.5f, .2f, .6f, 1);
+        dream.transform.Find("Statue Pt").gameObject.GetComponent<ParticleSystem>().startColor = new Color(.75f, .2f, .6f, 1);
         prefabs["dream"] = dream;
     }
     public override string UpdateText(string key, string sheet, string text)
@@ -25,22 +25,22 @@ public class Statue : Module
         {
             if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
-                text = "无上左特";
+                text = "Any 左特";
             }
             else
             {
-                text = "ABSOLUTE ZOTE";
+                text = "ANY ZOTE";
             }
         }
         else if (key == "GG_S_MIGHTYZOTE" && sheet == "CP3")
         {
             if (Language.Language.CurrentLanguage() == Language.LanguageCode.ZH)
             {
-                text = "混沌之神";
+                text = "左特之神";
             }
             else
             {
-                text = "God of chaos";
+                text = "God of Zote";
             }
         }
         return text;
