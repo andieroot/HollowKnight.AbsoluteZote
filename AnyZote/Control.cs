@@ -3,6 +3,7 @@ public partial class Control : Module
 {
     private List<GameObject> toSpit;
     private List<GameObject> turrets=new List<GameObject>();
+    private List<GameObject> beams = new List<GameObject>();
     public Control(AnyZote anyZote) : base(anyZote)
     {
     }
@@ -16,7 +17,8 @@ public partial class Control : Module
             ("GG_Nosk_Hornet", "Battle Scene"),
             ("GG_Sly","Battle Scene"),
             ("GG_Traitor_Lord", "Battle Scene"),
-            ("GG_Ghost_Markoth","Warrior")
+            ("GG_Ghost_Markoth","Warrior"),
+            ("GG_Radiance","Boss Control"),
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -33,6 +35,9 @@ public partial class Control : Module
         LoadPrefabsEvade(preloadedObjects);
         var markoth = preloadedObjects["GG_Ghost_Markoth"]["Warrior"].transform.Find("Ghost Warrior Markoth").gameObject;
         prefabs["Shield"] = markoth.LocateMyFSM("Shield Attack").GetAction<CreateObject>("Init", 1).gameObject.Value;
+        var radiance= preloadedObjects["GG_Radiance"]["Boss Control"].transform.Find("Absolute Radiance").gameObject;
+        var burst= radiance.transform.Find("Eye Beam Glow").gameObject.transform.Find("Burst 1").gameObject;
+        prefabs["Beam"] = burst.transform.Find("Radiant Beam").gameObject;
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -98,6 +103,14 @@ public partial class Control : Module
                 minion.SetActiveChildren(true);
                 minion.transform.position = new Vector3(l + g * i, 19+(float)random.NextDouble()/2, fsm.gameObject.transform.position.z);
                 turrets.Add(minion);
+                var beam = prefabs["Beam"] as GameObject;
+                beam = UnityEngine.Object.Instantiate(beam);
+                beam.SetActive(true);
+                beam.SetActiveChildren(true);
+                beam.transform.position = new Vector3(minion.transform.position.x, minion.transform.position.y-2.05f, minion.transform.position.z);
+                beam.transform.rotation = Quaternion.Euler(0, 0, -90);
+                beam.LocateMyFSM("Control").AddTransition("Fire", "FINISHED", "End");
+                beams.Add(beam);
             }
             fsm.gameObject.RefreshHPBar();
         });
@@ -160,6 +173,18 @@ public partial class Control : Module
             "JS Antic",
             "Charge Antic",
             "Dash Slash Jump Antic",
+            "Great Slash Jump Antic",
+            "Cyclone Slash Jump Antic",
+            "Great Slash Jump Antic",
+            "Cyclone Slash Jump Antic",
+            "Set Jumps",
+            "FT Through",
+            "Roar Check",
+            "JS Antic",
+            "Charge Antic",
+            "Dash Slash Jump Antic",
+            "Great Slash Jump Antic",
+            "Cyclone Slash Jump Antic",
             "Great Slash Jump Antic",
             "Cyclone Slash Jump Antic",
             "Great Slash Jump Antic",

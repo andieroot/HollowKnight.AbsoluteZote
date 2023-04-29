@@ -162,6 +162,10 @@ public partial class Control : Module
             {
                 t.LocateMyFSM("Control").SetState("Antic");
             }
+            foreach (var b in beams)
+            {
+                b.LocateMyFSM("Control").SetState("Antic");
+            }
             var gameObjectPrefab = (prefabs["greatSlashChargeBlob"] as FsmGameObject).Value;
             Vector3 a = fsm.gameObject.transform.position;
             int num = UnityEngine.Random.Range(8, 17);
@@ -225,6 +229,18 @@ public partial class Control : Module
         fsm.AddCustomAction("Great Slash Charge", fsm.CreateFacePosition("greatSlashDestination", true));
         fsm.AddAction("Great Slash Charge", fsm.CreateWait(0.4f, fsm.GetFSMEvent("1")));
         fsm.AddTransition("Great Slash Charge", "1", "Great Slash Charged");
+        fsm.AddAction("Great Slash Charge", fsm.CreateGeneralAction(() =>
+        {
+            foreach (var b in beams)
+            {
+                var from = b.transform.position;
+                var to = HeroController.instance.gameObject.transform.position;
+                var dx = to.x - from.x;
+                var dy = to.y - from.y;
+                var angle = Mathf.Atan2(dy, dx) / Mathf.PI * 180;
+                b.transform.rotation = Quaternion.Euler(0, 0, angle);
+            }
+        }));
     }
     private void UpdateStateGreatSlashCharged(PlayMakerFSM fsm)
     {
@@ -247,6 +263,14 @@ public partial class Control : Module
                 fsm.gameObject.transform.Find("greatSlashChargeNACharged").gameObject.SetActive(false);
                 fsm.gameObject.transform.Find("greatSlashChargeChargeEffect").gameObject.SetActive(false);
                 fsm.SetState("Jump Antic");
+                foreach (var t in turrets)
+                {
+                    t.LocateMyFSM("Control").SetState("Idle");
+                }
+                foreach (var b in beams)
+                {
+                    b.LocateMyFSM("Control").SetState("Fire");
+                }
             }
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
             var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
@@ -281,7 +305,14 @@ public partial class Control : Module
             prefabs["greatSlashSlashAudio"] as FsmObject, 1, 1, 1, 0));
         fsm.AddCustomAction("Great Slash Slash", () =>
         {
-
+            foreach (var t in turrets)
+            {
+                t.LocateMyFSM("Control").SetState("Idle");
+            }
+            foreach (var b in beams)
+            {
+                b.LocateMyFSM("Control").SetState("Fire");
+            }
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
             var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
             var newClip = new tk2dSpriteAnimationClip();
