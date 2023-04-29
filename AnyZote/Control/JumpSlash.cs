@@ -9,7 +9,7 @@ public partial class Control : Module
     {
         fsm.InsertCustomAction("Stomp", () =>
         {
-            if (random.Next(2) == 1)
+            if (random.Next(4) <=2)
             {
                 fsm.SetState("Shift Dir");
             }

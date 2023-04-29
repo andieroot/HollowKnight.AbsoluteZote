@@ -13,6 +13,7 @@ public partial class Control : Module
             ("GG_Mighty_Zote", "Battle Control"),
             ("GG_Nosk_Hornet", "Battle Scene"),
             ("GG_Sly","Battle Scene"),
+            ("GG_Traitor_Lord", "Battle Scene"),
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -75,6 +76,13 @@ public partial class Control : Module
             {
                 fsm.SetState("Roar End");
             }
+            Log("Stun before: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value);
+            Log("Stun before: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value);
+            fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value = 65536;
+            fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value = 65536;
+            Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value);
+            Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value);
+            fsm.gameObject.RefreshHPBar();
         });
     }
     private void UpdateStateRoar(PlayMakerFSM fsm)
@@ -149,10 +157,28 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("gs1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("gse1").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("gse2").gameObject.SetActive(false);
+            if (fsm.gameObject.GetComponent<HealthManager>().hp < 2800 && !fsm.AccessBoolVariable("wave1").Value)
+            {
+                fsm.SetState("Spit Set");
+                fsm.AccessBoolVariable("wave1").Value = true;
+                return;
+            }
+            if (fsm.gameObject.GetComponent<HealthManager>().hp < 1800 && !fsm.AccessBoolVariable("wave2").Value)
+            {
+                fsm.SetState("Spit Set");
+                fsm.AccessBoolVariable("wave2").Value = true;
+                return;
+            }
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 1500 && !fsm.AccessBoolVariable("rolled").Value)
             {
                 fsm.SetState("Roll Jump Antic");
                 fsm.AccessBoolVariable("rolled").Value = true;
+                return;
+            }
+            if (fsm.gameObject.GetComponent<HealthManager>().hp < 800 && !fsm.AccessBoolVariable("wave3").Value)
+            {
+                fsm.SetState("Spit Set");
+                fsm.AccessBoolVariable("wave3").Value = true;
                 return;
             }
             foreach (var regularMove in regluarMoves)

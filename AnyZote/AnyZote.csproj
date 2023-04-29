@@ -51,6 +51,9 @@
 		<Reference Include="MMHOOK_PlayMaker">
 			<HintPath>$(ReferenceInstallation)/MMHOOK_PlayMaker.dll</HintPath>
 		</Reference>
+		<Reference Include="MonoMod.Utils">
+			<HintPath>$(ReferenceInstallation)/MonoMod.Utils.dll</HintPath>
+		</Reference>
 		<Reference Include="Satchel">
 			<HintPath>$(ReferenceInstallation)/Mods/Satchel/Satchel.dll</HintPath>
 		</Reference>
