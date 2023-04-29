@@ -130,6 +130,15 @@ public partial class Control : Module
     {
         fsm.AddCustomAction("Dash Slash Charge", () =>
         {
+            foreach (var t in turrets)
+            {
+                t.LocateMyFSM("Control").SetState("Antic");
+            }
+            foreach (var b in beams)
+            {
+                b.LocateMyFSM("Control").SetState("Antic");
+                b.transform.rotation = Quaternion.Euler(0, 0, -90);
+            }
             var gameObjectPrefab = (prefabs["dashSlashChargeBlob"] as FsmGameObject).Value;
             Vector3 a = fsm.gameObject.transform.position;
             int num = UnityEngine.Random.Range(8, 17);
@@ -245,6 +254,16 @@ public partial class Control : Module
             {
                 fsm.SendEvent("1");
             }
+            for (int i = 0; i < turrets.Count; i++)
+            {
+                var t = turrets[i];
+                var b = beams[i];
+                if (t.LocateMyFSM("Control").ActiveStateName != "Idle" && Mathf.Abs(t.transform.position.x - fsm.gameObject.transform.position.x) < 1)
+                {
+                    t.LocateMyFSM("Control").SetState("Idle");
+                    b.LocateMyFSM("Control").SetState("Fire");
+                }
+            }
         }));
         fsm.AddTransition("Dash Slash Dash", "1", "Dash Slash Slash");
     }
@@ -255,7 +274,16 @@ public partial class Control : Module
             prefabs["dashSlashSlashAudio"] as FsmObject, 1, 1, 1, 0));
         fsm.AddCustomAction("Dash Slash Slash", () =>
         {
-
+            for (int i = 0; i < turrets.Count; i++)
+            {
+                var t = turrets[i];
+                var b = beams[i];
+                if (t.LocateMyFSM("Control").ActiveStateName != "Idle")
+                {
+                    t.LocateMyFSM("Control").SetState("Idle");
+                    b.LocateMyFSM("Control").SetState("Fire");
+                }
+            }
             var tk2dSpriteAnimator_ = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
             var oldClip = tk2dSpriteAnimator_.GetClipByName("Stomp Slash End");
             var newClip = new tk2dSpriteAnimationClip();

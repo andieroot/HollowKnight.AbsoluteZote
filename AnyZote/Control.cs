@@ -224,6 +224,7 @@ public partial class Control : Module
             "Cyclone Slash Jump Antic",
             "Great Slash Jump Antic",
             "Cyclone Slash Jump Antic",
+            "Dash Slash Jump Antic",
             "Great Slash Jump Antic",
             "Cyclone Slash Jump Antic"
         };
