@@ -159,6 +159,40 @@ public partial class Control : Module
     {
         fsm.AddCustomAction("Cyclone Slash Charge", () =>
         {
+            foreach (var t in turrets)
+            {
+                t.LocateMyFSM("Control").SetState("Antic");
+            }
+            List<int> sel = new();
+            for (int i = 0; i < turrets.Count; i++) sel.Add(i);
+            while (true)
+            {
+                bool good = true;
+                for (int i = 0; i < sel.Count; i++)
+                {
+                    if (sel[i] == i)
+                    {
+                        good = false;
+                    }
+                }
+                if (good) break;
+                int left = random.Next(sel.Count);
+                int right = random.Next(sel.Count);
+                int tmp = sel[left];
+                sel[left] = sel[right];
+                sel[right] = tmp;
+            }
+            int ttt = 0;
+            foreach (var b in beams)
+            {
+                b.LocateMyFSM("Control").SetState("Antic");
+                var from = b.transform.position;
+                var dx = turrets[sel[ttt]].transform.position.x - from.x;
+                var dy = 0 - from.y;
+                var angle = Mathf.Atan2(dy, dx) / Mathf.PI * 180;
+                b.transform.rotation = Quaternion.Euler(0, 0, angle);
+                ttt += 1;
+            }
             var gameObjectPrefab = (prefabs["cycloneSlashChargeBlob"] as FsmGameObject).Value;
             Vector3 a = fsm.gameObject.transform.position;
             int num = UnityEngine.Random.Range(8, 17);
@@ -278,6 +312,16 @@ public partial class Control : Module
                 var v = rigidbody2D.velocity;
                 v.y = -32;
                 rigidbody2D.velocity = v;
+                for (int i = 0; i < turrets.Count; i++)
+                {
+                    var t = turrets[i];
+                    var b = beams[i];
+                    if (t.LocateMyFSM("Control").ActiveStateName != "Idle")
+                    {
+                        t.LocateMyFSM("Control").SetState("Idle");
+                        b.LocateMyFSM("Control").SetState("Fire");
+                    }
+                }
                 if (!fsm.AccessBoolVariable("cycloneSlashCancel").Value)
                 {
                     fsm.AccessBoolVariable("cycloneSlashCancel").Value = true;
@@ -320,6 +364,16 @@ public partial class Control : Module
             fsm.gameObject.transform.Find("cycloneTink").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("cycloneTink2").gameObject.SetActive(false);
             fsm.gameObject.transform.Find("cycloneEffect").gameObject.SetActive(false);
+            for (int i = 0; i < turrets.Count; i++)
+            {
+                var t = turrets[i];
+                var b = beams[i];
+                if (t.LocateMyFSM("Control").ActiveStateName != "Idle")
+                {
+                    t.LocateMyFSM("Control").SetState("Idle");
+                    b.LocateMyFSM("Control").SetState("Fire");
+                }
+            }
         });
         fsm.AddTransition("Cyclone Slash Slash", "FINISHED", "Move Choice 3");
     }
