@@ -29,7 +29,7 @@ public class AnyZote : Mod, IGlobalSettings<Settings>, IMenuMod
         control = new(this);
         afterimage = new(this);
     }
-    public override string GetVersion() => "2.1.0.0";
+    public override string GetVersion() => "2.2.0.0";
     public override List<(string, string)> GetPreloadNames()
     {
         List<(string, string)> preloadNames = new();
