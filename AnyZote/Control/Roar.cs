@@ -10,6 +10,7 @@ public partial class Control : Module
             ("Zote Fluke", "", "Fluke Zoteling"),
             ("Fat Zotes", "Zote Crew Fat (1)", "Fat Zoteling"),
             ("Zote Salubra", "", "Salubra Zoteling"),
+            ("Extra Zotes", "Zote Turret", "Turret Zoteling"),
         };
         foreach ((string group, string instance, string name) in names)
         {
@@ -278,7 +279,18 @@ public partial class Control : Module
                 UnityEngine.Object.Destroy(fsm.gameObject);
             });
         }
-
+        else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Zote Turret(Clone)" && fsm.FsmName == "Control")
+        {
+            Log("Upgrading FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+            fsm.AddTransition("Dormant", "FINISHED", "Appear");
+            fsm.RemoveAction("Idle", 4);
+            fsm.gameObject.RemoveComponent<HealthManager>();
+            fsm.RemoveTransition("Idle", "FINISHED");
+            fsm.GetAction<Wait>("Antic", 0).time = 5;
+            fsm.RemoveAction("Fire", 3);
+            fsm.RemoveAction("Fire", 2);
+            fsm.RemoveAction("Fire", 1);
+        }
     }
     private void UpdateStateRoarCheck(PlayMakerFSM fsm)
     {

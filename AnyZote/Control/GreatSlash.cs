@@ -158,6 +158,10 @@ public partial class Control : Module
     {
         fsm.AddCustomAction("Great Slash Charge", () =>
         {
+            foreach (var t in turrets)
+            {
+                t.LocateMyFSM("Control").SetState("Antic");
+            }
             var gameObjectPrefab = (prefabs["greatSlashChargeBlob"] as FsmGameObject).Value;
             Vector3 a = fsm.gameObject.transform.position;
             int num = UnityEngine.Random.Range(8, 17);

@@ -2,6 +2,7 @@
 public partial class Control : Module
 {
     private List<GameObject> toSpit;
+    private List<GameObject> turrets=new List<GameObject>();
     public Control(AnyZote anyZote) : base(anyZote)
     {
     }
@@ -86,6 +87,18 @@ public partial class Control : Module
             fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value = 65536;
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value);
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value);
+            var cnt = 6;
+            float l = 8.19f, r = 44.61f;
+            float g = (r - l) / (cnt - 1);
+            for (int i = 0; i < cnt; i++)
+            {
+                var minion = prefabs["Turret Zoteling"] as GameObject;
+                minion = UnityEngine.Object.Instantiate(minion);
+                minion.SetActive(true);
+                minion.SetActiveChildren(true);
+                minion.transform.position = new Vector3(l + g * i, 19+(float)random.NextDouble()/2, fsm.gameObject.transform.position.z);
+                turrets.Add(minion);
+            }
             fsm.gameObject.RefreshHPBar();
         });
     }
