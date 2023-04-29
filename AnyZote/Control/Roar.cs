@@ -57,6 +57,10 @@ public partial class Control : Module
                 {
                     minion.GetComponent<Rigidbody2D>().velocity = zoteling.GetComponent<Rigidbody2D>().velocity;
                 }
+                var shield = UnityEngine.Object.Instantiate(prefabs["Shield"] as GameObject, minion.transform);
+                shield.transform.localScale *= 0.75f;
+                shield.transform.position = minion.transform.position;
+                minion.LocateMyFSM("Control").AccessGameObjectVariable("shield").Value = shield;
             }
             fsm.RemoveAction("Spit L", 7);
             fsm.AddCustomAction("Spit L", () => Spit(fsm));
@@ -234,6 +238,10 @@ public partial class Control : Module
             });
             fsm.AddCustomAction("Death Reset", () =>
             {
+                if (fsm.AccessGameObjectVariable("shield").Value)
+                {
+                    UnityEngine.Object.Destroy(fsm.AccessGameObjectVariable("shield").Value);
+                }
                 UnityEngine.Object.Destroy(fsm.gameObject);
             });
         }
@@ -251,6 +259,10 @@ public partial class Control : Module
             fsm.RemoveAction("Dead", 1);
             fsm.AddCustomAction("Dead", () =>
             {
+                if (fsm.AccessGameObjectVariable("shield").Value)
+                {
+                    UnityEngine.Object.Destroy(fsm.AccessGameObjectVariable("shield").Value);
+                }
                 UnityEngine.Object.Destroy(fsm.gameObject);
             });
         }

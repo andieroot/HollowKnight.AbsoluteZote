@@ -15,6 +15,7 @@ public partial class Control : Module
             ("GG_Nosk_Hornet", "Battle Scene"),
             ("GG_Sly","Battle Scene"),
             ("GG_Traitor_Lord", "Battle Scene"),
+            ("GG_Ghost_Markoth","Warrior")
         };
     }
     public override void LoadPrefabs(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -29,6 +30,8 @@ public partial class Control : Module
         LoadPrefabsJumpSlash(preloadedObjects);
         LoadPrefabsCharge(preloadedObjects);
         LoadPrefabsEvade(preloadedObjects);
+        var markoth = preloadedObjects["GG_Ghost_Markoth"]["Warrior"].transform.Find("Ghost Warrior Markoth").gameObject;
+        prefabs["Shield"] = markoth.LocateMyFSM("Shield Attack").GetAction<CreateObject>("Init", 1).gameObject.Value;
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -83,6 +86,8 @@ public partial class Control : Module
             fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value = 65536;
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Combo").Value);
             Log("Stun after: " + fsm.gameObject.LocateMyFSM("Stun").AccessIntVariable("Stun Hit Max").Value);
+            var shield = UnityEngine.Object.Instantiate(prefabs["Shield"] as GameObject, fsm.gameObject.transform);
+            shield.transform.position = fsm.gameObject.transform.position;
             fsm.gameObject.RefreshHPBar();
         });
     }
