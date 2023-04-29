@@ -39,6 +39,12 @@ public partial class Control : Module
         var burst = radiance.transform.Find("Eye Beam Glow").gameObject.transform.Find("Burst 1").gameObject;
         prefabs["Beam"] = burst.transform.Find("Radiant Beam").gameObject;
         prefabs["Radiance"] = radiance;
+        var ggStatueGrimm = preloadedObjects["GG_Workshop"]["GG_Statue_Grimm"];
+        var Base = ggStatueGrimm.transform.Find("Base").gameObject;
+        var Plaque = Base.transform.Find("Plaque").gameObject;
+        var Plaque_Trophy_Right = Plaque.transform.Find("Plaque_Trophy_Right").gameObject;
+        var Defeated_3 = Plaque_Trophy_Right.transform.Find("Defeated_3").gameObject;
+        prefabs["beamGlow"] = Defeated_3;
     }
     public override void UpdateHitInstance(HealthManager healthManager, HitInstance hitInstance)
     {
@@ -110,7 +116,7 @@ public partial class Control : Module
                 beam = UnityEngine.Object.Instantiate(beam);
                 beam.SetActive(true);
                 beam.SetActiveChildren(true);
-                beam.transform.position = new Vector3(minion.transform.position.x, minion.transform.position.y - 2.05f, minion.transform.position.z);
+                beam.transform.position = new Vector3(minion.transform.position.x + 0.2f, minion.transform.position.y - 2.35f, minion.transform.position.z);
                 beam.transform.rotation = Quaternion.Euler(0, 0, -90);
                 beam.LocateMyFSM("Control").AddTransition("Fire", "FINISHED", "End");
                 var radiance = prefabs["Radiance"] as GameObject;
@@ -118,7 +124,29 @@ public partial class Control : Module
                 action.spawnPoint = minion;
                 action.delay = 0;
                 beam.LocateMyFSM("Control").AddAction("Fire", action);
-
+                var glow = prefabs["beamGlow"] as GameObject;
+                glow = UnityEngine.Object.Instantiate(glow, minion.transform);
+                glow.name = "glow";
+                glow.transform.localScale *= 1.5f;
+                glow.SetActive(false);
+                glow.transform.Translate(-0.05f, 2, 0);
+                glow.GetAddComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.75f);
+                var halo = radiance.transform.Find("Halo").gameObject;
+                halo = UnityEngine.Object.Instantiate(halo, minion.transform);
+                halo.name = "halo";
+                halo.transform.localScale *= 0.2f;
+                halo.SetActive(false);
+                halo.transform.Translate(0.1f, 0.85f, 0);
+                beam.LocateMyFSM("Control").AddCustomAction("Antic", () =>
+                {
+                    halo.SetActive(true);
+                    glow.SetActive(true);
+                });
+                beam.LocateMyFSM("Control").AddCustomAction("End", () =>
+                {
+                    halo.SetActive(false);
+                    glow.SetActive(false);
+                });
                 beams.Add(beam);
             }
             fsm.gameObject.RefreshHPBar();
