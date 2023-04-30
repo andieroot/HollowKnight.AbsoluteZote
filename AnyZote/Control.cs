@@ -273,6 +273,7 @@ public partial class Control : Module
                 fsm.AccessBoolVariable("rolled").Value = true;
                 return;
             }
+            /*
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 800 && !fsm.AccessBoolVariable("wave3").Value)
             {
                 fsm.SetState("B Roar Antic");
@@ -280,6 +281,7 @@ public partial class Control : Module
                 fsm.AccessIntVariable("wave3Cnt").Value = 1;
                 return;
             }
+            */
             foreach (var regularMove in regluarMoves)
             {
                 if ((index - last[regularMove]) > 1.5 * regularMove.Length)
@@ -291,6 +293,10 @@ public partial class Control : Module
                 }
             }
             var chosenMove = regluarMoves[UnityEngine.Random.Range(0, regluarMoves.Count)];
+            if (HeroController.instance.transform.position.y > 15.5f)
+            {
+                chosenMove = "Great Slash Jump Antic";
+            }
             fsm.SetState(chosenMove);
             last[chosenMove] = index;
             index += 1;
