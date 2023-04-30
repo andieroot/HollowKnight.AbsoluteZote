@@ -217,27 +217,43 @@ public partial class Control : Module
                 }
                 if (b.LocateMyFSM("Control").ActiveStateName == "Antic")
                 {
-                    var a = b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value;
-                    var d = b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value;
-                    if (d > 0)
+                    if (HeroController.instance.transform.position.y > 15.5f)
                     {
-                        a = a + Time.deltaTime * 30;
-                        if (a > 0)
-                        {
-                            d = -1;
-                        }
+                        b.LocateMyFSM("Control").AccessBoolVariable("bad").Value = true;
+                    }
+                    if (b.LocateMyFSM("Control").AccessBoolVariable("bad").Value)
+                    {
+                        var from = b.transform.position;
+                        var to = HeroController.instance.gameObject.transform.position;
+                        var dx = to.x - from.x;
+                        var dy = to.y - from.y;
+                        var angle = Mathf.Atan2(dy, dx) / Mathf.PI * 180;
+                        b.transform.rotation = Quaternion.Euler(0, 0, angle);
                     }
                     else
                     {
-                        a = a - Time.deltaTime * 30;
-                        if (a < -180)
+                        var a = b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value;
+                        var d = b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value;
+                        if (d > 0)
                         {
-                            d = 1;
+                            a = a + Time.deltaTime * 30;
+                            if (a > 0)
+                            {
+                                d = -1;
+                            }
                         }
+                        else
+                        {
+                            a = a - Time.deltaTime * 30;
+                            if (a < -180)
+                            {
+                                d = 1;
+                            }
+                        }
+                        b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value = a;
+                        b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value = d;
+                        b.transform.rotation = Quaternion.Euler(0, 0, b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value);
                     }
-                    b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value = a;
-                    b.LocateMyFSM("Control").AccessFloatVariable("mydir").Value = d;
-                    b.transform.rotation = Quaternion.Euler(0, 0, b.LocateMyFSM("Control").AccessFloatVariable("myangle").Value);
                 }
             }
         }));
