@@ -2,6 +2,7 @@
 
 public partial class Control : Module
 {
+    List<GameObject>alive = new List<GameObject>();
     private void LoadPrefabsRoar(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
         var battleControl = preloadedObjects["GG_Mighty_Zote"]["Battle Control"];
@@ -11,6 +12,10 @@ public partial class Control : Module
             ("Fat Zotes", "Zote Crew Fat (1)", "Fat Zoteling"),
             ("Zote Salubra", "", "Salubra Zoteling"),
             ("Extra Zotes", "Zote Turret", "Turret Zoteling"),
+
+            ("Tall Zotes", "Zote Crew Tall", "Tall Zoteling"),
+            ("Dormant Warriors", "Zote Crew Normal (1)", "Normal Zoteling"),
+            ("Zotelings", "Ordeal Zoteling (1)", "Ordeal Zoteling"),
         };
         foreach ((string group, string instance, string name) in names)
         {
@@ -30,6 +35,10 @@ public partial class Control : Module
     }
     private void UpdateFSMRoar(PlayMakerFSM fsm)
     {
+        if(fsm.gameObject.scene.name == "GG_Grey_Prince_Zote")
+        {
+            Log("Welcome " + fsm.gameObject.name);
+        }
         if (IsGreyPrince(fsm.gameObject) && fsm.FsmName == "Control")
         {
             fsm.AddState("Roar Check");
@@ -47,6 +56,7 @@ public partial class Control : Module
                 var minion = toSpit[0];
                 toSpit.RemoveAt(0);
                 minion = UnityEngine.Object.Instantiate(minion);
+                alive.Add(minion);
                 minion.SetActive(true);
                 minion.SetActiveChildren(true);
                 minion.transform.position = zoteling.transform.position;
@@ -293,6 +303,47 @@ public partial class Control : Module
             fsm.RemoveAction("Fire", 3);
             fsm.RemoveAction("Fire", 2);
             fsm.RemoveAction("Fire", 1);
+        }
+        else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Zote Crew Normal (1)(Clone)" && fsm.FsmName == "Control")
+        {
+            Log("Upgrading FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+            fsm.AddTransition("Dormant", "FINISHED", "Multiply");
+            fsm.RemoveAction("Spawn Antic", 1);
+            fsm.RemoveAction("Spawn Antic", 3);
+            fsm.AddCustomAction("Spawn Antic", () => { fsm.SendEvent("FINISHED"); });
+            fsm.RemoveAction("Tumble Out", 2);
+            fsm.RemoveAction("Death", 0);
+            fsm.AddCustomAction("Death Reset", () =>
+            {
+                GameObject.Destroy(fsm.gameObject);
+            });
+            Log("Upgraded FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+        }
+        else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Ordeal Zoteling (1)(Clone)" && fsm.FsmName == "Control")
+        {
+            Log("Upgrading FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+            fsm.AddTransition("Dormant", "FINISHED", "Ball");
+            fsm.RemoveAction("Ball", 2);
+            fsm.AddCustomAction("Reset", () =>
+            {
+                GameObject.Destroy(fsm.gameObject);
+            });
+            Log("Upgraded FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+        }
+        else if (fsm.gameObject.scene.name == "GG_Grey_Prince_Zote" && fsm.gameObject.name == "Zote Crew Tall(Clone)" && fsm.FsmName == "Control")
+        {
+            Log("Upgrading FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
+            fsm.AddTransition("Dormant", "FINISHED", "Multiply");
+            fsm.RemoveAction("Spawn Antic", 1);
+            fsm.RemoveAction("Spawn Antic", 3);
+            fsm.AddCustomAction("Spawn Antic", () => fsm.SendEvent("FINISHED"));
+            fsm.RemoveAction("Tumble Out", 2);
+            fsm.RemoveAction("Death", 0);
+            fsm.AddCustomAction("Death Reset", () =>
+            {
+                GameObject.Destroy(fsm.gameObject);
+            });
+            Log("Upgraded FSM: " + fsm.gameObject.name + " - " + fsm.FsmName + ".");
         }
     }
     private void UpdateStateRoarCheck(PlayMakerFSM fsm)

@@ -234,7 +234,7 @@ public partial class Control : Module
             "Cyclone Slash Jump Antic",
             "Dash Slash Jump Antic",
             "Great Slash Jump Antic",
-            "Cyclone Slash Jump Antic"
+            "Cyclone Slash Jump Antic",
         };
         foreach (var regluarMove in regluarMoves)
         {
@@ -273,7 +273,6 @@ public partial class Control : Module
                 fsm.AccessBoolVariable("rolled").Value = true;
                 return;
             }
-            /*
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 800 && !fsm.AccessBoolVariable("wave3").Value)
             {
                 fsm.SetState("B Roar Antic");
@@ -281,7 +280,15 @@ public partial class Control : Module
                 fsm.AccessIntVariable("wave3Cnt").Value = 1;
                 return;
             }
-            */
+            List<GameObject>newAlive= new List<GameObject>();
+            foreach(var go in alive)
+            {
+                if (go != null&& !go.name.Contains("Salubra")&&!go.name.Contains("Fat"))
+                {
+                    newAlive.Add(go);
+                }
+            }
+            alive = newAlive;
             foreach (var regularMove in regluarMoves)
             {
                 if ((index - last[regularMove]) > 1.5 * regularMove.Length)
@@ -296,6 +303,30 @@ public partial class Control : Module
             if (HeroController.instance.transform.position.y > 15.5f)
             {
                 chosenMove = "Great Slash Jump Antic";
+            }
+            if (alive.Count == 0)
+            {
+                chosenMove = "Spit Set";
+            }
+            // regular spit
+            if (chosenMove == "Spit Set")
+            {
+                GameObject[] candidates = [
+                    prefabs["Tall Zoteling"] as GameObject,
+                    prefabs["Normal Zoteling"] as GameObject,
+                    prefabs["Ordeal Zoteling"] as GameObject,
+                ];
+                var candidate1 = candidates[UnityEngine.Random.Range(0, candidates.Length)];
+                var candidate2 = candidates[UnityEngine.Random.Range(0, candidates.Length)];
+                Log("Spit choice start");
+                Log("spit 1" + candidate1.name);
+                Log("Spit 2" + candidate2.name);
+                Log("Spit choice end");
+                toSpit = new List<GameObject>
+                {
+                    candidate1,
+                    candidate2
+                };
             }
             fsm.SetState(chosenMove);
             last[chosenMove] = index;
