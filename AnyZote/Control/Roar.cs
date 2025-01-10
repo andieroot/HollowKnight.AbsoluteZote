@@ -97,6 +97,7 @@ public partial class Control : Module
                 var greyPrince = GameObject.Find("Grey Prince");
                 if (greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value > 0)
                 {
+                    /*
                     greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value -= 1;
                     minion = prefabs["Salubra Zoteling"] as GameObject;
                     minion = UnityEngine.Object.Instantiate(minion);
@@ -114,6 +115,13 @@ public partial class Control : Module
                     minion.RemoveComponent<HealthManager>();
                     minion.transform.localScale *= 1.5f;
                     fsm.SetState("Dormant");
+                    */
+                    greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value -= 1;
+                    minion = prefabs["Tall Zoteling"] as GameObject;
+                    minion = UnityEngine.Object.Instantiate(minion);
+                    minion.SetActive(true);
+                    minion.SetActiveChildren(true);
+                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
                 }
                 else
                 {
@@ -153,6 +161,7 @@ public partial class Control : Module
                 var greyPrince = GameObject.Find("Grey Prince");
                 if (greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value > 0)
                 {
+                    /*
                     greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value -= 1;
                     minion = prefabs["Salubra Zoteling"] as GameObject;
                     minion = UnityEngine.Object.Instantiate(minion);
@@ -165,6 +174,13 @@ public partial class Control : Module
                     fsm.SetState("Dormant");
                     minion.transform.localScale *= 1.5f;
                     minion.RemoveComponent<HealthManager>();
+                    */
+                    greyPrince.LocateMyFSM("Control").AccessIntVariable("wave3Cnt").Value -= 1;
+                    minion = prefabs["Tall Zoteling"] as GameObject;
+                    minion = UnityEngine.Object.Instantiate(minion);
+                    minion.SetActive(true);
+                    minion.SetActiveChildren(true);
+                    minion.transform.position = new Vector3(fsm.gameObject.transform.position.x, 23.4f, fsm.gameObject.transform.position.z);
                 }
                 else
                 {
