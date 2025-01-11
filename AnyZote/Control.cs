@@ -275,9 +275,15 @@ public partial class Control : Module
             }
             if (fsm.gameObject.GetComponent<HealthManager>().hp < 800 && !fsm.AccessBoolVariable("wave3").Value)
             {
-                fsm.SetState("B Roar Antic");
+                fsm.SetState("Spit Set");
                 fsm.AccessBoolVariable("wave3").Value = true;
-                fsm.AccessIntVariable("wave3Cnt").Value = 4;
+                toSpit = new List<GameObject>
+                {
+                     prefabs["Salubra Zoteling"] as GameObject,
+                    prefabs["Salubra Zoteling"] as GameObject,
+                     prefabs["Salubra Zoteling"] as GameObject,
+                      prefabs["Salubra Zoteling"] as GameObject,
+                };
                 return;
             }
             List<GameObject>newAlive= new List<GameObject>();
